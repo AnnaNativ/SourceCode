@@ -1,0 +1,143 @@
+subjects
+{
+    name : '',
+	schoolGrade: '',
+	level: '',
+    subSubjects : [         
+		ObjectID('s1'),    
+        ObjectID('s2'),    
+        ObjectID('s3'),
+       ]
+}
+
+
+
+subSubjects
+{
+    name:'',
+	videos:[{
+		type:'', // tutorial, exercise solution
+		name:'',
+		link:'',
+		views:'',
+		likes:'',
+		dislikes:'',
+		
+	},
+	{},
+	{}
+	],
+	exercises:
+	[
+		Id:'1',
+		Id:'2',
+		Id:'3'
+	],
+	subjectId:''
+    
+}
+
+
+exercises
+{
+	level:,
+	body[{
+	type:text/picture}
+	content:'text'/link}],
+	answers:[
+	{
+		solution:"",
+		isCorrect:"boolean"
+	}]
+	tries:
+	successes:
+	failures:
+	gaveups:
+	publishDate:''
+	
+}
+
+-----------------------------------
+users{
+	hash:,
+	salt:,
+	role: teacher/student,
+	teacher:FK,
+	school: FK,
+	email:,
+	
+}
+
+assignments{
+	assigner: FK //teacher, self picked
+	assignee: FK, //student
+	status: open/done
+	subsubjectId: FK
+	
+}
+userAudit
+{
+	type:'exercise/next level/need help'
+	userId:'',
+	assignmentId:'',
+	subject:'',
+	subsubject:'',
+	level:'',
+	exerciseId:'',
+	videoId:'',
+	createdData:'',
+	success:'boolean'
+	failure:'boolean'
+	gaveup:'boolean',
+	inAssignment:'boolean'
+}
+
+userProgress{ // update level change within the same subsubject, create new one for each "need help sub " within the same assignment.
+ {
+	userId:'',
+	subSubject:'',
+	level:'',
+	assignmentID:'',
+	createdData:'',
+	isDone:''
+ }
+ 
+
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

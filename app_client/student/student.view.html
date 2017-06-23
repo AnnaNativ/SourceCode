@@ -1,0 +1,28 @@
+<navigation></navigation>
+
+<br>
+<div class="container" ng-cloak>
+    <h1 style="text-align:right">משוואה ריבועית</h1>
+    <div class="container text-right">
+        <div class="row">
+            <div class="col-md-6 pull-right">
+                <h3>:פתור תרגיל</h3>
+<!--                        <p class="text-right lead">X&sup2; + 2X + 3</p> -->
+                <p class="text-right lead">{{vm.exercise.exercise}}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 pull-right">
+                <h3>:בחר תשובה נכונה </h3>
+                <div ng-repeat="obj in vm.exercise.solutions" id="{{obj.solution}}">
+                    <label>{{obj.solution}}
+                        <input type="radio" name="obj" ng-click="vm.handleRadioClick(obj)" ng-model="selectedValue.solution" value="{{obj.solution}}"/>
+                    </label>
+                </div>                    
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-default pull-right" ng-click="vm.checkAnswer()">סיים תרגיל</button>
+    <h1 ng-if="vm.finalSelection == true" class="pull-right">הצלחת, יפה מאוד</h1>
+    <h1 ng-if="vm.finalSelection == false" class="pull-right">תשובה שגויה, נסה שנית</h1>
+</div>

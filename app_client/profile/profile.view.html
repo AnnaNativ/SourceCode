@@ -1,0 +1,23 @@
+<navigation></navigation>
+
+<br>
+<!-- JUMBOTRON -->
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div class="jumbotron text-center">
+      <div class="container">
+        <h2>:הפרופיל שלך</h2>
+        <br>
+        <p>{{ vm.user.name }} :שמך</p>
+        <p>{{ vm.user.email }} :כתובת אימייל שלך</p>
+        <p>{{ vm.user.role }} :תפקידך</p>
+        <p ng-show="vm.isTeacher()">{{ vm.user.school }} :בית ספר</p>
+        <a ng-show="vm.isTeacher()" href="teacher">הכנס תרגילים</a>
+        <p ng-show="vm.isStudent()">{{ vm.user.teacher }} :מורה</p>
+        <a ng-show="vm.isStudent()" href="student">היכנס לדף התירגולים</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>
