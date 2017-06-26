@@ -49,3 +49,5 @@ process.on('SIGTERM', function() {
 require('./users');
 require('./exercises');
 require('./subjects');
+require('./subjects');
+require('./assignments');

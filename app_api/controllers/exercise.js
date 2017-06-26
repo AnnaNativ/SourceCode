@@ -12,7 +12,7 @@ module.exports.getExercise = function (req, res) {
   } else {
     Exercise
       .find()
-      .random(1, true, function (err, exercise) {
+        .random(1, true, function (err, exercise) {
         console.log(exercise[0].badSolutions);
         shuffle(exercise[0].badSolutions);
         console.log(exercise[0].badSolutions);

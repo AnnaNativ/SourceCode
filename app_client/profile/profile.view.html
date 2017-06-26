@@ -15,7 +15,7 @@
         <p ng-show="vm.isTeacher()">{{ vm.user.school }} :בית ספר</p>
         <a ng-show="vm.isTeacher()" href="teacher">הכנס תרגילים</a>
         <p ng-show="vm.isStudent()">{{ vm.user.teacher }} :מורה</p>
-        <a ng-show="vm.isStudent()" href="student">היכנס לדף התירגולים</a>
+        <button ng-show="vm.isStudent()" ng-click='vm.getMyAssignments()'> View my assignments</button>
       </div>
     </div>
   </div>

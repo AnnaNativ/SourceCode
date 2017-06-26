@@ -10,6 +10,7 @@ var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');
 var ctrlExercise = require('../controllers/exercise');
 var ctrlSubjects = require('../controllers/subjects');
+var ctrlAssignment = require('../controllers/assignments');
 
 // profile
 router.get('/profile', auth, ctrlProfile.profileRead);
@@ -21,6 +22,9 @@ router.get('/exercise', auth, ctrlExercise.getExercise);
 router.get('/exercisesForSubjectAndSubSubject', auth, ctrlExercise.getExercisesForSubjectAndSubSubject);
 // subjects
 router.get('/subjects', auth, ctrlSubjects.getSubjects);
+
+//assignment
+router.get('/myAssignments',userId, ctrlAssignment.getMyAssignments);
 
 
 // authentication
