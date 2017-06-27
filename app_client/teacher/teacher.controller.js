@@ -5,25 +5,7 @@
     .controller('teacherCtrl', teacherCtrl);
 
   teacherCtrl.$inject = ['$location', 'exercise', 'meanData'];
-  function teacherCtrl($location, exercise, meanData) {
-    var vm = this;
-    vm.subjects = {};
-    vm.subSubjects = {};    
-    
-    meanData.getSubjects()
-    .success(function(data){
-      vm.subjects = data;
-    })
-    .error(function(e){
-      console.log(e);
-    })
-
-    vm.newExercise = {
-      solutions : [{solution: ""}, {solution: ""}, {solution: ""}, {solution: ""}, {solution: ""}],
-      exercise : "",
-      subject: "",
-      subSubject: ""
-    };
+  
 
     vm.onSubmit = function () {
       vm.newExercise.subject = vm.subjects[vm.subject]._id;
