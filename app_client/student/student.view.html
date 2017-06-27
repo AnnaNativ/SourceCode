@@ -1,28 +1,71 @@
 <navigation></navigation>
+<style>
+    div.ex1 {
+        direction: rtl;
+        unicode-bidi: bidi-override;
+    }
+</style>
 
 <br>
 <div class="container" ng-cloak>
-    <h1 style="text-align:right">משוואה ריבועית</h1>
     <div class="container text-right">
+        <div ng-if="vm.subjectVideoOn" class="row">
+            <div class="col-md-12">
+                <iframe id="ytplayer" type="text/html" width="1024" height="560"
+                src="https://www.youtube.com/embed/znPCD7tUKX0"
+                frameborder="0"></iframe>
+            </div>            
+        </div>
+        <div ng-if="vm.solutionVideoOn" class="row">
+            <div class="col-md-12">
+                <iframe id="ytplayer" type="text/html" width="1024" height="560"
+                src="https://www.youtube.com/embed/yT3jh2aZN68"
+                frameborder="0"></iframe>
+            </div>            
+        </div>
         <div class="row">
             <div class="col-md-6 pull-right">
-                <h3>:פתור תרגיל</h3>
-<!--                        <p class="text-right lead">X&sup2; + 2X + 3</p> -->
-                <p class="text-right lead">{{vm.exercise.exercise}}</p>
+                <h1>:פתור תרגיל</h1>
+            </div>
+            <div class="col-md-6">
+                <button ng-if="!vm.subjectVideoOn && !vm.solutionVideoOn" class="btn btn-info" ng-click="vm.solutionVideoOn = true">וידאו פתרונות לדוגמה</button>
+                <button ng-if="!vm.subjectVideoOn && !vm.solutionVideoOn"class="btn btn-info" ng-click="vm.subjectVideoOn = true">וידאו על הנושא</button>
+                <button ng-if="vm.subjectVideoOn || vm.solutionVideoOn" class="btn btn-info" ng-click="vm.closeVideos()">סגוד וידאו</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 pull-right">
+                <div ng-repeat="obj in vm.exercise.body">
+                    <div ng-if="obj.type == 'picture'">
+                        <img ng-src="{{obj.content}}">
+                    </div>
+                    <div class="ex1" ng-if="obj.type == 'text'">
+                        {{obj.content}}
+                    </div>
+                    <br>            
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6 pull-right">
                 <h3>:בחר תשובה נכונה </h3>
                 <div ng-repeat="obj in vm.exercise.solutions" id="{{obj.solution}}">
-                    <label>{{obj.solution}}
-                        <input type="radio" name="obj" ng-click="vm.handleRadioClick(obj)" ng-model="selectedValue.solution" value="{{obj.solution}}"/>
-                    </label>
+                    <div class="ex1">
+                        <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"/>&nbsp;&nbsp;
+                        <label>{{obj.solution}}</label>
+                    </div>
                 </div>                    
             </div>
         </div>
+        <br>        
+        <div class="row">
+            <div class="col-md-6 pull-right">
+                <button type="button" class="btn btn-default pull-right" ng-click="vm.checkAnswer()">סיים תרגיל</button>
+                <h1 ng-if="vm.finalSelection == true" class="pull-right">הצלחת, יפה מאוד</h1>
+                <h1 ng-if="vm.finalSelection == false" class="pull-right">תשובה שגויה, נסה שנית</h1>
+            </div>
+        </div>
     </div>
-    <button type="button" class="btn btn-default pull-right" ng-click="vm.checkAnswer()">סיים תרגיל</button>
-    <h1 ng-if="vm.finalSelection == true" class="pull-right">הצלחת, יפה מאוד</h1>
-    <h1 ng-if="vm.finalSelection == false" class="pull-right">תשובה שגויה, נסה שנית</h1>
 </div>
+<div style="height:100px"></div>
+

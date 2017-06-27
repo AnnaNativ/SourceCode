@@ -9,6 +9,8 @@
     var vm = this;
     vm.currentSelection = false;
     vm.finalSelection = null;
+    vm.subjectVideoOn = false;
+    vm.solutionVideoOn = false;
 
     vm.exercise = {};
 
@@ -21,8 +23,6 @@
       .success(function (data) {
         console.log("In student.controller getExercise with: " + data);
         vm.exercise = data;
-        vm.exercise.solutions = vm.exercise.badSolutions;
-        vm.exercise.solutions.splice(vm.random(), 0, vm.exercise.goodSolutions[0]);
       })
       .error(function (e) {
         console.log(e);
@@ -31,13 +31,18 @@
     // check user's answer
     vm.checkAnswer = function () {
       console.log("in CheckAnswer with: " + vm.currentSelection);
-      vm.finalSelection = (vm.currentSelection == vm.exercise.goodSolutions[0].solution);
+      vm.finalSelection = (vm.exercise.solutions[vm.currentSelection].isCorrect);
     }
 
-    vm.handleRadioClick = function (obj) {
-      console.log(obj.solution);
+    vm.closeVideos = function() {
+      vm.subjectVideoOn = false;
+      vm.solutionVideoOn = false;
+    }
+
+    vm.handleRadioClick = function ($index) {
+      console.log(vm.exercise.solutions[$index].isCorrect);
       vm.finalSelection = null;
-      vm.currentSelection = obj.solution;
+      vm.currentSelection = $index;
     };
   }
 
