@@ -38,6 +38,23 @@ module.exports.getExercisesForSubjectAndSubSubject = function(req, res) {
   }  
 
 }
+//TODO this is just a git test
+module.exports.getExercisesFoSubSubjectandLevel = function(req, res) {
+  if (!req.payload._id) {
+    res.status(401).json({
+      "message": "UnauthorizedError: private exercise"
+    });
+  } else {
+    var subject = new mongoose.mongo.ObjectId(req.query.subject);
+    var subSubject = new mongoose.mongo.ObjectId(req.query.subSubject);
+    Exercise
+      .find({'subject' : subject, 'subSubject': subSubject})
+      .exec(function(err, exercises) {
+        res.status(200).json(exercises);
+      });
+  }  
+
+}
 
 module.exports.newExercise = function (req, res) {
 
