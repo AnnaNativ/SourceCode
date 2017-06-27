@@ -1,35 +1,89 @@
 <navigation></navigation>
 
 <div class="container" ng-cloak>
-  <form ng-submit="vm.onSubmit()">
+  <form ng-submit="vm.onSubmit(picFile)">
     <div class="form-group text-right">
       <div class="row">
-        <div class="col-md-3 pull-right">
+          <h2>:מסך הכנסת תרגיל</h2>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pull-right">
           <h3>:בחר נושא</h3>
-          <select class="form-control" ng-model="vm.subject" 
+          <select dir="rtl" class="form-control" ng-model="vm.subject" 
               ng-options="vm.subjects.indexOf(subject) as subject.name for subject in vm.subjects">
           </select>
+        </div>
+        <div ng-if="vm.subject >= 0" class="col-md-4 pull-right">
           <h3>:בחר תת נושא</h3>
-            <select class="form-control" ng-model="vm.subSubject" 
+            <select dir="rtl" class="form-control" ng-model="vm.subSubject" 
                 ng-options="vm.subjects[vm.subject].subSubjects.indexOf(subSubject) as subSubject.name for subSubject in vm.subjects[vm.subject].subSubjects">
             </select>
         </div>
-        <div class="col-md-1 pull-right">
+        <div ng-if="vm.subSubject >= 0" class="col-md-3 pull-right">
+          <h3>:בחר רמת קושי</h3>
+            <select dir="rtl" class="form-control" ng-model="vm.newExercise.level" ng-options="idx as level for (idx, level) in vm.levels"></select>
         </div>
-        <div class="col-md-6 pull-right">
+      </div>
+      <br><hr>
+      <div ng-if="vm.newExercise.level != undefined" class="row">
+        <div class="col-md-8 pull-right">
           <h3>:הכנס/י תרגיל</h3>
-          <input type="text" class="form-control text-right" ng-model="vm.newExercise.exercise" name="exercise">
+          <div class="text-center">
+            <div ng-if="vm.newExercise.body.length == 0">
+              <label class="btn btn-default" ng-click="vm.addTextArea()">הוספת טקסט</label>
+              <label for="files" class="btn btn-default">הוספת תמונה</label>
+              <input id="files" type="file" style="visibility:hidden;" ngf-select="vm.addPicture()" ng-model="vm.picFile" name="file" accept="image/*" ngf-max-size="2MB" ngf-model-invalid="errorFile">
+              <img ngf-thumbnail="vm.newExercise.body[0].content" class="thumb">
+              <br>
+            </div>
+            <div ng-repeat="obj in vm.newExercise.body">
+              <div ng-if="obj.type == 'text'" class="row">
+                <div class="col-md-2 pull-right">          
+                  <label class="btn btn-default" ng-click="vm.removeTextArea($index)">מחק טקסט</label>
+                </div>
+                <div class="col-md-10 pull-right">          
+                  <textarea  dir="rtl" class="form-control" rows="5" placeholder="Add Message" ng-model="obj.content">{{obj.content}}</textarea>
+                </div>
+              <br>
+              </div>
+              <div ng-if="obj.type == 'picture'" class="row">
+                <div class="col-md-2 pull-right">          
+                  <label class="btn btn-default" ng-click="vm.removePicture($index)">מחק תמונה</label>
+                </div>
+                <div class="col-md-10 pull-right">          
+                  <img ngf-thumbnail="obj.content" class="thumb">
+                </div>
+              </div>
+              <div ng-if="$index == vm.newExercise.body.length - 1" class="row">
+                <div class="col-md-10 center">          
+                  <br>
+                  <label class="btn btn-default" ng-click="vm.addTextArea()">הוספת טקסט</label>
+                  <label for="files" class="btn btn-default">הוספת תמונה</label>
+                  <input id="files" type="file" style="visibility:hidden;" ngf-select="vm.addPicture()" ng-model="vm.picFile" name="file" accept="image/*" ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                </div>
+              </div>
+              <br>
+            </div>
+          </div>
+        </div>        
+        <div ng-if="vm.newExercise.body.length > 0" class="col-md-3 pull-right">
           <div ng-repeat="obj in vm.newExercise.solutions">
             <h3 ng-if="$index == 0">:הכנס תשובה נכונה</h3>
             <h3 ng-if="$index == 1">:הכנס תשובות אחרות </h3>
-            <input type="text" class="form-control text-right" ng-model="obj.solution" name="solutions"><br>
+            <input dir="rtl" type="text" class="form-control" ng-model="obj.solution" name="solutions"><br>
           </div>        
         </div>        
       </div>
     </div>
-    <button type="submit" class="btn btn-default pull-right">שמור תרגיל</button>
+    <button type="submit"
+      ng-disabled ="vm.newExercise.solutions[0].solution.length == 0 ||
+                    vm.newExercise.solutions[1].solution.length == 0 ||
+                    vm.newExercise.solutions[2].solution.length == 0 ||
+                    vm.newExercise.solutions[3].solution.length == 0 ||
+                    vm.newExercise.solutions[4].solution.length == 0" 
+      class="btn btn-default pull-right">שמור תרגיל
+    </button>
   </form>
 </div>
-{{vm.subjects}}
-{{vm.subject}}
-{{vm.subSubject}}
+<div style="height:100px"></div>
+{{vm.newExercise}}
