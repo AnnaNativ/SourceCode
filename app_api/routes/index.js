@@ -24,7 +24,9 @@ router.get('/exercisesForSubjectAndSubSubject', auth, ctrlExercise.getExercisesF
 router.get('/subjects', auth, ctrlSubjects.getSubjects);
 
 //assignment
-router.get('/myAssignments',userId, ctrlAssignment.getMyAssignments);
+router.get('/myAssignments', ctrlAssignment.getMyAssignments);
+router.get('/myLastLocation', ctrlAssignment.getMyLastLocation);
+
 
 
 // authentication

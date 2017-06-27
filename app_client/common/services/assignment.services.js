@@ -8,16 +8,25 @@
   function assignment ($http) {
   
     var myAssignments = function(user){
-       console.log('in myAssignments with userid ' + user._id);
-      //ToDo need to implement something more secure
-       return $http.get('/api/myAssignments', user._id)
-      .success(function(data){
-        console.log('back from myAssignments');
-        return data;
-      }); 
+      // console.log('in myAssignments with userid ' + user._id);
+      
+      var congif = {
+        params:user
+      };
+       return $http.get('/api/myAssignments', congif);
     };
-    return {
-      myAssignments:myAssignments
+
+    var myLastLocation = function(assignment){
+        console.log('in myLastLocation for assignment ' + assignment);
+        var congif = {
+          params:assignment
+        };
+        return $http.get('/api/myLastLocation', congif);
+        
     };
+  return {
+      myAssignments:myAssignments,
+      myLastLocation:myLastLocation
+  };
   }
 })();
