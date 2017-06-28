@@ -13,10 +13,14 @@
         <p>{{ vm.user.email }} :כתובת אימייל שלך</p>
         <p>{{ vm.user.role }} :תפקידך</p>
         <p ng-show="vm.isTeacher()">{{ vm.user.school }} :בית ספר</p>
-        <a ng-show="vm.isTeacher()" href="teacher">הכנס תרגילים</a><br><br>
-        <a ng-show="vm.isTeacher()" href="video">הכנס וידאו</a>
+        <a ng-show="vm.isTeacher()" href="teacher">הכנס תרגילים</a>
         <p ng-show="vm.isStudent()">{{ vm.user.teacher }} :מורה</p>
-        <a ng-show="vm.isStudent()" href="student">היכנס לדף התירגולים</a>
+        <!--<button ng-show="vm.isStudent()" ng-click='vm.getMyAssignments()'> View my assignments</button>-->
+      </div>
+      <div>
+         <label>Your current assignments are:</label>       
+        <select class="form-control" ng-model="vm.selectedAssignment" ng-options="assignment as assignment.subSubject[0].name for assignment in vm.myAssignments" ng-change="vm.lastLocation()"></select>
+        <button ng-hide=vm.isInOriginalSubject ng-click=vm.myInitialSubSubject()>Return to your original Subject</button> 
       </div>
     </div>
   </div>
