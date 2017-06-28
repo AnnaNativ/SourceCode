@@ -19,9 +19,10 @@ subSubjects
 	sample videos:[videoId1, videoId2,...],
 	exercises:
 	[
-		Id:'1',
-		Id:'2',
-		Id:'3'
+		{Id:'1',level:'1'},
+		{Id:'1',level:'2'},
+		{Id:'1',level:'3'},
+		{Id:'1',level:'6'},
 	],
 	subjectId:''
     
@@ -38,7 +39,6 @@ videos:{
 	
 exercises
 {
-	level:,
 	body[{
 	type:text/picture}
 	content:'text'/link}],
@@ -55,7 +55,6 @@ exercises
 	publishDate:''
 	
 }
-
 -----------------------------------
 users{
 	hash:,
@@ -80,7 +79,7 @@ userAudit
 	userId:'',
 	assignmentId:'',
 	subject:'',
-	subsubject:'',
+	subsubjectId:'',
 	level:'',
 	exerciseId:'',
 	videoId:'',
