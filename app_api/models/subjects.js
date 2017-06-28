@@ -1,21 +1,12 @@
 var mongoose = require('mongoose');
 
-var videoSchema = new mongoose.Schema({
-  name: String,
-  link: String
-});
-
-var subSubjectSchema = new mongoose.Schema({
-  name: String,
-  videos: [videoSchema]
-});
-
 var subjectSchema = new mongoose.Schema({
   name: String,
-  subSubjects: [subSubjectSchema]
+  schoolGrade: String,
+  level: String,
+  subSubjects:[
+      {type: Schema.Types.ObjectId, ref: 'SubSubject'}
+  ]
 });
 
-mongoose.model('Video', videoSchema);
-mongoose.model('SubSubject', subSubjectSchema);
-mongoose.model('Subject', subjectSchema);
-
+module.exports = mongoose.model('Subject', subjectSchema);

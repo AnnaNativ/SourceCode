@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var System = mongoose.model('System');
 
 var gracefulShutdown;
 module.exports.systemConfig = {
@@ -62,6 +63,6 @@ process.on('SIGTERM', function() {
 require('./users');
 require('./exercises');
 require('./subjects');
+require('./subSubjects');
 require('./system');
 require('./assignments');
-var System = mongoose.model('System');
