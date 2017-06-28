@@ -15,18 +15,8 @@ subjects
 subSubjects
 {
     name:'',
-	videos:[{
-		type:'', // tutorial, exercise solution
-		name:'',
-		link:'',
-		views:'',
-		likes:'',
-		dislikes:'',
-		
-	},
-	{},
-	{}
-	],
+	tutorial video:'videoId';
+	sample videos:[videoId1, videoId2,...],
 	exercises:
 	[
 		Id:'1',
@@ -37,7 +27,15 @@ subSubjects
     
 }
 
-
+videos:{
+		type:'', // tutorial, sample solution, exercise solution
+		name:'',
+		link:'',
+		views:'',
+		likes:'',
+		dislikes:''	
+	}
+	
 exercises
 {
 	level:,
@@ -48,7 +46,8 @@ exercises
 	{
 		solution:"",
 		isCorrect:"boolean"
-	}]
+	}],
+	videoSolution:videoId,
 	tries:
 	successes:
 	failures:
@@ -71,7 +70,7 @@ users{
 assignments{
 	assigner: FK //teacher, self picked
 	assignee: FK, //student
-	status: open/done
+	status:   new/inprogress/done
 	subsubjectId: FK
 	
 }
@@ -92,7 +91,7 @@ userAudit
 	inAssignment:'boolean'
 }
 
-userProgress{ // update level change within the same subsubject, create new one for each "need help sub " within the same assignment.
+userProgress{ // create new when new assignment is made,update level change within the same subsubject, create new one for each "need help sub " within the same assignment.
  {
 	userId:'',
 	subSubject:'',
@@ -104,6 +103,11 @@ userProgress{ // update level change within the same subsubject, create new one 
  
 
  
+}
+
+system
+{
+	"imageLocation" : "/media/images/"
 }
 
 

@@ -37,6 +37,18 @@ module.exports.getExercisesForSubjectAndSubSubject = function(req, res) {
 
 }
 
+module.exports.getExercisesForSubSubjectAndLevel = function(subSubject, level,userId,exercise,myCallBackFunc) {
+  console.log('in getExercisesForSubSubjectAndLevel');
+  var subSubject = new mongoose.mongo.ObjectId(subSubject);
+  var userId = new mongoose.mongo.ObjectId(userId);
+  
+    Exercise
+      .find({'subSubjectId' : subSubject,'userId':userId,'level': level})
+      .exec(function(err, nextExercises) {
+        exercise = nextExercises;
+        myCallBackFunc(exercise);
+      });
+}
 module.exports.newExercise = function (req, res) {
   console.log("in exercise.js newExercise with: " + req.body);
 
@@ -64,4 +76,3 @@ module.exports.newExercise = function (req, res) {
     });
   });
 };
-

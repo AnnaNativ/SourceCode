@@ -63,4 +63,5 @@ require('./users');
 require('./exercises');
 require('./subjects');
 require('./system');
+require('./assignments');
 var System = mongoose.model('System');

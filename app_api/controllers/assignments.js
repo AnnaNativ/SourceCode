@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var exercise = require('exercise');
+var exercise = require('./exercise');
 
 var assignments = mongoose.model('Assignment');
 var progress = mongoose.model('userProgress');
@@ -48,14 +48,23 @@ module.exports.getMyAssignments = function(req, res)
           console.log('Returned from getmyLastLocation with error '+ err);
         }
         else{
-          res.status(200).json(progress);
+         // res.status(200).json(progress);
           lastSubSubject = progress[0].subSubjectId;
           lastLevel = progress[0].level;
+          userId = progress[0].userId;
+          var nextExericise;
+
+          var callbackFunc = function(exercise)
+          {
+            console.log(' I am in callbackFunc with: '+ exercise);
+            res.status(200).json(exercise);
+          }
 
           //get exercise for the subsubject and level that was last done within this assignment
-          
+          exercise.getExercisesForSubSubjectAndLevel(lastSubSubject,lastLevel,userId,nextExericise,callbackFunc);
+         
         }  
-      }); 
+      }) 
 
 
     };

@@ -45,16 +45,16 @@
         console.log('checking where you left it of in your previous session: '+ vm.selectedAssignment);
         assignment.myLastLocation(vm.selectedAssignment)
         .success(function(data){
-          console.log('your last subject was ' + data[0].subSubject[0].name);
+          console.log('your last subject was ' + JSON.stringify(data));
           vm.myProgress = data;
-          if(data[0].subSubjectId != vm.selectedAssignment.subSubjectId){
+         /* if(data[0].subSubjectId != vm.selectedAssignment.subSubjectId){
             console.log('You are not in your origianl subject');
             vm.isInOriginalSubject = false;
           }else{
             console.log('You are in your original subject');
             vm.isInOriginalSubject = true;
           }
-
+          */
           
         })
         .error(function(e){
