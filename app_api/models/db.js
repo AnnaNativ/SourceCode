@@ -65,3 +65,4 @@ require('./exercises');
 require('./subjects');
 require('./subSubjects');
 require('./system');
+require('./assignments');
