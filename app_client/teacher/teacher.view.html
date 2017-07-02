@@ -10,13 +10,13 @@
         <div class="col-md-4 pull-right">
           <h3>:בחר נושא</h3>
           <select dir="rtl" class="form-control" ng-model="vm.subject" 
-              ng-options="vm.subjects.indexOf(subject) as subject.name for subject in vm.subjects">
+              ng-options="vm.subjects.indexOf(subject) as subject.name for subject in vm.subjects" ng-change="vm.subjectSelected()">
           </select>
         </div>
         <div ng-if="vm.subject >= 0" class="col-md-4 pull-right">
           <h3>:בחר תת נושא</h3>
             <select dir="rtl" class="form-control" ng-model="vm.subSubject" 
-                ng-options="vm.subjects[vm.subject].subSubjects.indexOf(subSubject) as subSubject.name for subSubject in vm.subjects[vm.subject].subSubjects">
+                ng-options="vm.subSubjects.indexOf(subSubject) as subSubject.name for subSubject in vm.subSubjects">
             </select>
         </div>
         <div ng-if="vm.subSubject >= 0" class="col-md-3 pull-right">
@@ -86,4 +86,6 @@
   </form>
 </div>
 <div style="height:100px"></div>
-{{vm.newExercise}}
+Subjects: {{vm.subjects}}<br><br>
+SubSubjects: {{vm.subSubjects}}<br><br>
+Exercises: {{vm.newExercise}}<br><br>

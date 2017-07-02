@@ -32,19 +32,37 @@
       });
     }
 
-    var getExercisesForSubjectAndSubSubject = function(subject, subSubject) {
-      console.log('In data.service getExercisesForSubjectAndSubSubject with subject: ' + subject + ' and sub subject: ' + subSubject);
-      var data = {
-          subject: subject,
-          subSubject: subSubject
-      };
+    var getVideos = function(videos) {
+      console.log('In data.service getVideos');
 
       var config = {
-        params: data,
+        params: {videos: videos},
         headers : {Authorization: 'Bearer '+ authentication.getToken()}
       };
 
-      return $http.get('/api/exercisesForSubjectAndSubSubject', config);
+      return $http.get('/api/videos', config);
+    }
+
+    var getSubSubjects = function(subject) {
+      console.log('In data.service getSubSubjects');
+
+      var config = {
+        params: {subject: subject},
+        headers : {Authorization: 'Bearer '+ authentication.getToken()}
+      };
+
+      return $http.get('/api/subSubjects', config);
+    }
+
+    var getExercises = function(subSubject) {
+      console.log('In data.service getExercises with subSubject: ' + subSubject);
+
+      var config = {
+        params: {subSubject: subSubject},
+        headers : {Authorization: 'Bearer '+ authentication.getToken()}
+      };
+
+      return $http.get('/api/exercises', config);
     }
 
     var getStudentsOfTeacher = function() {
@@ -64,7 +82,9 @@
       getProfile : getProfile,
       getExercise: getExercise,
       getSubjects: getSubjects,
-      getExercisesForSubjectAndSubSubject: getExercisesForSubjectAndSubSubject,
+      getSubSubjects: getSubSubjects,
+      getVideos: getVideos,
+      getExercises: getExercises,
       getStudentsOfTeacher: getStudentsOfTeacher,
       getTeachersList: getTeachersList
     };

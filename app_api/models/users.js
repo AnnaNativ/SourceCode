@@ -4,26 +4,11 @@ var jwt = require('jsonwebtoken');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-  email: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  name: {
-    type: String,
-    required: true
-  },
-  role: {
-    type: String,
-    required: true
-  },
-  school: {
-    type: String,
-    required: false
-  },
-  teacher: {
-    type: Schema.Types.ObjectId, ref: 'User'
-  },
+  email: {type: String, unique: true, required: true},
+  name: {type: String, required: true},
+  role: {type: String, required: true, enum: ['teacher', 'student']},
+  school: {type: Schema.Types.ObjectId, ref: 'School'},
+  teacher: {type: Schema.Types.ObjectId, ref: 'User'},
   hash: String,
   salt: String
 });

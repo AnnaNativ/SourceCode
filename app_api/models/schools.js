@@ -3,5 +3,5 @@ var mongoose = require('mongoose');
 
 var schoolsSchema = new mongoose.Schema({name:String});
 
-mongoose.model('schools', schoolsSchema);
+mongoose.model('School', schoolsSchema);
 
