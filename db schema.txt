@@ -84,9 +84,7 @@ userAudit
 	exerciseId:'',
 	videoId:'',
 	createdData:'',
-	success:'boolean'
-	failure:'boolean'
-	gaveup:'boolean',
+	outcome: enum(success, failure,gaveup)
 	inAssignment:'boolean'
 }
 
@@ -108,6 +106,7 @@ system
 {
 	"imageLocation" : "/media/images/"
 }
+
 
 
 

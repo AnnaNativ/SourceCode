@@ -1,4 +1,14 @@
 var mongoose = require('mongoose');
+
+// BRING IN YOUR SCHEMAS & MODELS
+require('./users');
+require('./exercises');
+require('./subjects');
+require('./subSubjects');
+require('./system');
+require('./assignments');
+require('./audit');
+
 var System = mongoose.model('System');
 
 var gracefulShutdown;
@@ -59,10 +69,4 @@ process.on('SIGTERM', function() {
   });
 });
 
-// BRING IN YOUR SCHEMAS & MODELS
-require('./users');
-require('./exercises');
-require('./subjects');
-require('./subSubjects');
-require('./system');
-require('./assignments');
+

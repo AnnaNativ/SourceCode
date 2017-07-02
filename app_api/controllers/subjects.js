@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Subject = mongoose.model('Subject');
-var SubSubject = mongoose.model('SubSubject');
+var SubSubject = mongoose.model('subSubjects');
 var Video = mongoose.model('Video');
 
 module.exports.getSubjects = function(req, res) {
@@ -46,4 +46,37 @@ module.exports.getSubjects = function(req, res) {
       });
   }
 
+};
+
+module.exports.getAll = function(postSubjectGetAllCallback){
+ // var allSubjects; 
+   Subject
+      .find()
+      .exec(function(err, allSubjects) {
+        postSubjectGetAllCallback(allSubjects);
+      });
+  
+};
+
+module.exports.createSubsubject = function(selecteSubject,subSubjectName,postCreateSubsubject){
+  //create subsubject
+  
+  var createdSubsubject = new SubSubject({
+    name:subSubjectName
+ 	}); 
+  
+  createdSubsubject.save(function(err, createdSubsubject){
+      if(err)
+          console.log(err);
+      else{
+          //update the subject object with the new subsubjectid
+          console.log('createdSubsubject: ' +createdSubsubject);
+         
+          Subject
+          .update({"name":selecteSubject.name},{$push:{subSubjects:createdSubsubject._id}})
+          .exec(function(err, subjects) {
+            console.log('subject is updated!!!!')
+          });
+          }
+      });
 };

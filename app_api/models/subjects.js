@@ -1,11 +1,12 @@
 var mongoose = require('mongoose');
+var Schema  = mongoose.Schema;
 
 var subjectSchema = new mongoose.Schema({
   name: String,
   schoolGrade: String,
   level: String,
   subSubjects:[
-      {type: Schema.Types.ObjectId, ref: 'SubSubject'}
+      {Id:{type: Schema.Types.ObjectId, ref:'SubSubject'}}
   ]
 });
 

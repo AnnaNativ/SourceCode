@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var videoSchema = new mongoose.Schema({
   name: String,
@@ -6,38 +7,11 @@ var videoSchema = new mongoose.Schema({
 });
 
 var subSubjectSchema = new mongoose.Schema({
-  name: String,
-  videos:[
-      {type: Schema.Types.ObjectId, ref: 'Video'}
-  ]
-
-});
+  name: String
+ // videos:[
+  //    {type: Schema.Types.ObjectId, ref: 'Video'}
+ // ]
+},{collection: 'subSubjects' });
 
 mongoose.model('Video', videoSchema);
-mongoose.model('SubSubject', subSubjectSchema);
-
-
-subSubjects
-{
-    name:'',
-	videos:[{
-		type:'', // tutorial, exercise solution
-		name:'',
-		link:'',
-		views:'',
-		likes:'',
-		dislikes:'',
-		
-	},
-	{},
-	{}
-	],
-	exercises:
-	[
-		Id:'1',
-		Id:'2',
-		Id:'3'
-	],
-	subjectId:''
-    
-}
+mongoose.model('subSubjects', subSubjectSchema);
