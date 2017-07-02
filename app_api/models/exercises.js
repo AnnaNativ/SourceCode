@@ -12,9 +12,9 @@ var solutionSchema = new Schema({
 });
 
 var exerciseSchema = new Schema({
-  level: { type: Number, min: 0, max: 9 },
   body: [bodyPartSchema],
   solutions: [solutionSchema],
+  videoSolution: {type: Schema.Types.ObjectId, ref: 'Video'},
   tries: {type: Number, default: 0},
   successes: {type: Number, default: 0},
   failures: {type: Number, default: 0},

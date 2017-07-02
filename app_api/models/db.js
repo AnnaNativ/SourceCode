@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-
 // BRING IN YOUR SCHEMAS & MODELS
 require('./users');
 require('./exercises');
@@ -9,6 +8,7 @@ require('./system');
 require('./assignments');
 require('./audit');
 
+require('./videos');
 var System = mongoose.model('System');
 
 var gracefulShutdown;

@@ -15,8 +15,8 @@ subjects
 subSubjects
 {
     name:'',
-	tutorial video:'videoId';
-	sample videos:[videoId1, videoId2,...],
+	tutorial_video:'videoId';
+	sample_videos:[videoId1, videoId2,...],
 	exercises:
 	[
 		{Id:'1',level:'1'},

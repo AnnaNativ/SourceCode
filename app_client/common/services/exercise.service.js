@@ -12,7 +12,7 @@
     };
 
     var newExercise = function(exercise) {
-      console.log("In exercise.service newExercise with: " + exercise);
+      console.log("In exercise.service newExercise with: " + exercise.subSubject);
       return $http.post('/api/exercise', exercise).success(function(data){
         saveExercise(data);
       });

@@ -4,7 +4,6 @@
     .module('meanApp')
     .controller('teacherCtrl', teacherCtrl);
 
-
   teacherCtrl.$inject = ['$location', 'exercise', 'meanData', 'Upload', '$timeout'];
   function teacherCtrl($location, exercise, meanData, Upload, $timeout) {
     var vm = this;
@@ -15,6 +14,7 @@
     meanData.getSubjects()
     .success(function(data){
       vm.subjects = data;
+      vm.subSubjects = [];
     })
     .error(function(e){
       console.log(e);
@@ -27,7 +27,6 @@
       subject: "",
       subSubject: ""
     };
-origin/master
 
     vm.addTextArea = function(){
       vm.newExercise.body.push({type: 'text', content: '' });
@@ -46,11 +45,21 @@ origin/master
       vm.newExercise.body.splice(index, 1);
     }
 
-    vm.onSubmit = function () {
+     vm.subjectSelected = function() {
+      meanData.getSubSubjects(vm.subjects[vm.subject]._id)
+      .success(function(data){
+        vm.subSubjects = data;
+      })
+      .error(function(e){
+        console.log(e);
+      })
+    }
+
+   vm.onSubmit = function () {
       console.log('in teacher.controller onSubmit: 1');
       // first, fill the missing data in the newExercise object
       vm.newExercise.subject = vm.subjects[vm.subject]._id;
-      vm.newExercise.subSubject = vm.subjects[vm.subject].subSubjects[vm.subSubject]._id;
+      vm.newExercise.subSubject = vm.subSubjects[vm.subSubject]._id;
       
      vm.allPicSavedCallback = function() { 
           console.log('in in teacher.controller allPicSavedCallback');

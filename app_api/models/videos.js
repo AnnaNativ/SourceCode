@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var videoSchema = new mongoose.Schema({
-  type: String,
+  type: {type: String, enum: ['tutorial', 'sample solution', 'exercise solution']},
   name: String,
   link: String,
   views:{type: Number, default: 0},
@@ -9,4 +9,6 @@ var videoSchema = new mongoose.Schema({
   dislikes:{type: Number, default: 0},
 });
 
-module.exports = mongoose.model('Video', videoSchema);
+mongoose.model('Video', videoSchema);
+
+//db.videos.insert({type: 'sample solution', name: 'משוואות דיפרנציליות', link: 'https://www.youtube.com/embed/znPCD7tUKX0'})

@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var Exercise = mongoose.model('Exercise');
+var SubSubject = mongoose.model('SubSubject');
+var AssignedExercises = mongoose.model('AssignedExercises');
 var BodyPart = mongoose.model('BodyPart');
 var Solution = mongoose.model('Solution');
 var randGen = require('mongoose-query-random');
@@ -20,16 +22,15 @@ module.exports.getExercise = function (req, res) {
 
 };
 
-module.exports.getExercisesForSubjectAndSubSubject = function(req, res) {
+module.exports.getExercises = function(req, res) {
   if (!req.payload._id) {
     res.status(401).json({
       "message": "UnauthorizedError: private exercise"
     });
   } else {
-    var subject = new mongoose.mongo.ObjectId(req.query.subject);
     var subSubject = new mongoose.mongo.ObjectId(req.query.subSubject);
-    Exercise
-      .find({'subject' : subject, 'subSubject': subSubject})
+    SubSubject
+      .find({'_id' : subSubject})
       .exec(function(err, exercises) {
         res.status(200).json(exercises);
       });
@@ -49,6 +50,7 @@ module.exports.newExercise = function (req, res) {
   console.log("in exercise.js newExercise with: " + req.body);
 
   var exercise = new Exercise();
+  exercise._id = new mongoose.mongo.ObjectId();
   exercise.level = req.body.level;
   // create the exercise body from its parts
   req.body.body.forEach(function(bodyPart) {
@@ -64,11 +66,23 @@ module.exports.newExercise = function (req, res) {
     sol.isCorrect = solution.isCorrect;
     exercise.solutions.push(sol);
   });
-
-  exercise.save(function (err) {
-    res.status(200);
-    res.json({
-      "exercise": "saved"
-    });
+  // save the exercise
+  exercise.save(function (err){
+      if(err) {
+        console.log(err);
+      }
+      else {
+        var newExercise = new AssignedExercises();
+        newExercise.Id = exercise._id;
+        newExercise.level = exercise.level;
+        // update the subSubject with the new exercise
+        SubSubject
+        .update({"_id": req.body.subSubject},{$push:{exercises: newExercise}})
+        .exec(function(err, subSubject) {
+          console.log('subSubject is updated!!!!')
+          res.status(200).json(subSubject);
+        });
+      }
   });
 };
+
