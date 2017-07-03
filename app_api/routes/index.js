@@ -15,6 +15,7 @@ var ctrlAuth = require('../controllers/authentication');
 var ctrlExercise = require('../controllers/exercise');
 var ctrlSubjects = require('../controllers/subjects');
 var ctrlUploads = require('../controllers/uploads');
+var ctrlAssignment = require('../controllers/assignments');
 
 // profile
 router.get('/profile', auth, ctrlProfile.profileRead);
@@ -41,5 +42,10 @@ router.post('/subject', ctrlSubjects.newSubject);
 router.post('/subSubject', ctrlSubjects.newSubSubject);
 // pictures upload
 router.post('/upload', multipartyMiddleware, ctrlUploads.uploadPic);
+
+//assignment
+router.get('/myAssignments', ctrlAssignment.getMyAssignments);
+router.get('/myLastLocation', ctrlAssignment.getMyLastLocation);
+
 
 module.exports = router;
