@@ -45,7 +45,8 @@
       console.log('checking where you left it of in your previous session: ' + vm.selectedAssignment);
       assignment.myLastLocation(vm.selectedAssignment)
         .success(function (data) {
-          $location.path('student');
+          console.log('Your next exe is: '+ JSON.stringify(data));
+          $location.path('student').search({param: data});
 
         })
         .error(function (e) {

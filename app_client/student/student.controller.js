@@ -4,29 +4,20 @@
     .module('meanApp')
     .controller('studentCtrl', studentCtrl);
 
-  studentCtrl.$inject = ['$location', 'meanData'];
-  function studentCtrl($location, meanData) {
+  studentCtrl.$inject = ['$location', '$routeParams', 'meanData'];
+  function studentCtrl($location, $routeParams, meanData) {
     var vm = this;
     vm.currentSelection = false;
     vm.finalSelection = null;
     vm.subjectVideoOn = false;
     vm.solutionVideoOn = false;
 
-    vm.exercise = {};
+    vm.exercise = $routeParams.param[0];
 
 
     vm.random = function() {
       return Math.round(Math.random() * vm.exercise.solutions.length);
     };
-
-    meanData.getExercise()
-      .success(function (data) {
-        console.log("In student.controller getExercise with: " + data);
-        vm.exercise = data;
-      })
-      .error(function (e) {
-        console.log(e);
-      });
 
     // check user's answer
     vm.checkAnswer = function () {
