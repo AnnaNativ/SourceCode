@@ -8,7 +8,7 @@
   function assignment ($http) {
   
     var myAssignments = function(user){
-      // console.log('in myAssignments with userid ' + user._id);
+      console.log('in myAssignments with userid ' + user._id);
       
       var congif = {
         params:user

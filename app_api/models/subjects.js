@@ -6,7 +6,7 @@ var subjectSchema = new mongoose.Schema({
   schoolGrade: String,
   level: String,
   subSubjects:[
-      {Id:{type: Schema.Types.ObjectId, ref:'SubSubject'}}
+      {type: Schema.Types.ObjectId, ref:'SubSubject'}
   ]
 });
 

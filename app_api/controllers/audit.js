@@ -5,12 +5,12 @@ var audit = mongoose.model('UserAudit');
 
 module.exports.getSeenExercises = function(param,exe,callbackFunc)
 {
-   console.log('getting a list of exe for a specific user/subsubject/level '+ JSON.stringify(param.userid) +'/'+ JSON.stringify(param.subject)+'/'+ param.level);
+   console.log('getting a list of exe for a specific user/subsubject/level '+ JSON.stringify(param.userId) +'/'+ JSON.stringify(param.subject)+'/'+ param.level);
    
-   var userId = mongoose.Types.ObjectId(param.userid);
+   var userId = mongoose.Types.ObjectId(param.userId);
    audit
       .aggregate(
-        {$match:{'userId':param.userid,'subsubjectId':param.subject,'level':param.level}})
+        {$match:{'userId':param.userId,'subsubjectId':param.subjectId,'level':param.level}})
       .exec(function(err, data) {
         if(err){
           console.log('Returned from aggregate with error '+ err);

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Subject = mongoose.model('Subject');
-var SubSubject = mongoose.model('subSubjects');
+var SubSubject = mongoose.model('SubSubject');
 var Video = mongoose.model('Video');
 
 module.exports.getSubjects = function(req, res) {
