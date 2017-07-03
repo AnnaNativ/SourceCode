@@ -1,6 +1,7 @@
 var passport = require('passport');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var School = mongoose.model('School');
 
 var sendJSONresponse = function(res, status, content) {
   res.status(status);
@@ -21,7 +22,10 @@ module.exports.register = function(req, res) {
   user.name = req.body.name;
   user.email = req.body.email;
   user.role = req.body.role;
-  user.school = req.body.school;
+
+  if(user.role === "teacher") {
+    user.school = new mongoose.mongo.ObjectId(req.body.school);
+  }
   if(user.role === "student") {
     user.teacher = new mongoose.mongo.ObjectId(req.body.teacher);
   }

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var School = mongoose.model('School');
 
 module.exports.profileRead = function(req, res) {
   if (!req.payload._id) {
@@ -34,6 +35,14 @@ module.exports.getTeachersList = function(req, res) {
     .find({"role" : "teacher"})
     .exec(function(err, user) {
       res.status(200).json(user);
+    });
+};
+
+module.exports.getSchoolsList = function(req, res) {
+  School
+    .find({})
+    .exec(function(err, schools) {
+      res.status(200).json(schools);
     });
 };
 // this is a comment

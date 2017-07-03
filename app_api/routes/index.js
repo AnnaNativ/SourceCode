@@ -16,6 +16,7 @@ var ctrlAssignment = require('../controllers/assignments');
 router.get('/profile', auth, ctrlProfile.profileRead);
 router.get('/studentsOfTeacher', auth, ctrlProfile.getStudentsOfTeacher);
 router.get('/teachersList', ctrlProfile.getTeachersList);
+router.get('/schoolsList', ctrlProfile.getSchoolsList);
 
 // exercises
 router.get('/exercise', auth, ctrlExercise.getExercise);

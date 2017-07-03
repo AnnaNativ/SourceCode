@@ -73,9 +73,15 @@
         }        
       });
     }
+
     var getTeachersList = function() {
       console.log('In data.service getTeachersList');
       return $http.get('/api/teachersList', {});
+    }
+    
+    var getSchoolsList = function() {
+      console.log('In data.service getSchoolsList');
+      return $http.get('/api/schoolsList', {});
     }
     
     return {
@@ -86,7 +92,8 @@
       getVideos: getVideos,
       getExercises: getExercises,
       getStudentsOfTeacher: getStudentsOfTeacher,
-      getTeachersList: getTeachersList
+      getTeachersList: getTeachersList,
+      getSchoolsList: getSchoolsList
     };
   }
 
