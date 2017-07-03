@@ -28,3 +28,6 @@ build/Release
 # Dependency directory
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules
+app_client/app.min.js
+*.map
+app_client/app.min.js.map
