@@ -23,9 +23,6 @@
          <label>Your current assignments are:</label>       
         <select class="form-control" ng-model="vm.selectedAssignment" 
             ng-options="assignment as assignment.subSubject[0].name for assignment in vm.myAssignments" ng-change="vm.lastLocation()"></select>
-              <div ng-if="vm.selectedAssignment!= undefined">
-                <a href="exercise"></a>
-              </div>
         <!--<button ng-hide=vm.isInOriginalSubject ng-click=vm.myInitialSubSubject()>Return to your original Subject</button> -->
       </div>
     </div>
