@@ -45,7 +45,7 @@
       console.log('checking where you left it of in your previous session: ' + vm.selectedAssignment);
       assignment.myLastLocation(vm.selectedAssignment)
         .success(function (data) {
-          $location.path('profile');
+          $location.path('student');
 
         })
         .error(function (e) {
