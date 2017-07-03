@@ -5,52 +5,57 @@
 <div class="container text-right">
   <h1 class="form-signin-heading">:הרשמה</h1>
   <p class="lead">כבר רשום? <a href="login">תיכנס </a> כדי להשתמש</p>
-  <form name="registrationForm" ng-submit="vm.onSubmit()">
-    <div></div>
+  <div ng-if="!vm.formValid">
+    <div class="row">
+      <div class="col-md-4 pull-right">
+        <div class="alert alert-danger" role="alert">אנא מלאו את כל השדות</div>
+      </div>
+    </div>
+  </div>
+  <form name="registrationForm" novalidate ng-submit="vm.submit(registrationForm.$valid)"">
     <div class="row">
       <div class="col-md-4 pull-right">
         <div class="form-group text-right">
-          <label for="name">:שם משתמש</label>
-          <input type="text" name="name" class="form-control text-right" id="name" placeholder="הכנס שם משתמש" ng-model="vm.credentials.name" required>
-          <div ng-messages="registrationForm.name.$error" ng-messages-include="messages.html"></div>
+          <h3>:שם משתמש</h3>
+          <input type="text" name="name" class="form-control text-right" placeholder="הכנס שם משתמש" ng-model="vm.credentials.name" required>
+          <div ng-messages="registrationForm.name.$error" ng-messages-include="/src/messages.html"></div>
         </div>
         <div class="form-group">
           <label for="email">:כתובת אימייל</label>
-          <input type="email" class="form-control text-right" name="emailInput" id="email" placeholder="הכנס כתובת אימייל" ng-model="vm.credentials.email">
+          <input type="email" name="email" class="form-control text-right" name="emailInput" placeholder="הכנס כתובת אימייל" ng-model="vm.credentials.email" required>
+          <div ng-messages="registrationForm.email.$error" ng-messages-include="/src/messages.html"></div>
         </div>
         <div class="form-group">
           <label for="password">:סיסמה</label>
-          <input type="password" class="form-control text-right" id="password" placeholder="הכנס סיסמה" ng-model="vm.credentials.password">
+          <input type="password" name="password" class="form-control text-right" placeholder="הכנס סיסמה" ng-model="vm.credentials.password" required>
+          <div ng-messages="registrationForm.password.$error" ng-messages-include="/src/messages.html"></div>
         </div>
         <div class="form-group">
           <label for="password">:אימות סיסמה</label>
-          <input type="password" class="form-control text-right" id="verifyPassword" placeholder="הכנס שוב סיסמה" ng-model="vm.credentials.verifyPassword">
+          <input type="password" name="verifyPassword" class="form-control text-right" placeholder="הכנס שוב סיסמה" ng-model="vm.credentials.verifyPassword" 
+            required compare-to="vm.credentials.password">
+          <div ng-messages="registrationForm.verifyPassword.$error" ng-messages-include="/src/messages.html"></div>
+
         </div>
-        <button type="submit" class="btn btn-info">שמירה</button>
-<!--        <button type="submit" class="btn btn-info" 
-          ng-disabled="vm.credentials.name == undifined || vm.credentials.name == '' ||
-                       vm.credentials.email == '' || registrationForm.emailInput.$error.email ||
-                       vm.credentials.password == undifined || vm.credentials.password == '' ||
-                       vm.credentials.verifyPassword == undifined || vm.credentials.verifyPassword == '' ||
-                       !((vm.credentials.role == 'teacher' && vm.school >= 0) || (vm.credentials.role == 'student' && vm.teacher >= 0))">שמירה</button>
--->
+        <button type="submit" class="btn btn-info">שמירה</button>  
       </div>
       <div class="col-md-2 pull-right">
         <div class="form-group">
           <h5>:בחר/י תפקיד</h5>
-          <label class="radio-inline"><input type="radio" ng-model="vm.credentials.role" value="teacher">מורה</label>
-          <label class="radio-inline"><input type="radio" ng-model="vm.credentials.role" value="student">תלמיד</label>
+          <label class="radio-inline"><input type="radio" name="role" ng-model="vm.credentials.role" value="teacher" required>מורה</label>
+          <label class="radio-inline"><input type="radio" name="role" ng-model="vm.credentials.role" value="student" required>תלמיד</label>
+          <div ng-messages="registrationForm.role.$error" ng-messages-include="/src/messages.html"></div>
         </div>
       </div>
       <div ng-show="vm.isTeacher()" class="col-md-3 pull-right">
         <div class="form-group">
           <label>:בחר/י בית ספר</label>
-          <select class="form-control" ng-model="vm.school" ng-options="vm.schools.indexOf(school) as school.name for school in vm.schools"></select>
+          <select class="form-control" name="school" ng-model="vm.school" ng-options="vm.schools.indexOf(school) as school.name for school in vm.schools"></select>
         </div>
       </div>
       <div ng-show="vm.isStudent()" class="col-md-3 pull-right">
         <label>:בחר/י מורה משוייכת</label>       
-        <select class="form-control" ng-model="vm.teacher" ng-options="vm.teachers.indexOf(teacher) as teacher.name for teacher in vm.teachers"></select>
+        <select class="form-control" name="teacher" ng-model="vm.teacher" ng-options="vm.teachers.indexOf(teacher) as teacher.name for teacher in vm.teachers"></select>
       </div>
     </div>
   </form>

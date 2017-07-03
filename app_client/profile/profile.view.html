@@ -18,11 +18,6 @@
         <p ng-show="vm.isStudent()">{{ vm.user.teacher }} :מורה</p>
         <a ng-show="vm.isStudent()" href="student">היכנס לדף התירגולים</a>
       </div>
-      <div>
-         <label>Your current assignments are:</label>       
-        <select class="form-control" ng-model="vm.selectedAssignment" ng-options="assignment as assignment.subSubject[0].name for assignment in vm.myAssignments" ng-change="vm.lastLocation()"></select>
-        <!-- <button ng-hide=vm.isInOriginalSubject ng-click=vm.myInitialSubSubject()>Return to your original Subject</button> -->
-      </div>
     </div>
   </div>
   <div class="col-md-3"></div>

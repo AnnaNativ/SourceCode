@@ -8,7 +8,7 @@
   function registerCtrl($location, authentication, meanData) {
     console.log('Register controller is running!!!');
     var vm = this;
-    vm.message = "";
+    vm.formValid = true;
     
     vm.credentials = {
       name : "",
@@ -49,24 +49,28 @@
       return vm.credentials.role == "student";
     }
     
-    vm.onSubmit = function () {
+    vm.submit = function (isValid) {
       console.log('Submitting registration');
-      if(vm.credentials.role == 'teacher') {
-        vm.credentials.school = vm.schools[vm.school]._id;
+      if (!isValid) {
+        vm.formValid = false;
       }
-      if(vm.credentials.role == 'student') {
-        vm.credentials.teacher = vm.teachers[vm.teacher]._id;
+      else {
+        if(vm.credentials.role == 'teacher') {
+          vm.credentials.school = vm.schools[vm.school]._id;
+        }
+        if(vm.credentials.role == 'student') {
+          vm.credentials.teacher = vm.teachers[vm.teacher]._id;
+        }
+        authentication
+          .register(vm.credentials)
+          .error(function(err){
+            alert(err);
+          })
+          .then(function(){
+            $location.path('profile');
+          });
       }
-      authentication
-        .register(vm.credentials)
-        .error(function(err){
-          alert(err);
-        })
-        .then(function(){
-          $location.path('profile');
-        });
     };
-
   }
 
 })();
