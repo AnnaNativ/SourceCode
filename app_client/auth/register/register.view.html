@@ -1,6 +1,4 @@
-<navigation>
-
-</navigation>
+<navigation></navigation>
 
 <div class="container text-right">
   <h1 class="form-signin-heading">:הרשמה</h1>
@@ -8,7 +6,7 @@
   <div ng-if="!vm.formValid">
     <div class="row">
       <div class="col-md-4 pull-right">
-        <div class="alert alert-danger" role="alert">אנא מלאו את כל השדות</div>
+        <div class="text-danger">!אנא מלאו את כל השדות</div>
       </div>
     </div>
   </div>
@@ -17,22 +15,22 @@
       <div class="col-md-4 pull-right">
         <div class="form-group text-right">
           <h3>:שם משתמש</h3>
-          <input type="text" name="name" class="form-control text-right" placeholder="הכנס שם משתמש" ng-model="vm.credentials.name" required>
+          <input type="text" name="name" class="form-control text-right" ng-model="vm.credentials.name" required>
           <div ng-messages="registrationForm.name.$error" ng-messages-include="/src/messages.html"></div>
         </div>
         <div class="form-group">
-          <label for="email">:כתובת אימייל</label>
-          <input type="email" name="email" class="form-control text-right" name="emailInput" placeholder="הכנס כתובת אימייל" ng-model="vm.credentials.email" required>
+          <h3>:כתובת אימייל</h3>
+          <input type="email" name="email" class="form-control text-right" name="emailInput" ng-model="vm.credentials.email" required>
           <div ng-messages="registrationForm.email.$error" ng-messages-include="/src/messages.html"></div>
         </div>
         <div class="form-group">
-          <label for="password">:סיסמה</label>
-          <input type="password" name="password" class="form-control text-right" placeholder="הכנס סיסמה" ng-model="vm.credentials.password" required>
+          <h3>:סיסמה</h3>
+          <input type="password" name="password" class="form-control text-right" ng-model="vm.credentials.password" required>
           <div ng-messages="registrationForm.password.$error" ng-messages-include="/src/messages.html"></div>
         </div>
         <div class="form-group">
-          <label for="password">:אימות סיסמה</label>
-          <input type="password" name="verifyPassword" class="form-control text-right" placeholder="הכנס שוב סיסמה" ng-model="vm.credentials.verifyPassword" 
+          <h3>:אימות סיסמה<h3>
+          <input type="password" name="verifyPassword" class="form-control text-right" ng-model="vm.credentials.verifyPassword" 
             required compare-to="vm.credentials.password">
           <div ng-messages="registrationForm.verifyPassword.$error" ng-messages-include="/src/messages.html"></div>
 
@@ -60,8 +58,5 @@
     </div>
   </form>
 </div>
-All Teachers: {{vm.teachers}}<br><br>
-All Schoolss: {{vm.schools}}<br><br>
-Selected Teacher: {{vm.teacher}}<br><br>
-Selected Student: {{vm.student}}<br><br>
-Credentials: {{vm.credentials}}<br><br>
+<div style="height:100px"></div>
+

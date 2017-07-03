@@ -1,27 +1,26 @@
 <navigation></navigation>
 
 <div class="container text-right">
-
   <div class="row">
     <div class="col-md-4 pull-right"></div>
     <div class="col-md-4 pull-right">
-
+      <div ng-if="!vm.formValid" class="text-danger">!אנא מלאו את כל השדות</div>
       <h1 class="form-signin-heading">:כניסה</h1>
-  
-      <form ng-submit="vm.onSubmit()">
-        <div class="form-group text-right">
-          <label for="email">:כתובת אימייל</label>
-          <input type="email" class="form-control text-right" id="email" placeholder="הכנס כתובת אימייל" ng-model="vm.credentials.email">
+      <form name="registrationForm" novalidate ng-submit="vm.submit(registrationForm.$valid)" ">
+        <div class="form-group text-right ">
+          <h3>:כתובת אימייל</h3>
+          <input type="email " name="email " class="form-control text-right " id="email " ng-model="vm.credentials.email " required>
+          <div ng-messages="registrationForm.email.$error " ng-messages-include="/src/messages.html "></div>
         </div>
-        <div class="form-group text-right">
-          <label for="password">:סיסמה</label>
-          <input type="password" class="form-control text-right" id="password" placeholder="הכנס סיסמה" ng-model="vm.credentials.password">
+        <div class="form-group text-right ">
+          <h3>:סיסמה</h3>
+          <input type="password " name="password " class="form-control text-right " id="password " ng-model="vm.credentials.password " required>
+          <div ng-messages="registrationForm.password.$error " ng-messages-include="/src/messages.html "></div>
         </div>
-        <p class="lead">עדיין לא רשום? <a href="register">תירשם </a> כדי להשתמש</p>
-        <button type="submit" class="btn btn-default">כניסה</button>
+        <p class="lead ">עדיין לא רשום? <a href="register ">תירשם </a> כדי להשתמש</p>
+        <button type="submit " class="btn btn-default ">כניסה</button>
       </form>
-
     </div>
   </div>
-
 </div>
+<div style="height:100px "></div>
