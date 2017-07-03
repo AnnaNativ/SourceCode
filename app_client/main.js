@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('meanApp', ['ngRoute', 'ngFileUpload']);
+  angular.module('meanApp', ['ngRoute', 'ngFileUpload', 'ngMessages']);
 
   function config ($routeProvider, $locationProvider) {
     $routeProvider

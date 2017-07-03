@@ -9,6 +9,8 @@ require('./assignments');
 require('./audit');
 
 require('./videos');
+require('./schools');
+
 var System = mongoose.model('System');
 
 var gracefulShutdown;

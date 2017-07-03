@@ -8,7 +8,8 @@
   function registerCtrl($location, authentication, meanData) {
     console.log('Register controller is running!!!');
     var vm = this;
-
+    vm.message = "";
+    
     vm.credentials = {
       name : "",
       email : "",
@@ -20,7 +21,7 @@
     };
 
     vm.selectedTeacher = "";
-    vm.schools = ["Gutman","eldad"];
+    vm.schools = [];
     
     meanData.getTeachersList()
     .success(function(data){
@@ -30,12 +31,15 @@
       console.log(e);
     })
 
-    vm.selectedSchool = "";
+    meanData.getSchoolsList()
+    .success(function(data){
+      vm.schools = data;
+    })
+    .error(function(e){
+      console.log(e);
+    })
 
-    vm.teacherSelected = function() {
-      console.log("In teacherSelected with: " + vm.selectedTeacher);
-      vm.credentials.teacher = vm.selectedTeacher._id;
-    }
+    vm.selectedSchool = "";
 
     vm.isTeacher = function() {
       return vm.credentials.role == "teacher";
@@ -47,6 +51,12 @@
     
     vm.onSubmit = function () {
       console.log('Submitting registration');
+      if(vm.credentials.role == 'teacher') {
+        vm.credentials.school = vm.schools[vm.school]._id;
+      }
+      if(vm.credentials.role == 'student') {
+        vm.credentials.teacher = vm.teachers[vm.teacher]._id;
+      }
       authentication
         .register(vm.credentials)
         .error(function(err){

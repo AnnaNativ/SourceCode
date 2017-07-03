@@ -32,6 +32,8 @@ module.exports.getExercises = function(req, res) {
     SubSubject
       .find({'_id' : subSubject})
       .exec(function(err, exercises) {
+        Exercise
+        .find({})
         res.status(200).json(exercises);
       });
   }  
