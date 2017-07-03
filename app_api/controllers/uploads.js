@@ -12,7 +12,7 @@ module.exports.uploadPic = function (req, res) {
   fs.readFile(req.files.file.path, function (err, data) {
     var d = new Date();
     // set the correct path for the file not the temporary one from the API:
-    file.path = systemConfig.imagesLocation + d.getFullYear() + "/" + d.getMonth() + "/" + d.getDate() + "/" + d.getTime() + "/" + file.name;
+    file.path = systemConfig.imagesLocation + d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getTime() + "/" + file.name;
     mkdirp(getDirName(file.path), function (err) {
       if (err){
         return cb(err);
