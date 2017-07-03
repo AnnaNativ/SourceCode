@@ -1,4 +1,3 @@
-//comment Anna2
 var express = require('express');
 var router = express.Router();
 var jwt = require('express-jwt');
@@ -7,29 +6,27 @@ var auth = jwt({
   userProperty: 'payload'
 });
 
-// Requires multiparty 
-multiparty = require('connect-multiparty');
-multipartyMiddleware = multiparty();
-
 var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');
 var ctrlExercise = require('../controllers/exercise');
 var ctrlSubjects = require('../controllers/subjects');
-var ctrlUploads = require('../controllers/uploads');
+var ctrlAssignment = require('../controllers/assignments');
 
 // profile
 router.get('/profile', auth, ctrlProfile.profileRead);
 router.get('/studentsOfTeacher', auth, ctrlProfile.getStudentsOfTeacher);
 router.get('/teachersList', ctrlProfile.getTeachersList);
-router.get('/schoolsList', ctrlProfile.getSchoolsList);
 
 // exercises
 router.get('/exercise', auth, ctrlExercise.getExercise);
-router.get('/exercises', auth, ctrlExercise.getExercises);
+router.get('/exercisesForSubjectAndSubSubject', auth, ctrlExercise.getExercisesForSubjectAndSubSubject);
 // subjects
 router.get('/subjects', auth, ctrlSubjects.getSubjects);
-router.get('/subSubjects', auth, ctrlSubjects.getSubSubjects);
-router.get('/videos', auth, ctrlSubjects.getVideos);
+
+//assignment
+router.get('/myAssignments', ctrlAssignment.getMyAssignments);
+router.get('/myLastLocation', ctrlAssignment.getMyLastLocation);
+
 
 
 // authentication
@@ -38,10 +35,6 @@ router.post('/login', ctrlAuth.login);
 router.post('/logout', ctrlAuth.logout);
 
 router.post('/exercise', ctrlExercise.newExercise);
-router.post('/subject', ctrlSubjects.newSubject);
-router.post('/subSubject', ctrlSubjects.newSubSubject);
-// pictures upload
-router.post('/upload', multipartyMiddleware, ctrlUploads.uploadPic);
+
 
 module.exports = router;
-// Ido
