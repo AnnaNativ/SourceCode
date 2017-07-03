@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var audit = mongoose.model('UserAudit');
 
 
-module.exports.getSeenExercises = function(param,exe,callbackFunc)
+module.exports.getSeenExercises = function(param,callbackFunc)
 {
    console.log('getting a list of exe for a specific user/subsubject/level '+ JSON.stringify(param.userId) +'/'+ JSON.stringify(param.subject)+'/'+ param.level);
    
@@ -18,7 +18,7 @@ module.exports.getSeenExercises = function(param,exe,callbackFunc)
         else{
          
           console.log('came back with '+data.length +' exercises that need to be excluded');
-          callbackFunc(exe,data);
+          callbackFunc(data);
 
         }  
       }); 

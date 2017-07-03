@@ -11,7 +11,7 @@ module.exports.getMyAssignments = function (req, res) {
   assignments
     .aggregate(
     { $match: { assignee: userId } },
-    { $lookup: { from: 'subSubjects', localField: 'subSubjectId', foreignField: '_id', as: 'subSubject' } }
+    { $lookup: { from: 'subsubjects', localField: 'subSubjectId', foreignField: '_id', as: 'subSubject' } }
     )
     .exec(function (err, data) {
       if (err) {
@@ -30,29 +30,30 @@ module.exports.getMyLastLocation = function (req, res) {
   var myAssignmentId = mongoose.Types.ObjectId(req.query._id);
   var lastSubSubject;
   var lastLevel;
+  var exeforLevel = new Array;
 
   PostGetExeForId = function (nextExe) {
     console.log('I have the exe I need.');
     res.status(200).json(nextExe);
   };
 
-  PostSeenExe = function (exe, seenExe) {
+  PostSeenExe = function (seenExe) {
     console.log(' I am in PostSeenExe callbackFunc with: ' + seenExe.length);
     //removing seenExe from the list of exe
     if (seenExe.length > 0) {
       var seenExeIndex;
       for (index in seenExe) {
         //find it in exe array and remove it
-        seenExeIndex = exe.indexOf(seenExe[index](_id));
-        exe.splice(seenExeIndex, 1);
+        seenExeIndex = exeforLevel.indexOf(seenExe[index](_id));
+        exeforLevel.splice(seenExeIndex, 1);
         console.log('exe :' + seenExe[index](_id) + ' was already worked on by this user');
       }
     };
-    if (exe.length > 0) {
+    if (exeforLevel.length > 0) {
       //pick a random exe from the filtered list
-      var randonIndex = Math.floor((Math.random() * exe.length));
-      console.log('getting the next exe for you ' + exe[randonIndex]._id);
-      exercise.getExerciseForId(exe[randonIndex]._id, PostGetExeForId);
+      var randonIndex = Math.floor((Math.random() * exeforLevel.length));
+      console.log('getting the next exe for you ' + exeforLevel[randonIndex]._id);
+      exercise.getExerciseForId(exeforLevel[randonIndex].Id, PostGetExeForId);
     } else {
       console.log('There are no exercise assigned to you that have not been worked on.');
     }
@@ -64,7 +65,7 @@ module.exports.getMyLastLocation = function (req, res) {
     { $match: { 'assignmentId': myAssignmentId } },
     { $sort: { 'createdDate': -1 } },
     { $limit: 1 },
-    { $lookup: { from: 'subSubjects', localField: 'subSubjectId', foreignField: '_id', as: 'subSubject' } }
+    { $lookup: { from: 'subsubjects', localField: 'subSubjectId', foreignField: '_id', as: 'subSubject' } }
     )
     .exec(function (err, progress) {
       if (err) {
@@ -73,8 +74,7 @@ module.exports.getMyLastLocation = function (req, res) {
       else {
         var exeInSubSubject = progress[0].subSubject[0].exercises;
         var levelNeeded = progress[0].level;
-        var exeforLevel = new Array;
-
+      
         //filter out exe from a different level
         console.log('looking for exe for level:' + levelNeeded);
 
@@ -89,6 +89,11 @@ module.exports.getMyLastLocation = function (req, res) {
 
         }
 
+        if(exeforLevel.length == 0){
+          console.log('There  are no exercise in this subsubject for the required level');
+           res.status(200).json(exeforLevel);
+          
+        }
         //filter our all exe that user has already worked on(both success and failure)
         var param = {
           'userId': progress[0].userId,
@@ -96,7 +101,7 @@ module.exports.getMyLastLocation = function (req, res) {
           'level': levelNeeded
         };
 
-        audit.getSeenExercises(param, exeforLevel, PostSeenExe);
+        audit.getSeenExercises(param, PostSeenExe);
       };
 
     })

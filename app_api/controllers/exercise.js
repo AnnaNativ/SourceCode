@@ -44,7 +44,7 @@ module.exports.getExerciseForId = function(exeId,PostGetExeForId){
   Exercise
   .find({'_id':exeId})
   .exec(function(err, nextExercises) {
-    console.log('I got the next exercise for you ' + nextExercises.body);
+    console.log('I got the next exercise for you ' + JSON.stringify(nextExercises[0].body) );
     PostGetExeForId(nextExercises);
   })
 };
