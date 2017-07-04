@@ -11,7 +11,9 @@
     vm.showAnswers = false;
     vm.subjects = {};
     vm.subSubjects = {};
-    vm.levels = ['1 קל מאוד', '2', '3', '4', '5 בינוני', '6', '7', '8', '9', '10 קשה מאוד'];
+    vm.levels = ['1 קל', '2', '3 בינוני', '4', '5 מתקדם', 'לא יודע'];
+    vm.defaultLevel = 2;
+    vm.exerciseSaved = false;
 
     meanData.getSubjects()
     .success(function(data){
@@ -25,20 +27,27 @@
     vm.newExercise = {
       level: undefined,
       body:[],
-      solutions : [{solution: "", isCorrect: true}, {solution: "", isCorrect: false}, {solution: "", isCorrect: false}, {solution: "", isCorrect: false}, {solution: "", isCorrect: false}],
+      solutions : [{solution: "", isCorrect: true}, 
+                   {solution: "", isCorrect: false}, 
+                   {solution: "", isCorrect: false}, 
+                   {solution: "", isCorrect: false}, 
+                   {solution: "", isCorrect: false}],
       subject: "",
       subSubject: ""
     };
 
     vm.addTextArea = function(){
+      vm.exerciseSaved = false;
       vm.newExercise.body.push({type: 'text', content: '' });
     }
+
     vm.addAnswers = function(){
       vm.showAnswers = true;
     }
 
     vm.addPicture = function(){
       console.log('in teacher.controller addPicture:' + vm.picFile.content);
+      vm.exerciseSaved = false;
       vm.newExercise.body.push({type: 'picture', content: vm.picFile});
     }
 
@@ -77,20 +86,37 @@
         // first, fill the missing data in the newExercise object
         vm.newExercise.subject = vm.subjects[vm.subject]._id;
         vm.newExercise.subSubject = vm.subSubjects[vm.subSubject]._id;
-        
-      vm.allPicSavedCallback = function() { 
-            console.log('in in teacher.controller allPicSavedCallback');
-            exercise
-              .newExercise(vm.newExercise)
-              .error(function(err){
-                alert("There was an error : " + err);
-              })
-            .then(function(){
-              // forth, go to profile page
-              console.log('in teacher.controller onSubmit.exercise.then.forEach.end');
-              $location.path('profile');          
-            });
+        if(vm.newExercise.level == (vm.levels.length - 1)) {
+          vm.beforeSetToDefaultLevel = vm.newExercise.level;
+          vm.newExercise.level = vm.defaultLevel;
         }
+        
+        vm.allPicSavedCallback = function() { 
+              console.log('in in teacher.controller allPicSavedCallback');
+              exercise
+                .newExercise(vm.newExercise)
+                .error(function(err){
+                  alert("There was an error : " + err);
+                })
+              .then(function(){
+                // forth, reset the page for the new exerciese
+                console.log('in teacher.controller onSubmit.exercise.then.forEach.end');
+                vm.newExercise.body = [];  
+                vm.newExercise.solutions = [{solution: "", isCorrect: true}, 
+                                            {solution: "", isCorrect: false}, 
+                                            {solution: "", isCorrect: false}, 
+                                            {solution: "", isCorrect: false}, 
+                                            {solution: "", isCorrect: false}];
+                // this is for the edge case where the "don't know level" was selected. We need to restore the original level.
+                if(vm.beforeSetToDefaultLevel != undefined) {
+                  vm.newExercise.level = vm.beforeSetToDefaultLevel;
+                  vm.beforeSetToDefaultLevel = undefined;
+                }
+                vm.updateShowAnswersStatus();
+                vm.exerciseSaved = true;
+                vm.formValid = true;
+              });
+          }
 
         // first, upload all pictures to server 
         var itemsProcessed = 0;

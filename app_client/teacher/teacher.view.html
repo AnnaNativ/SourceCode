@@ -3,6 +3,7 @@
 <div class="container" ng-cloak>
   <form name="registrationForm" novalidate ng-submit="vm.submit(registrationForm.$valid)">
     <div class="form-group text-right">
+      <div ng-if="vm.exerciseSaved" class="alert alert-warning" role="alert">!תרגיל נשמר בהצלחה</div>
       <div class="row">
         <h2>:מסך הכנסת תרגיל</h2>
       </div>
@@ -12,27 +13,24 @@
           <select dir="rtl" name="subject" class="form-control" ng-model="vm.subject" 
             ng-options="vm.subjects.indexOf(subject) as subject.name for subject in vm.subjects"
             ng-change="vm.subjectSelected()" required>
-          <div ng-messages="registrationForm.subject.$error" ng-messages-include="/src/messages.html"></div>
           </select>
         </div>
         <div ng-if="vm.subject >= 0" class="col-md-4 pull-right">
           <h3>:בחר תת נושא</h3>
           <select dir="rtl" name="subSubject" class="form-control" ng-model="vm.subSubject" 
             ng-options="vm.subSubjects.indexOf(subSubject) as subSubject.name for subSubject in vm.subSubjects" required></select>
-            <div ng-messages="registrationForm.subSubject.$error" ng-messages-include="/src/messages.html"></div>
         </div>
         <div ng-if="vm.subSubject >= 0" class="col-md-4 pull-right">
           <h3>:בחר רמת קושי</h3>
           <select dir="rtl" name="level" class="form-control" ng-model="vm.newExercise.level" 
             ng-options="idx as level for (idx, level) in vm.levels" required></select>
-            <div ng-messages="registrationForm.level.$error" ng-messages-include="/src/messages.html"></div>
         </div>
       </div>
       <br>
       <hr>
       <div ng-if="vm.newExercise.level != undefined" class="row">
         <div class="col-md-9 pull-right">
-          <h3>:הכנס/י תרגיל</h3>
+          <h3>:הכנס תרגיל</h3>
           <div>
             <div ng-if="vm.newExercise.body.length == 0">
               <label class="btn btn btn-info" ng-click="vm.addTextArea()">לחץ להוספת טקסט</label>
@@ -77,16 +75,15 @@
         </div>
         <div ng-if="vm.newExercise.body.length > 0" class="col-md-3 pull-right">
           <div ng-if="!vm.showAnswers">
-            <h3>:הכנס/י תשובות</h3>
+            <h3>:הכנס תשובות</h3>
             <label class="btn btn btn-info" ng-click="vm.addAnswers()">לחץ להוספת תשובות</label>
           </div>
           <div ng-if="vm.showAnswers" ng-repeat="obj in vm.newExercise.solutions">
             <h3 ng-if="$index == 0">:הכנס תשובה נכונה</h3>
             <h3 ng-if="$index == 1">:הכנס תשובות אחרות </h3>
-            <input dir="rtl" type="text" name="{{$index}}" class="form-control" ng-model="obj.solution" required>
-            <ng-messages for="registrationForm[$index].$error" ng-if="registrationForm[$index].$touched" ng-messages-include="/src/messages.html"></ng-messages><br>
+            <input dir="rtl" type="text" name="{{$index}}" class="form-control" ng-model="obj.solution" required><br>
           </div>
-          <button ng-if="vm.showAnswers" type="submit" class="btn btn btn-info pull-right">שמור תרגיל</button>
+          <button ng-if="vm.showAnswers" type="submit" class="btn btn btn-warning pull-right">שמור תרגיל</button>
           <div ng-if="!vm.formValid">
             <div class="text-danger">&nbsp;&nbsp;!אנא מלאו את כל השדות&nbsp;&nbsp;</div>
           </div>

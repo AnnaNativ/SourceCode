@@ -4,12 +4,12 @@ var Schema = mongoose.Schema;
 var bodyPartSchema = new Schema({
   type: {type: String},
   content: String
-});
+},{ _id : false });
 
 var solutionSchema = new Schema({
   solution: String,
   isCorrect: Boolean
-});
+},{ _id : false });
 
 var exerciseSchema = new Schema({
   body: [bodyPartSchema],
