@@ -1,0 +1,13 @@
+<div ng-if="!vm.showAnswers">
+    <h3>:הכנס תשובות</h3>
+    <label class="btn btn btn-info" ng-click="vm.addAnswers()">לחץ להוספת תשובות</label>
+</div>
+<div ng-if="vm.showAnswers" ng-repeat="obj in vm.newExercise.solutions">
+    <h3 ng-if="$index == 0">:הכנס תשובה נכונה</h3>
+    <h3 ng-if="$index == 1">:הכנס תשובות אחרות </h3>
+    <input dir="rtl" type="text" name="{{$index}}" class="form-control" ng-model="obj.solution" required><br>
+</div>
+<button ng-if="vm.showAnswers" type="submit" class="btn btn btn-warning pull-right">שמור תרגיל</button>
+<div ng-if="!vm.formValid">
+    <div class="text-danger">&nbsp;&nbsp;!אנא מלאו את כל השדות&nbsp;&nbsp;</div>
+</div>
