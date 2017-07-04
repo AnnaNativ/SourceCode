@@ -17,7 +17,7 @@
     };
 
     var myLastLocation = function(assignment){
-        console.log('in myLastLocation for assignment ' + assignment);
+       // console.log('in myLastLocation for assignment ' + JSON.stringify(assignment));
         var congif = {
           params:assignment
         };

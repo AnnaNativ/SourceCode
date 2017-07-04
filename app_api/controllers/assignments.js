@@ -34,7 +34,13 @@ module.exports.getMyLastLocation = function (req, res) {
 
   PostGetExeForId = function (nextExe) {
     console.log('I have the exe I need.');
-    res.status(200).json(nextExe);
+    //adding subsubject and level for the audit
+    var response = {};
+    response.level = lastLevel;
+    response.subsubject = lastSubSubject;
+    response.exe = nextExe[0];
+    console.log('sending to client exe with level:' + JSON.stringify(response));
+    res.status(200).json(response);
   };
 
   PostSeenExe = function (seenExe) {
@@ -72,6 +78,9 @@ module.exports.getMyLastLocation = function (req, res) {
         console.log('Returned from getmyLastLocation with error ' + err);
       }
       else {
+        console.log('Returned from getmyLastLocation with  ' + progress);
+        lastSubSubject = progress[0].subSubjectId;
+        lastLevel = progress[0].level;
         var exeInSubSubject = progress[0].subSubject[0].exercises;
         var levelNeeded = progress[0].level;
       

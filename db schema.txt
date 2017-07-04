@@ -77,15 +77,15 @@ userAudit
 {
 	type:'exercise/next level/need help'
 	userId:'',
-	assignmentId:'',
-	subject:'',
-	subsubjectId:'',
-	level:'',
+	//  assignmentId:'',  can be taken thru exeId
+	//  subject:'',	can be taken thru exeId
+	//  subsubjectId:'',can be taken thru exeId
+	//  level:'',can be taken thru exeId
 	exerciseId:'',
 	videoId:'',
 	createdData:'',
-	outcome: enum(success, failure,gaveup)
-	inAssignment:'boolean'
+	outcome: enum(success, failure,gaveup) // boolean with success and failure might be enough. need help is taken from type above
+	//inAssignment:'boolean' // not sure we need it???
 }
 
 userProgress{ // create new when new assignment is made,update level change within the same subsubject, create new one for each "need help sub " within the same assignment.
