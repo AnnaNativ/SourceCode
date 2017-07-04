@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <form name="registrationForm" novalidate ng-submit="vm.submit(registrationForm.$valid)"">
+  <form name="registrationForm" novalidate ng-submit="vm.submit(registrationForm.$valid)">
     <div class="row">
       <div class="col-md-4 pull-right">
         <div class="form-group text-right">
@@ -29,11 +29,10 @@
           <div ng-messages="registrationForm.password.$error" ng-messages-include="/src/messages.html"></div>
         </div>
         <div class="form-group">
-          <h3>:אימות סיסמה<h3>
+          <h3>:אימות סיסמה</h3>
           <input type="password" name="verifyPassword" class="form-control text-right" ng-model="vm.credentials.verifyPassword" 
             required compare-to="vm.credentials.password">
           <div ng-messages="registrationForm.verifyPassword.$error" ng-messages-include="/src/messages.html"></div>
-
         </div>
         <button type="submit" class="btn btn-info">שמירה</button>  
       </div>
