@@ -46,23 +46,9 @@ module.exports.getMyLastLocation = function (req, res) {
   PostSeenExe = function (seenExe) {
     console.log(' I am in PostSeenExe callbackFunc with: ' + seenExe.length);
     //removing seenExe from the list of exe
-    if (seenExe.length > 0) {
-      var seenExeIndex;
-      for (index in seenExe) {
-        //find it in exe array and remove it
-        seenExeIndex = exeforLevel.indexOf(seenExe[index](_id));
-        exeforLevel.splice(seenExeIndex, 1);
-        console.log('exe :' + seenExe[index](_id) + ' was already worked on by this user');
-      }
-    };
-    if (exeforLevel.length > 0) {
-      //pick a random exe from the filtered list
-      var randonIndex = Math.floor((Math.random() * exeforLevel.length));
-      console.log('getting the next exe for you ' + exeforLevel[randonIndex]._id);
-      exercise.getExerciseForId(exeforLevel[randonIndex].Id, PostGetExeForId);
-    } else {
-      console.log('There are no exercise assigned to you that have not been worked on.');
-    }
+    exeforLevel = exercise.CleanUpExercisesFromSeen(exeforLevel,seenExe);
+    
+    exercise.getRandom(exeforLevel);
   };
 
   progress

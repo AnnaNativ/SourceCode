@@ -31,3 +31,4 @@ node_modules
 app_client/app.min.js
 *.map
 app_client/app.min.js.map
+~$bugs.xlsx

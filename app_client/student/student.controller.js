@@ -4,8 +4,8 @@
     .module('meanApp')
     .controller('studentCtrl', studentCtrl);
 
-  studentCtrl.$inject = ['$location', '$routeParams', 'meanData','$window','audit'];
-  function studentCtrl($location, $routeParams, meanData,$window,audit) {
+  studentCtrl.$inject = ['$location', '$routeParams', 'meanData','$window','audit','exercise'];
+  function studentCtrl($location, $routeParams, meanData,$window,audit,exercise) {
     var vm = this;
     vm.currentSelection = false;
     vm.finalSelection = null;
@@ -18,7 +18,7 @@
     };
     
     vm.exercise.exe =$routeParams.param.exe;
-     vm.exercise.level = $routeParams.param.level;
+    vm.exercise.level = $routeParams.param.level;
     vm.exercise.subsubject = $routeParams.param.subsubject;
     
 
@@ -52,7 +52,28 @@
 
     vm.LoadNextExe = function(){
       console.log('Loading next exe.');
-    }
+      var param = {};
+      param.userId = $window.sessionStorage['userId'];
+      param.subsubject = vm.exercise.subsubject;
+      param.level = vm.exercise.level;
+      
+      var config = {
+        params: param,
+      };
+        
+      exercise.similarExercise(config)
+      .success(function (data) {
+         console.log('Your next similarExercise is: '+ JSON.stringify(data));
+         // $location.path('student').search({param: data});
+          vm.exercise.exe =data.exe;
+          vm.exercise.level = data.level;
+          vm.exercise.subsubject = data.subsubject;
+     })
+     .error(function (e) {
+          console.log(e);
+        })
+
+    };
 
     vm.closeVideos = function() {
       vm.subjectVideoOn = false;

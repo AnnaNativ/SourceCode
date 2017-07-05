@@ -65,6 +65,7 @@
         </div>
         <div>
             <div class="col-md-6">
+               <p ng-if="vm.finalSelection == true" > Correct!</p>
                 <button ng-if="vm.finalSelection == true" class="btn btn-info" ng-click="vm.LoadNextExe()">More of the same</button>
                 <button ng-if="vm.finalSelection == true" class="btn btn-info" ng-click="vm.subjectVideoOn = true">Ready for something more challenging</button>
             </div>

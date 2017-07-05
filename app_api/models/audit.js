@@ -8,7 +8,7 @@ var auditSchema = new mongoose.Schema({
     exerciseId:{type: Schema.Types.ObjectId, ref: 'exercises'},
     subsubjectId:{type: Schema.Types.ObjectId, ref: 'subsubjects'},
     publishDate: {type: Date, default: Date.now},
-    outcome:Boolean
+    outcome:{type: String, enum: ['success', 'failure','needhelp']}
     },{ collection: 'userAudit' });    
 
 mongoose.model('UserAudit', auditSchema);

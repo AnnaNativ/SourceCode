@@ -27,6 +27,8 @@ router.get('/schoolsList', ctrlProfile.getSchoolsList);
 // exercises
 router.get('/exercise', auth, ctrlExercise.getExercise);
 router.get('/exercises', auth, ctrlExercise.getExercises);
+router.get('/similarExercise', ctrlExercise.getSimilarExercise);
+
 // subjects
 router.get('/subjects', auth, ctrlSubjects.getSubjects);
 router.get('/subSubjects', auth, ctrlSubjects.getSubSubjects);

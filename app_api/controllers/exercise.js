@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var audit = require('./audit');
+
 var Exercise = mongoose.model('Exercise');
 var SubSubject = mongoose.model('SubSubject');
 var AssignedExercises = mongoose.model('AssignedExercises');
@@ -21,8 +23,101 @@ module.exports.getExercise = function (req, res) {
   }
 
 };
+getExercisesForSubsubjectAndLevel = function (subsubject, level, callbackFunc1) {
 
-module.exports.getExercises = function(req, res) {
+  SubSubject
+    .aggregate(
+    { $match: { '_id': subsubject } },
+    {
+      $project: {
+        exercises: {
+          $filter: {
+            input: '$exercises',
+            as: 'exer',
+            cond: { $eq: ["$$exer.level", level] }
+          }
+        }
+      }
+    }
+    )
+    .exec(function (err, result) {
+      console.log('exe for this subsubject and level:' + result[0].exercises.length);
+      callbackFunc1(result[0].exercises);
+    });
+};
+
+module.exports.getSimilarExercise = function (req, res) {
+
+  var subsubject = mongoose.Types.ObjectId(req.query.subsubject);
+  var level = Number(req.query.level);
+  var user = req.query.userId;
+  var exeforLevel = [];
+  
+  console.log('looking  for the same exe for subsubject ' + subsubject + ' for level ' + level );
+  
+  PostSeenExe = function (seenExe) {
+    console.log(' I am in PostSeenExe callbackFunc with: ' + seenExe.length);
+    //removing seenExe from the list of exe
+    exeforLevel = internalCleanUpExercisesFromSeen(exeforLevel,seenExe);
+    
+    internalgetRandom(exeforLevel,PostGetRandom);
+    
+  };
+
+  PostGetRandom = function(exeforLevel){
+    if (exeforLevel.length > 0) {
+        //pick a random exe from the filtered list
+        var randonIndex = Math.floor((Math.random() * exeforLevel.length));
+        console.log('getting the next exe for you ' + exeforLevel[randonIndex]._id);
+        getExerciseForId(exeforLevel[randonIndex].Id, PostGetExeForId);
+      } else {
+        console.log('There are no exercise assigned to you that have not been worked on.');
+      }
+  };
+
+  PostGetExeForId = function (nextExe) {
+    console.log('prepping params for the next exe');
+    //adding subsubject and level for the audit
+    var response = {};
+    response.level = level;
+    response.subsubject = subsubject;
+    response.exe = nextExe[0];
+    console.log('sending to client exe with level:' + JSON.stringify(response));
+    res.status(200).json(response);
+  };
+
+  PostExesForSubsubjectAndLevel = function(result){
+      //need to filter out exe that have already been seen
+      console.log('need to filter out exe that have already been seen');
+       exeforLevel = result;
+       var param = {
+          'userId': user,
+          'subSubjectId': subsubject,
+          'level': level
+        };
+        audit.getSeenExercises(param, PostSeenExe);
+        
+  };
+   getExercisesForSubsubjectAndLevel(subsubject, level, PostExesForSubsubjectAndLevel);
+
+  console.log('we have '+ availableExe.length + ' exe for this level');
+};
+
+module.exports.getRandom = function(exeforLevel){
+  internalgetRandom(exeforLevel);
+}
+internalgetRandom = function(exeforLevel){
+  if (exeforLevel.length > 0) {
+        //pick a random exe from the filtered list
+        var randonIndex = Math.floor((Math.random() * exeforLevel.length));
+        console.log('getting the next exe for you ' + exeforLevel[randonIndex]._id);
+        getExerciseForId(exeforLevel[randonIndex].Id, PostGetExeForId);
+  } else {
+        console.log('There are no exercise assigned to you that have not been worked on.');
+  }
+};
+
+module.exports.getExercises = function (req, res) {
   if (!req.payload._id) {
     res.status(401).json({
       "message": "UnauthorizedError: private exercise"
@@ -30,24 +125,41 @@ module.exports.getExercises = function(req, res) {
   } else {
     var subSubject = new mongoose.mongo.ObjectId(req.query.subSubject);
     SubSubject
-      .find({'_id' : subSubject})
-      .exec(function(err, exercises) {
+      .find({ '_id': subSubject })
+      .exec(function (err, exercises) {
         Exercise
-        .find({})
+          .find({})
         res.status(200).json(exercises);
       });
-  }  
+  }
 
 }
 
-module.exports.getExerciseForId = function(exeId,PostGetExeForId){
+getExerciseForId = function (exeId, PostGetExeForIdFunc) {
   Exercise
-  .find({'_id':exeId})
-  .exec(function(err, nextExercises) {
-    console.log('I got the next exercise for you ' + JSON.stringify(nextExercises[0].body) );
-    PostGetExeForId(nextExercises);
-  })
+    .find({ '_id': exeId })
+    .exec(function (err, nextExercises) {
+      console.log('I got the next exercise for you ' + JSON.stringify(nextExercises[0].body));
+      PostGetExeForIdFunc(nextExercises);
+    })
 };
+
+internalCleanUpExercisesFromSeen = function(exeforLevel,seenExe){
+  if (seenExe.length > 0) {
+        var seenExeIndex;
+        for (index in seenExe) {
+          //find it in exe array and remove it
+          seenExeIndex = exeforLevel.indexOf(seenExe[index](_id));
+          exeforLevel.splice(seenExeIndex, 1);
+          console.log('exe :' + seenExe[index](_id) + ' was already worked on by this user');
+        }
+      };
+      return exeforLevel;
+};
+module.exports.CleanUpExercisesFromSeen = function (exeforLevel,seenExe) {
+   return internalCleanUpExercisesFromSeen(exeforLevel,seenExe);
+};
+
 module.exports.newExercise = function (req, res) {
   console.log("in exercise.js newExercise with: " + req.body);
 
@@ -55,36 +167,36 @@ module.exports.newExercise = function (req, res) {
   exercise._id = new mongoose.mongo.ObjectId();
   exercise.level = req.body.level;
   // create the exercise body from its parts
-  req.body.body.forEach(function(bodyPart) {
+  req.body.body.forEach(function (bodyPart) {
     var part = new BodyPart();
     part.type = bodyPart.type;
     part.content = bodyPart.content;
     exercise.body.push(part);
   });
   // create all the solutions from all solution parts
-  req.body.solutions.forEach(function(solution) {
+  req.body.solutions.forEach(function (solution) {
     var sol = new Solution();
     sol.solution = solution.solution;
     sol.isCorrect = solution.isCorrect;
     exercise.solutions.push(sol);
   });
   // save the exercise
-  exercise.save(function (err){
-      if(err) {
-        console.log(err);
-      }
-      else {
-        var newExercise = new AssignedExercises();
-        newExercise.Id = exercise._id;
-        newExercise.level = exercise.level;
-        // update the subSubject with the new exercise
-        SubSubject
-        .update({"_id": req.body.subSubject},{$push:{exercises: newExercise}})
-        .exec(function(err, subSubject) {
+  exercise.save(function (err) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      var newExercise = new AssignedExercises();
+      newExercise.Id = exercise._id;
+      newExercise.level = exercise.level;
+      // update the subSubject with the new exercise
+      SubSubject
+        .update({ "_id": req.body.subSubject }, { $push: { exercises: newExercise } })
+        .exec(function (err, subSubject) {
           console.log('subSubject is updated!!!!')
           res.status(200).json(subSubject);
         });
-      }
+    }
   });
 };
 
