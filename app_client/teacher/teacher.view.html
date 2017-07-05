@@ -5,9 +5,10 @@
     <div class="form-group text-right">
       <div ng-if="vm.exerciseSaved" class="alert alert-warning" role="alert">!תרגיל נשמר בהצלחה</div>
       <div class="row">
-        <h2>:מסך הכנסת תרגיל</h2>
+        <h2>:מסך הכנסת תרגיל&nbsp;&nbsp;</h2>
       </div>
       <div ng-include="'/teacher/subject.view.html'"></div>
+      <div ng-include="'/teacher/addSubject.view.html'"></div>
       <div ng-if="vm.newExercise.level != undefined" class="row">
         <div ng-include="'/teacher/exercise.view.html'"></div>
         <div ng-if="vm.newExercise.body.length > 0" class="col-md-3 pull-right">
