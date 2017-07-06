@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var audit = require('./audit');
+var Schema = mongoose.Schema;
 
 var Exercise = mongoose.model('Exercise');
 var SubSubject = mongoose.model('SubSubject');
@@ -56,23 +57,12 @@ module.exports.getSimilarExercise = function (req, res) {
   console.log('looking  for the same exe for subsubject ' + subsubject + ' for level ' + level );
   
   PostSeenExe = function (seenExe) {
-    console.log(' I am in PostSeenExe callbackFunc with: ' + seenExe.length);
+    console.log(' I am in PostSeenExe callbackFunc with: ' + seenExe.length + ' seen exe and ' +exeforLevel.length +' available exe');
     //removing seenExe from the list of exe
     exeforLevel = internalCleanUpExercisesFromSeen(exeforLevel,seenExe);
+    console.log('after cleanup left with ' + exeforLevel.length);
+    internalgetRandom(exeforLevel);
     
-    internalgetRandom(exeforLevel,PostGetRandom);
-    
-  };
-
-  PostGetRandom = function(exeforLevel){
-    if (exeforLevel.length > 0) {
-        //pick a random exe from the filtered list
-        var randonIndex = Math.floor((Math.random() * exeforLevel.length));
-        console.log('getting the next exe for you ' + exeforLevel[randonIndex]._id);
-        getExerciseForId(exeforLevel[randonIndex].Id, PostGetExeForId);
-      } else {
-        console.log('There are no exercise assigned to you that have not been worked on.');
-      }
   };
 
   PostGetExeForId = function (nextExe) {
@@ -82,7 +72,7 @@ module.exports.getSimilarExercise = function (req, res) {
     response.level = level;
     response.subsubject = subsubject;
     response.exe = nextExe[0];
-    console.log('sending to client exe with level:' + JSON.stringify(response));
+    //console.log('sending to client exe with level:' + JSON.stringify(response));
     res.status(200).json(response);
   };
 
@@ -106,14 +96,16 @@ module.exports.getSimilarExercise = function (req, res) {
 module.exports.getRandom = function(exeforLevel){
   internalgetRandom(exeforLevel);
 }
+
 internalgetRandom = function(exeforLevel){
   if (exeforLevel.length > 0) {
         //pick a random exe from the filtered list
         var randonIndex = Math.floor((Math.random() * exeforLevel.length));
-        console.log('getting the next exe for you ' + exeforLevel[randonIndex]._id);
+        console.log('getting the next exe for you ' + exeforLevel[randonIndex].Id);
         getExerciseForId(exeforLevel[randonIndex].Id, PostGetExeForId);
   } else {
         console.log('There are no exercise assigned to you that have not been worked on.');
+        PostGetExeForId(exeforLevel);
   }
 };
 
@@ -145,13 +137,23 @@ getExerciseForId = function (exeId, PostGetExeForIdFunc) {
 };
 
 internalCleanUpExercisesFromSeen = function(exeforLevel,seenExe){
+  
+  lookForExeId = function(exe,IdToRemove){
+      exeToCompare = exe.Id.toHexString();
+      console.log('comparing ' + exeToCompare + ' to '+ IdToRemove);
+      return(exeToCompare == IdToRemove);
+  };
   if (seenExe.length > 0) {
         var seenExeIndex;
         for (index in seenExe) {
           //find it in exe array and remove it
-          seenExeIndex = exeforLevel.indexOf(seenExe[index](_id));
-          exeforLevel.splice(seenExeIndex, 1);
-          console.log('exe :' + seenExe[index](_id) + ' was already worked on by this user');
+          var exeToRemove = seenExe[index].exerciseId.toHexString();
+          seenExeIndex = exeforLevel.findIndex(exe => exe.Id.toHexString() == exeToRemove);
+          if(seenExeIndex != -1){
+            exeforLevel.splice(seenExeIndex, 1);
+            console.log('exe :' + seenExe[index].exerciseId + ' was already worked on by this user');
+          }else
+            console.log('exe :' + seenExe[index].exerciseId + ' was never seen by this user');
         }
       };
       return exeforLevel;

@@ -34,7 +34,7 @@
     vm.checkAnswer = function () {
       vm.finalSelection = (vm.exercise.exe.solutions[vm.currentSelection].isCorrect);
       
-      console.log('vm.exercise.level ' + vm.exercise.level);
+      console.log('vm.exercise ' + vm.exercise);
        
       // update audit with the results
       var param = {};
@@ -63,11 +63,16 @@
         
       exercise.similarExercise(config)
       .success(function (data) {
-         console.log('Your next similarExercise is: '+ JSON.stringify(data));
+         console.log('---- Your next similarExercise is - : '+ JSON.stringify(data));
          // $location.path('student').search({param: data});
-          vm.exercise.exe =data.exe;
+          if(data.exe == 'undefined'){
+            console.log('NO MORE EXERCISES IN THIS LEVEL');
+            vm.exercise.exe.body.type = "text";
+            vm.exercise.exe.body.content = 'NOTHING TO SHOW';
+          }else{
+           vm.exercise.exe =data.exe;
           vm.exercise.level = data.level;
-          vm.exercise.subsubject = data.subsubject;
+          vm.exercise.subsubject = data.subsubject;}
      })
      .error(function (e) {
           console.log(e);

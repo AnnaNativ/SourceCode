@@ -39,7 +39,7 @@ module.exports.getMyLastLocation = function (req, res) {
     response.level = lastLevel;
     response.subsubject = lastSubSubject;
     response.exe = nextExe[0];
-    console.log('sending to client exe with level:' + JSON.stringify(response));
+    //console.log('sending to client exe with level:' + JSON.stringify(response));
     res.status(200).json(response);
   };
 
@@ -95,7 +95,6 @@ module.exports.getMyLastLocation = function (req, res) {
           'subSubjectId': progress[0].subSubjectId,
           'level': levelNeeded
         };
-
         audit.getSeenExercises(param, PostSeenExe);
       };
 

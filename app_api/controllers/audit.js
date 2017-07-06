@@ -11,7 +11,7 @@ module.exports.auditExercise = function (req, res) {
   auditRecord.userId = req.body.userId;
   auditRecord.level = req.body.level;
   auditRecord.subsubjectId = req.body.subsubject;
-  auditRecord.exerciseId = req.body.exerciseId;
+  auditRecord.exerciseId = req.body.exeId;
   auditRecord.outcome = req.body.outcome;
 
   auditRecord.save(function (err) {
@@ -22,18 +22,19 @@ module.exports.auditExercise = function (req, res) {
 };
 module.exports.getSeenExercises = function(param,callbackFunc)
 {
-   console.log('getting a list of exe for a specific user/subsubject/level '+ JSON.stringify(param.userId) +'/'+ JSON.stringify(param.subSubjectId)+'/'+ param.level);
-   
+   console.log('******* getting a list of exe for a specific user/subsubject/level '+ JSON.stringify(param.userId) +'/'+ JSON.stringify(param.subSubjectId)+'/'+ param.level);
    var userId = mongoose.Types.ObjectId(param.userId);
+   var subsubjectId = mongoose.Types.ObjectId(param.subSubjectId);
+   console.log('userId '+ userId + ' subsubjectId '+ subsubjectId+ ' level '+ param.level);
    Audit
       .aggregate(
-        {$match:{'userId':param.userId,'subsubjectId':param.subSubjectId,'level':param.level}})
+        {$match:{'userId':userId,'subsubjectId':subsubjectId,'level':param.level}})
       .exec(function(err, data) {
         if(err){
           console.log('Returned from aggregate with error '+ err);
         }
         else{
-         
+          console.log('userId '+ userId + ' subsubjectId '+ subsubjectId+ ' level '+ param.level);
           console.log('came back from audit with '+data.length +' exercises that need to be excluded');
           callbackFunc(data);
 
