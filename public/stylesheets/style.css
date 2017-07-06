@@ -8,8 +8,8 @@ a {
 }
 
 .ng-invalid {
-    border-color: red;
-    outline-color: red;
+    border-color: green;
+    outline-color: green;
 }
 
 .ng-valid {

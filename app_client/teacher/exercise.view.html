@@ -1,44 +1,46 @@
 <div class="col-md-9 pull-right">
-    <h3>:הכנס תרגיל</h3>
-    <div>
-    <div ng-if="vm.newExercise.body.length == 0">
-        <label class="btn btn btn-info" ng-click="vm.addTextArea()">לחץ להוספת טקסט</label>
-        <label for="files" class="btn btn btn-info">לחץ להוספת תמונה</label>
-        <input id="files" type="file" style="visibility:hidden;" ngf-select="vm.addPicture()" ng-model="vm.picFile" name="file" accept="image/*"
-        ngf-max-size="2MB" ngf-model-invalid="errorFile">
-        <img ngf-thumbnail="vm.newExercise.body[0].content" class="thumb">
-        <br>
-    </div>
-    <div ng-repeat="obj in vm.newExercise.body">
-        <div ng-if="obj.type == 'text'" class="row">
-        <div class="col-md-1 pull-right">
-            <button type="button" class="btn btn-info" ng-click="vm.removeTextArea($index)" data-toggle="tooltip" title="מחק טקסט">
-                    <span class="glyphicon glyphicon-remove"></span></button>
-        </div>
-        <div class="col-md-10 pull-right">
-            <textarea dir="rtl" class="form-control" rows="5" placeholder="Add Message" ng-model="obj.content" focus-me>{{obj.content}}</textarea>
-        </div>
-        <br>
-        </div>
-        <div ng-if="obj.type == 'picture'" class="row">
-        <div class="col-md-1 pull-right">
-            <button type="button" class="btn btn-info" ng-click="vm.removePicture($index)" data-toggle="tooltip" title="מחק תמונה">
-                    <span class="glyphicon glyphicon-remove"></span></button>
-        </div>
-        <div class="col-md-10 pull-right">
-            <img ngf-thumbnail="obj.content" class="thumb">
-        </div>
-        </div>
-        <div ng-if="$index == vm.newExercise.body.length - 1" class="row">
-        <div class="col-md-8 center">
-            <br>
+    <div class="well well-lg">
+        <h3>:הכנס תרגיל</h3>
+        <div>
+        <div ng-if="vm.newExercise.body.length == 0">
             <label class="btn btn btn-info" ng-click="vm.addTextArea()">לחץ להוספת טקסט</label>
             <label for="files" class="btn btn btn-info">לחץ להוספת תמונה</label>
             <input id="files" type="file" style="visibility:hidden;" ngf-select="vm.addPicture()" ng-model="vm.picFile" name="file" accept="image/*"
             ngf-max-size="2MB" ngf-model-invalid="errorFile">
+            <img ngf-thumbnail="vm.newExercise.body[0].content" class="thumb">
+            <br>
+        </div>
+        <div ng-repeat="obj in vm.newExercise.body">
+            <div ng-if="obj.type == 'text'" class="row">
+            <div class="col-md-1 pull-right">
+                <button type="button" class="btn btn-info" ng-click="vm.removeTextArea($index)" data-toggle="tooltip" title="מחק טקסט">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+            </div>
+            <div class="col-md-10 pull-right">
+                <textarea dir="rtl" class="form-control" rows="5" placeholder="Add Message" ng-model="obj.content" focus-me>{{obj.content}}</textarea>
+            </div>
+            <br>
+            </div>
+            <div ng-if="obj.type == 'picture'" class="row">
+            <div class="col-md-1 pull-right">
+                <button type="button" class="btn btn-info" ng-click="vm.removePicture($index)" data-toggle="tooltip" title="מחק תמונה">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+            </div>
+            <div class="col-md-10 pull-right">
+                <img ngf-thumbnail="obj.content" class="thumb">
+            </div>
+            </div>
+            <div ng-if="$index == vm.newExercise.body.length - 1" class="row">
+            <div class="col-md-8 center">
+                <br>
+                <label class="btn btn btn-info" ng-click="vm.addTextArea()">לחץ להוספת טקסט</label>
+                <label for="files" class="btn btn btn-info">לחץ להוספת תמונה</label>
+                <input id="files" type="file" style="visibility:hidden;" ngf-select="vm.addPicture()" ng-model="vm.picFile" name="file" accept="image/*"
+                ngf-max-size="2MB" ngf-model-invalid="errorFile">
+            </div>
+            </div>
+            <br>
         </div>
         </div>
-        <br>
-    </div>
     </div>
 </div>
