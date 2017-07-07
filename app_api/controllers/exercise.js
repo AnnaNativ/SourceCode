@@ -82,7 +82,7 @@ module.exports.getSimilarExercise = function (req, res) {
        exeforLevel = result;
        var param = {
           'userId': user,
-          'subSubjectId': subsubject,
+          'subsubjectId': subsubject,
           'level': level
         };
         audit.getSeenExercises(param, PostSeenExe);

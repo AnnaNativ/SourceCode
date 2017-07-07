@@ -11,7 +11,7 @@ module.exports.getMyAssignments = function (req, res) {
   assignments
     .aggregate(
     { $match: { assignee: userId } },
-    { $lookup: { from: 'subsubjects', localField: 'subSubjectId', foreignField: '_id', as: 'subSubject' } }
+    { $lookup: { from: 'subsubjects', localField: 'subsubjectId', foreignField: '_id', as: 'subSubject' } }
     )
     .exec(function (err, data) {
       if (err) {
@@ -57,7 +57,7 @@ module.exports.getMyLastLocation = function (req, res) {
     { $match: { 'assignmentId': myAssignmentId } },
     { $sort: { 'createdDate': -1 } },
     { $limit: 1 },
-    { $lookup: { from: 'subsubjects', localField: 'subSubjectId', foreignField: '_id', as: 'subSubject' } }
+    { $lookup: { from: 'subsubjects', localField: 'subsubjectId', foreignField: '_id', as: 'subSubject' } }
     )
     .exec(function (err, progress) {
       if (err) {
@@ -65,7 +65,7 @@ module.exports.getMyLastLocation = function (req, res) {
       }
       else {
         console.log('Returned from getmyLastLocation with  ' + progress);
-        lastSubSubject = progress[0].subSubjectId;
+        lastSubSubject = progress[0].subsubjectId;
         lastLevel = progress[0].level;
         var exeInSubSubject = progress[0].subSubject[0].exercises;
         var levelNeeded = progress[0].level;
@@ -92,7 +92,7 @@ module.exports.getMyLastLocation = function (req, res) {
         //filter our all exe that user has already worked on(both success and failure)
         var param = {
           'userId': progress[0].userId,
-          'subSubjectId': progress[0].subSubjectId,
+          'subsubjectId': progress[0].subsubjectId,
           'level': levelNeeded
         };
         audit.getSeenExercises(param, PostSeenExe);

@@ -52,6 +52,8 @@ router.get('/myLastLocation', ctrlAssignment.getMyLastLocation);
 
 //audit
 router.post('/auditExercise', ctrlAudit.auditExercise);
+router.post('/saveProgress', ctrlAudit.saveProgress);
+
 
 
 

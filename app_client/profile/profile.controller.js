@@ -54,6 +54,7 @@
           //  'selectedAssignment':vm.selectedAssignment
           //}
           console.log('Your next exe is: '+ JSON.stringify(data));
+          $window.sessionStorage['selectedAssignment'] = vm.selectedAssignment;
           $location.path('student').search({param: data});
 
         })

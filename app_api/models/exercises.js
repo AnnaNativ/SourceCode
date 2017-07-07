@@ -19,7 +19,7 @@ var exerciseSchema = new Schema({
   successes: {type: Number, default: 0},
   failures: {type: Number, default: 0},
   gaveups: {type: Number, default: 0},
-  publishDate: {type: Date, default: Date.now}
+  createdDate: {type: Date, default: Date.now}
 });
 
 mongoose.model('BodyPart', bodyPartSchema);

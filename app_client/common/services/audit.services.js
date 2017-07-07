@@ -14,8 +14,17 @@
        })
     };
 
+    saveProgress
+    var saveProgress = function(param){
+       
+       return $http.post('/api/saveProgress', param).success(function(data){
+           console.log('Back from saveProgress with '+ data);
+       })
+    };
+
   return {
-      auditExercise:auditExercise
+      auditExercise:auditExercise,
+      saveProgress:saveProgress
   };
   }
 })();

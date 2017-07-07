@@ -8,9 +8,4 @@ var assignmentSchema = new mongoose.Schema({
 
 mongoose.model('Assignment', assignmentSchema);
 
-var progressSchema = new mongoose.Schema({ 
-    //subSubject: {type: Schema.Types.ObjectId, ref: 'SubSubject'}
-    level: Number
-    },{ collection: 'userProgress' });    
 
-mongoose.model('userProgress', progressSchema);

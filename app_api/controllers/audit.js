@@ -1,11 +1,29 @@
 var mongoose = require('mongoose');
 
 var Audit = mongoose.model('UserAudit');
+var Progress = mongoose.model('userProgress');
 
 
 module.exports.auditExercise = function (req, res) {
   //console.log('saving audit for finished exe ' + req.body);
-  var auditRecord = new Audit();
+  var progressRecord = new Progress();
+  
+  progressRecord.userId = req.body.userId;
+  progressRecord.level = req.body.level;
+  progressRecord.subsubjectId = req.body.subsubject;
+  progressRecord.assignmentId = req.body.exeId;
+
+  progressRecord.save(function (err) {
+      console.log('came back from progressRecord.save with ' + JSON.stringify(progressRecord));
+      res.status(200).json(progressRecord);
+  })
+
+};
+
+
+module.exports.saveProgress = function (req, res) {
+  //console.log('saving user progress ' + req.body);
+  var userProgress = new UserProgress();
   
   auditRecord.type = 'exercise';
   auditRecord.userId = req.body.userId;
@@ -20,11 +38,12 @@ module.exports.auditExercise = function (req, res) {
   })
 
 };
+
 module.exports.getSeenExercises = function(param,callbackFunc)
 {
-   console.log('******* getting a list of exe for a specific user/subsubject/level '+ JSON.stringify(param.userId) +'/'+ JSON.stringify(param.subSubjectId)+'/'+ param.level);
+   console.log('******* getting a list of exe for a specific user/subsubject/level '+ JSON.stringify(param.userId) +'/'+ JSON.stringify(param.subsubjectId)+'/'+ param.level);
    var userId = mongoose.Types.ObjectId(param.userId);
-   var subsubjectId = mongoose.Types.ObjectId(param.subSubjectId);
+   var subsubjectId = mongoose.Types.ObjectId(param.subsubjectId);
    console.log('userId '+ userId + ' subsubjectId '+ subsubjectId+ ' level '+ param.level);
    Audit
       .aggregate(

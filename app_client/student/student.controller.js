@@ -49,18 +49,38 @@
       console.log('calling auditExercise ' + JSON.stringify(param ));
       audit.auditExercise(param);
     }
+    
+    
+   vm.LoadPrereq = function(){
+      console.log("let's review prerequisites for this exe");
+   };
+   vm.LoadNextExe = function(){
 
-    vm.LoadNextExe = function(){
-      console.log('Loading next exe.');
+      console.log('update progress with going up a level');
       var param = {};
       param.userId = $window.sessionStorage['userId'];
       param.subsubject = vm.exercise.subsubject;
       param.level = vm.exercise.level;
+      param.assignmentId = $window.sessionStorage['selectedAssignment']
       
+      audit.saveProgress(param);
+
+      console.log('get next exe for the higher level');
+      vm.exercise.level = vm.exercise.level+1;
+      vm.LoadSimilarExe();
+    };
+
+    vm.LoadSimilarExe = function(){
+       var param = {};
+      param.userId = $window.sessionStorage['userId'];
+      param.subsubject = vm.exercise.subsubject;
+      param.level = vm.exercise.level;
+     
+     
       var config = {
         params: param,
       };
-        
+      console.log('calling similarExercise for level: ' + param.level);  
       exercise.similarExercise(config)
       .success(function (data) {
          console.log('---- Your next similarExercise is - : '+ JSON.stringify(data));

@@ -85,7 +85,7 @@ module.exports.newSubSubject = function(req, res) {
         console.log(err);
       }
       else {
-        //update the subject object with the new subsubjectid
+        //update the subject object with the new subsubjectId
         console.log('createdSubsubject: ' + subSubject);
         Subject
         .update({"_id": subSubject.subjectId},{$push:{subSubjects: subSubject._id}})
