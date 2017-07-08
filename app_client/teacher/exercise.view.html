@@ -1,6 +1,6 @@
-<div class="col-md-9 pull-right">
-    <div class="well well-lg">
-        <h3>:הכנס תרגיל</h3>
+<div class="col-md-10 pull-right">
+    <div ng-show="vm.addingExercise" class="well well-lg">
+        <label>:הכנס תרגיל</label>
         <div>
         <div ng-if="vm.newExercise.body.length == 0">
             <label class="btn btn btn-info" ng-click="vm.addTextArea()">לחץ להוספת טקסט</label>

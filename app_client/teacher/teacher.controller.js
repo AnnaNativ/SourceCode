@@ -4,8 +4,8 @@
     .module('meanApp')
     .controller('teacherCtrl', teacherCtrl);
 
-  teacherCtrl.$inject = ['$location', 'exercise', 'meanData', 'Upload', '$timeout'];
-  function teacherCtrl($location, exercise, meanData, Upload, $timeout) {
+  teacherCtrl.$inject = ['$location', 'exercise', 'meanData', 'Upload', '$timeout', 'subject'];
+  function teacherCtrl($location, exercise, meanData, Upload, $timeout, subject) {
     var vm = this;
     vm.formValid = true;
     vm.showAnswers = false;
@@ -13,13 +13,17 @@
     vm.subSubjects = {};
     vm.levels = ['1 קל', '2', '3 בינוני', '4', '5 מתקדם', 'לא יודע'];
     vm.defaultLevel = 2;
-    vm.exerciseSaved = false;
+    vm.schoolGrades = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'י"א', 'י"ב'];
+    vm.schoolLevels = ['1', '2', '3', '4', '5'];
 
     vm.newSubject = {};
     vm.newSubSubject = {};
     vm.newSubjectAdded = false; 
     vm.newSubSubjectAdded = false; 
-
+    vm.newExerciseAdded = false;
+    vm.addSubjectFormValid = true;
+    vm.addSubSubjectFormValid = true;
+    
     meanData.getSubjects()
     .success(function(data){
       vm.subjects = data;
@@ -42,42 +46,57 @@
     };
 
     vm.addNewSubject = function() {
-      subject
-        .newSubject(vm.newSubject)
-        .error(function(err){
-          alert("There was an error : " + err);
-        })
-        .success(function(data){
-          console.log('in subjects.controller addNewSubject.success');
-          vm.subjects.push(data);
-          // set the add subject successful message
-          vm.newSubjectAdded = true; 
-          vm.cancelNewSubject();
-        })
-        .then(function(){
-          console.log('in subjects.controller addNewSubject.then');
-          vm.cancelNewSubject();
-       });    
+      if(vm.newSubject.name == undefined || vm.newSubject.name.length == 0 || 
+        !(vm.newSubject.schoolGrade >= 0) || !(vm.newSubject.level >= 0)) {
+        vm.addSubjectFormValid = false;
+      }
+      else {
+        subject
+          .newSubject(vm.newSubject)
+          .error(function(err){
+            alert("There was an error : " + err);
+          })
+          .success(function(data){
+            console.log('in subjects.controller addNewSubject.success');
+            vm.subjects.push(data);
+            vm.subject = vm.subjects.length - 1;
+            vm.subSubject = undefined;
+            vm.newExercise.level = undefined;
+            vm.subSubjects = [];
+            // set the add subject successful message
+            vm.newSubjectAdded = true; 
+            vm.cancelNewSubject();
+          })
+          .then(function(){
+            console.log('in subjects.controller addNewSubject.then');
+        });  
+      }  
     }
 
     vm.addNewSubSubject = function() {
-      vm.newSubSubject.subjectId = vm.subjects[vm.subject]._id;
-      subject
-        .newSubSubject(vm.newSubSubject)
-        .error(function(err){
-          alert("There was an error : " + err);
-        })
-        .success(function(data){
-          console.log('in subjects.controller addNewSubSubject.success');
-          vm.subSubjects.push(data);
-          // set the add subject successful message
-          vm.newSubSubjectAdded = true; 
-          vm.cancelNewSubSubject();
-        })
-        .then(function(){
-          console.log('in subjects.controller addNewSubject.then');
-          vm.cancelNewSubject();
-       });
+      if(vm.newSubSubject.name == undefined || vm.newSubSubject.name.length == 0) {
+        vm.addSubSubjectFormValid = false;
+      }
+      else {
+        vm.newSubSubject.subjectId = vm.subjects[vm.subject]._id;
+        subject
+          .newSubSubject(vm.newSubSubject)
+          .error(function(err){
+            alert("There was an error : " + err);
+          })
+          .success(function(data){
+            console.log('in subjects.controller addNewSubSubject.success');
+            vm.subSubjects.push(data);
+            vm.subSubject = vm.subSubjects.length - 1;
+            vm.newExercise.level = undefined;          
+            // set the add sub subject successful message
+            vm.newSubSubjectAdded = true; 
+            vm.cancelNewSubSubject();
+          })
+          .then(function(){
+            console.log('in subjects.controller addNewSubject.then');
+        });
+      }
     }
 
     vm.addSubjectClicked = function() {
@@ -86,22 +105,30 @@
       vm.newSubjectAdded = false; 
       vm.newSubSubjectAdded = false; 
     }
-
     vm.addSubSubjectClicked = function() {
       vm.addingSubSubject = true;
       // clrer the add subject successful message
       vm.newSubjectAdded = false; 
       vm.newSubSubjectAdded = false; 
     }
+    
+    vm.addExerciseClicked = function() {
+      console.log('in subjects.controller addExerciseClicked');
+      vm.addingExercise = true;
+      // clrer the add subject successful message
+    }
+
 
     vm.cancelNewSubject = function() {
       vm.newSubject = {};
       vm.addingSubject = false;
+      vm.addSubjectFormValid = true;
     }
 
     vm.cancelNewSubSubject = function() {
       vm.newSubSubject = {};
       vm.addingSubSubject = false;
+      vm.addSubSubjectFormValid = true;
     }
 
     vm.getVideos = function() {
@@ -127,7 +154,7 @@
     }
 
     vm.addTextArea = function(){
-      vm.exerciseSaved = false;
+      vm.newExerciseAdded = false;
       vm.newExercise.body.push({type: 'text', content: '' });
     }
 
@@ -137,7 +164,7 @@
 
     vm.addPicture = function(){
       console.log('in teacher.controller addPicture:' + vm.picFile.content);
-      vm.exerciseSaved = false;
+      vm.newExerciseAdded = false;
       vm.newExercise.body.push({type: 'picture', content: vm.picFile});
     }
 
@@ -184,15 +211,16 @@
       } 
     }
 
-   vm.submit = function(isValid) {
+   vm.addNewExercise = function() {
       console.log('in teacher.controller onSubmit');
-      if (!isValid) {
+      if (!true) {
         vm.formValid = false;
       }
       else {
         // first, fill the missing data in the newExercise object
         vm.newExercise.subject = vm.subjects[vm.subject]._id;
         vm.newExercise.subSubject = vm.subSubjects[vm.subSubject]._id;
+        vm.newExercise.level = vm.level;
         if(vm.newExercise.level == (vm.levels.length - 1)) {
           vm.beforeSetToDefaultLevel = vm.newExercise.level;
           vm.newExercise.level = vm.defaultLevel;
@@ -220,7 +248,7 @@
                   vm.beforeSetToDefaultLevel = undefined;
                 }
                 vm.updateShowAnswersStatus();
-                vm.exerciseSaved = true;
+                vm.newExerciseAdded = true;
                 vm.formValid = true;
               });
           }
