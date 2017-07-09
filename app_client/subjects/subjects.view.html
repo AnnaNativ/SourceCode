@@ -1,0 +1,147 @@
+<navigation></navigation>
+
+<div class="container" ng-cloak>
+  <div class="container text-right">
+    <h2>:נושאי לימוד</h2><br>
+    <div class="row">
+      <div class="col-md-3 pull-right">
+          <div class="form-group text-right">
+            <label>:נושא לימוד</label>
+            <select dir="rtl" class="form-control" ng-model="vm.subject" 
+                ng-options="vm.subjects.indexOf(subject) as subject.name for subject in vm.subjects" ng-change="vm.subjectSelected()" ng-disabled="vm.addingSubject">
+            </select>
+          </div>
+      </div>
+      <div class="col-md-3 pull-right">
+          <div class="form-group text-right" ng-show="vm.subject >= 0">    
+            <label>:תת נושא</label>
+            <select dir="rtl" class="form-control" ng-model="vm.subSubject" 
+                ng-options="vm.subSubjects.indexOf(subSubject) as subSubject.name for subSubject in vm.subSubjects" ng-change="vm.subSubjectSelected()" ng-disabled="vm.addingSubSubject">
+            </select>
+          </div>
+      </div>
+      <div class="col-md-3 pull-right" ng-show="vm.subSubject >= 0">
+          <div class="form-group text-right">
+            <label>:תרגילים</label>
+            <select dir="rtl" class="form-control" ng-model="vm.exercise" 
+                ng-options="vm.exercises.indexOf(exercise) as exercise.exercise for exercise in vm.exercises"></select>
+          </div>
+      </div>
+      <div class="col-md-3 pull-right" ng-show="vm.exercise >= 0">
+          <div class="form-group text-right">
+            <label>:פרוט</label>
+            <div class="well well-lg">
+              :תרגיל<br>
+              {{vm.exercises[vm.exercise].exercise}}<br><br>
+              :תשובות נכונות<br>
+              <div ng-repeat="obj in vm.exercises[vm.exercise].goodSolutions" id="{{obj.solution}}">
+                {{obj.solution}} :{{$index + 1}} תשובה<br>
+              </div>
+              <br>
+              :תשובות שגויות<br>
+              <div ng-repeat="obj in vm.exercises[vm.exercise].badSolutions" id="{{obj.solution}}">
+                {{obj.solution}} :{{$index + 1}} תשובה<br>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 pull-right">
+        <div class="btn-toolbar pull-right">
+          <button type="button" class="btn btn-info" ng-click="vm.removeSubject()" ng-disabled="vm.addingSubject" data-toggle="tooltip" title="מחק נושא לימוד נבחר">
+              <span class="glyphicon glyphicon-trash"></span></button>
+          <button type="button" class="btn btn-info" ng-click="vm.addSubjectClicked()" ng-disabled="vm.addingSubject" data-toggle="tooltip" title="הוסף נושא לימוד חדש">
+              <span class="glyphicon glyphicon-plus"></span></button>
+        </div>
+        <br><br><br>
+        <div class="well well-lg" ng-show="vm.subject >= 0 && !vm.addingSubject && !vm.addingSubSubject">
+          <b>נושא לימוד</b> - {{vm.subjects[vm.subject].name}}<br>
+          <b>כיתה</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{vm.subjects[vm.subject].schoolGrade}}<br>
+          <b>רמת לימוד</b> - {{vm.subjects[vm.subject].level}}<br>
+          <div ng-repeat="obj in vm.subSubjects" id="{{obj.name}}">
+            <div ng-if="$index == 0">
+              <b>תת נושאים</b> - {{obj.name}}<br>
+            </div>
+            <div ng-if="$index != 0">
+               {{obj.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+            </div>
+          </div>
+        </div>
+        <div ng-show="vm.newSubjectAdded">
+          <br><h3 >!הוסף בהצלחה</h3>
+        </div>
+      </div> 
+      <div class="col-md-3 pull-right" ng-show="vm.subject >= 0">
+        <div class="btn-toolbar pull-right">
+          <button type="button" class="btn btn-info" ng-click="vm.removeSubSubject()" ng-disabled="vm.addingSubSubject" data-toggle="tooltip" title="מחק תת נושא לימוד נבחר">
+              <span class="glyphicon glyphicon-trash"></span></button>
+          <button type="button" class="btn btn-info" ng-click="vm.addSubSubjectClicked()" ng-disabled="vm.addingSubSubject" data-toggle="tooltip" title="הוסף תת נושא לימוד חדש">
+              <span class="glyphicon glyphicon-plus"></span></button>
+        </div>
+        <br><br><br>
+        <div class="well well-lg" ng-show="vm.subSubject >= 0 && !vm.addingSubject && !vm.addingSubSubject">
+          <b>תת הנושא</b>&nbsp;&nbsp;&nbsp; - {{vm.subSubjects[vm.subSubject].name}}<br>
+          <div ng-repeat="obj in vm.videos" id="{{obj.link}}">
+            <div ng-if="obj.type == 'tutorial'">
+              <b>וידאו הדרכה</b>&nbsp; - <a href="#" data-toggle="tooltip" 
+                  title="likes - {{obj.likes}}&#13;&#10;dislikes - {{obj.dislikes}}&#13;&#10;views - {{obj.views}}">{{obj.link}}</a><br>
+            </div>
+            <div ng-if="obj.type == 'sample solution'">
+              <b>וידאו דוגמה</b>&nbsp;&nbsp; - <a href="#" data-toggle="tooltip"
+                  title="likes - {{obj.likes}}&#13;&#10;dislikes - {{obj.dislikes}}&#13;&#10;views - {{obj.views}}">{{obj.link}}</a><br>
+            </div>
+          </div>
+        </div>
+        <div ng-show="vm.newSubSubjectAdded">
+          <br><h3 >!הוסף בהצלחה</h3>
+        </div>      
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-3 pull-right" ng-show="vm.addingSubject">
+        <div class="form-group text-right">
+          <label>:שם הנושא </label>
+          <input dir="rtl" type="text" class="form-control" ng-model="vm.newSubject.name" name="subjectName"><br>
+          <label>:כיתה </label>
+          <select dir="rtl" class="form-control" ng-model="vm.newSubject.schoolGrade" ng-options="idx as grade for (idx, grade) in vm.schoolGrades"></select><br>
+          <label>:רמת לימוד </label>
+          <select dir="rtl" class="form-control" ng-model="vm.newSubject.level" ng-options="idx as level for (idx, level) in vm.levels"></select><br>
+          <button type="button" class="btn btn-info" ng-click="vm.cancelNewSubject()" data-toggle="tooltip" title="בטל הוספת נושא לימוד חדש">
+                  <span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="btn btn-info" ng-click="vm.addNewSubject()" data-toggle="tooltip" title="שמור נושא לימוד חדש"
+                  ng-disabled="(vm.newSubject.name == undefined) || (vm.newSubject.name == '') || !(vm.newSubject.schoolGrade >= 0) || !(vm.newSubject.level >= 0)">
+                  <span class="glyphicon glyphicon-ok"></span></button>
+        </div>
+      </div>
+      <div class="col-md-3 pull-right" ng-show="!vm.addingSubject">
+      </div>
+      <div class="col-md-3 pull-right" ng-show="vm.addingSubSubject">
+        <div class="form-group text-right">
+          <label>:שם התת נושא </label>
+          <input dir="rtl" type="text" class="form-control" ng-model="vm.newSubSubject.name" name="subSubjectName"><br>
+          <label>:קישור לוידאו הדרכה </label>
+          <input dir="rtl" type="text" class="form-control" ng-model="vm.newSubSubject.tutorialVideo" name="subSubjectTutorialVideo"><br>
+          <label>:קישור לוידאו פתרון דוגמה </label>
+          <input dir="rtl" type="text" class="form-control" ng-model="vm.newSubSubject.sampleVideos" name="subSubjectSampleVideos"><br>    
+          <button type="button" class="btn btn-info" ng-click="vm.cancelNewSubSubject()" data-toggle="tooltip" title="בטל הוספת תת נושא לימוד חדש">
+                  <span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="btn btn-info" ng-click="vm.addNewSubSubject()" data-toggle="tooltip" title="שמור תת נושא לימוד חדש"
+                  ng-disabled="(vm.newSubSubject.name == undefined) || (vm.newSubSubject.name == '')">
+                  <span class="glyphicon glyphicon-ok"></span></button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</div>
+<!--
+Debug Subjects: {{vm.subjects}}<br><br>
+Ddbug SubSubjects: {{vm.subSubjects}}<br><br>
+Ddbug exercises: {{vm.exercises}}<br><br>
+Ddbug Videos: {{vm.videos}}<br><br>
+-->
+
+

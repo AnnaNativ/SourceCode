@@ -1,0 +1,61 @@
+<navigation></navigation>
+
+<div class="container text-right">
+  <h1 class="form-signin-heading">:הרשמה</h1>
+  <p class="lead">כבר רשום? <a href="login">תיכנס </a> כדי להשתמש</p>
+  <div ng-if="!vm.formValid">
+    <div class="row">
+      <div class="col-md-4 pull-right">
+        <div class="text-danger">!אנא מלאו את כל השדות</div>
+      </div>
+    </div>
+  </div>
+  <form name="registrationForm" novalidate ng-submit="vm.submit(registrationForm.$valid)">
+    <div class="row">
+      <div class="col-md-4 pull-right">
+        <div class="form-group text-right">
+          <h3>:שם משתמש</h3>
+          <input type="text" name="name" class="form-control text-right" ng-model="vm.credentials.name" required>
+          <div ng-messages="registrationForm.name.$error" ng-messages-include="/src/messages.html"></div>
+        </div>
+        <div class="form-group">
+          <h3>:כתובת אימייל</h3>
+          <input type="email" name="email" class="form-control text-right" name="emailInput" ng-model="vm.credentials.email" required>
+          <div ng-messages="registrationForm.email.$error" ng-messages-include="/src/messages.html"></div>
+        </div>
+        <div class="form-group">
+          <h3>:סיסמה</h3>
+          <input type="password" name="password" class="form-control text-right" ng-model="vm.credentials.password" required>
+          <div ng-messages="registrationForm.password.$error" ng-messages-include="/src/messages.html"></div>
+        </div>
+        <div class="form-group">
+          <h3>:אימות סיסמה</h3>
+          <input type="password" name="verifyPassword" class="form-control text-right" ng-model="vm.credentials.verifyPassword" 
+            required compare-to="vm.credentials.password">
+          <div ng-messages="registrationForm.verifyPassword.$error" ng-messages-include="/src/messages.html"></div>
+        </div>
+        <button type="submit" class="btn btn-info">שמירה</button>  
+      </div>
+      <div class="col-md-2 pull-right">
+        <div class="form-group">
+          <h5>:בחר/י תפקיד</h5>
+          <label class="radio-inline"><input type="radio" name="role" ng-model="vm.credentials.role" value="teacher" required>מורה</label>
+          <label class="radio-inline"><input type="radio" name="role" ng-model="vm.credentials.role" value="student" required>תלמיד</label>
+          <div ng-messages="registrationForm.role.$error" ng-messages-include="/src/messages.html"></div>
+        </div>
+      </div>
+      <div ng-show="vm.isTeacher()" class="col-md-3 pull-right">
+        <div class="form-group">
+          <label>:בחר/י בית ספר</label>
+          <select class="form-control" name="school" ng-model="vm.school" ng-options="vm.schools.indexOf(school) as school.name for school in vm.schools"></select>
+        </div>
+      </div>
+      <div ng-show="vm.isStudent()" class="col-md-3 pull-right">
+        <label>:בחר/י מורה משוייכת</label>       
+        <select class="form-control" name="teacher" ng-model="vm.teacher" ng-options="vm.teachers.indexOf(teacher) as teacher.name for teacher in vm.teachers"></select>
+      </div>
+    </div>
+  </form>
+</div>
+<div style="height:100px"></div>
+
