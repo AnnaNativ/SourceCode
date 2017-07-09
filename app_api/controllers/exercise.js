@@ -114,17 +114,30 @@ module.exports.getExercises = function (req, res) {
     res.status(401).json({
       "message": "UnauthorizedError: private exercise"
     });
-  } else {
+  } 
+  else {
     var subSubject = new mongoose.mongo.ObjectId(req.query.subSubject);
+    var level = parseInt(req.query.level);
     SubSubject
-      .find({ '_id': subSubject })
-      .exec(function (err, exercises) {
-        Exercise
-          .find({})
-        res.status(200).json(exercises);
+      .aggregate(
+      { $match: { '_id': subSubject } },
+      {
+        $project: {
+          exercises: {
+            $filter: {
+              input: '$exercises',
+              as: 'exer',
+              cond: { $eq: ["$$exer.level", level] }
+            }
+          }
+        }
+      }
+      )
+      .exec(function (err, result) {
+        console.log('exe for this subsubject and level:' + result[0].exercises.length);
+        res.status(200).json(result[0].exercises);
       });
   }
-
 }
 
 getExerciseForId = function (exeId, PostGetExeForIdFunc) {

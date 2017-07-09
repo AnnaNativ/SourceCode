@@ -131,6 +131,18 @@
       vm.addSubSubjectFormValid = true;
     }
 
+    vm.cancelNewExercise = function() {
+      vm.newExercise.body = [];  
+      vm.newExercise.solutions = [{solution: "", isCorrect: true}, 
+                                  {solution: "", isCorrect: false}, 
+                                  {solution: "", isCorrect: false}, 
+                                  {solution: "", isCorrect: false}, 
+                                  {solution: "", isCorrect: false}];
+      vm.updateShowAnswersStatus();
+      vm.formValid = true;
+      vm.addingExercise = false;
+    }
+    
     vm.getVideos = function() {
       var videos = vm.subSubjects[vm.subSubject].sample_videos;
       videos.push(vm.subSubjects[vm.subSubject].tutorial_video);
@@ -144,7 +156,7 @@
     }
 
     vm.getExercises = function() {
-      meanData.getExercises(vm.subSubjects[vm.subSubject]._id)
+      meanData.getExercises(vm.subSubjects[vm.subSubject]._id, vm.level)
       .success(function(data){
         vm.exercises = data;
       })
@@ -211,21 +223,34 @@
       } 
     }
 
-   vm.addNewExercise = function() {
+    vm.levelSelected = function() {
+      console.log('In levelSelected');
+      meanData.getExercises(vm.subSubjects[vm.subSubject]._id, vm.level)
+      .success(function(data){
+        vm.exercises = data;
+      })
+      .error(function(e){
+        console.log(e);
+      })      
+    }
+
+    vm.addNewExercise = function() {
       console.log('in teacher.controller onSubmit');
-      if (!true) {
+      if (vm.newExercise.body.length == 0 || 
+          vm.newExercise.solutions[0].solution.length == 0 || vm.newExercise.solutions[1].solution.length == 0) {
         vm.formValid = false;
       }
       else {
         // first, fill the missing data in the newExercise object
         vm.newExercise.subject = vm.subjects[vm.subject]._id;
         vm.newExercise.subSubject = vm.subSubjects[vm.subSubject]._id;
-        vm.newExercise.level = vm.level;
-        if(vm.newExercise.level == (vm.levels.length - 1)) {
-          vm.beforeSetToDefaultLevel = vm.newExercise.level;
+        if(vm.newExercise.level != (vm.levels.length - 1)) {
+          vm.newExercise.level = vm.level;
+        }
+        else {
           vm.newExercise.level = vm.defaultLevel;
         }
-        
+              
         vm.allPicSavedCallback = function() { 
               console.log('in in teacher.controller allPicSavedCallback');
               exercise
@@ -236,20 +261,11 @@
               .then(function(){
                 // forth, reset the page for the new exerciese
                 console.log('in teacher.controller onSubmit.exercise.then.forEach.end');
-                vm.newExercise.body = [];  
-                vm.newExercise.solutions = [{solution: "", isCorrect: true}, 
-                                            {solution: "", isCorrect: false}, 
-                                            {solution: "", isCorrect: false}, 
-                                            {solution: "", isCorrect: false}, 
-                                            {solution: "", isCorrect: false}];
-                // this is for the edge case where the "don't know level" was selected. We need to restore the original level.
-                if(vm.beforeSetToDefaultLevel != undefined) {
-                  vm.newExercise.level = vm.beforeSetToDefaultLevel;
-                  vm.beforeSetToDefaultLevel = undefined;
-                }
-                vm.updateShowAnswersStatus();
+
+                vm.cancelNewExercise();
+                vm.exercises = {};
+                vm.levelSelected();
                 vm.newExerciseAdded = true;
-                vm.formValid = true;
               });
           }
 

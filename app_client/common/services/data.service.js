@@ -54,11 +54,11 @@
       return $http.get('/api/subSubjects', config);
     }
 
-    var getExercises = function(subSubject) {
-      console.log('In data.service getExercises with subSubject: ' + subSubject);
+    var getExercises = function(subSubject, level) {
+      console.log('In data.service getExercises with subSubject: ' + subSubject + ' and level: ' + level);
 
       var config = {
-        params: {subSubject: subSubject},
+        params: {subSubject: subSubject, level: level},
         headers : {Authorization: 'Bearer '+ authentication.getToken()}
       };
 

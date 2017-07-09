@@ -1,5 +1,5 @@
 <div class="row">
-    <h2>:מסך הכנסת תרגיל&nbsp;&nbsp;</h2>
+    <h2>:מסך הכנסת נתונים&nbsp;&nbsp;</h2>
 </div>
 <div class="well well-lg">
     <div class="row">
@@ -13,17 +13,17 @@
             <label>:בחר תת נושא</label>
             <select dir="rtl" class="form-control form-fixer" ng-model="vm.subSubject" ng-options="vm.subSubjects.indexOf(subSubject) as subSubject.name for subSubject in vm.subSubjects"></select>
         </div>
-        <div ng-if="vm.subSubject >= 0" class="col-md-2 pull-right">
+        <div ng-if="vm.subSubject >= 0" class="col-md-3 pull-right">
             <label>:בחר רמת קושי</label>
-            <select dir="rtl" class="form-control form-fixer" ng-model="vm.level" ng-options="idx as level for (idx, level) in vm.levels"></select>
+            <select dir="rtl" class="form-control form-fixer" ng-model="vm.level" ng-options="idx as level for (idx, level) in vm.levels" 
+                ng-change="vm.levelSelected()">
+            </select>
         </div>
-        <div ng-if="vm.level >= 0" class="col-md-2 pull-right">
+        <div ng-if="vm.level >= 0" class="col-md-3 pull-right">
             <label>:בחר תרגיל</label>
-            <select dir="rtl" class="form-control form-fixer" ng-model="vm.exercise" ng-options="idx as level for (idx, level) in vm.exercises"></select>
-        </div>
-        <div ng-if="vm.exercise >= 0" class="col-md-2 pull-right">
-            <label>:עזרים</label>
-            <select dir="rtl" class="form-control form-fixer" ng-model="vm.learningTools" ng-options="idx as level for (idx, level) in vm.learningTools"></select>
+            <select dir="rtl" class="form-control form-fixer" >
+                <option ng-model="vm.exercise" ng-repeat="exercise in vm.exercises">תרגיל - {{$index+1}}</option>
+            </select>
         </div>
     </div>
     <br>
@@ -62,14 +62,14 @@
             </div>
             <br>
         </div>
-        <div class="col-md-2 pull-right" ng-show="vm.subSubject >= 0">
+        <div class="col-md-3 pull-right" ng-show="vm.subSubject >= 0">
             <div class="btn-toolbar pull-right">
                 <button type="button" class="btn btn-info" ng-click="vm.viewSelectedLevel()" data-toggle="tooltip" title="פרטים על רמת הקושי הנבחרת">
                     <span class="glyphicon glyphicon-info-sign"></span></button>
             </div>
             <br>
         </div>
-        <div class="col-md-2 pull-right" ng-show="vm.level >= 0">
+        <div class="col-md-3 pull-right" ng-show="vm.level >= 0">
             <div class="btn-toolbar pull-right">
                 <button type="button" class="btn btn-info" ng-click="vm.viewSelectedExercise()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
                     title="פרטים על התרגיל הנבחר">
@@ -80,18 +80,9 @@
                 <button type="button" class="btn btn-info" ng-click="vm.removeExercise()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
                     title="מחק תרגיל נבחר">
                 <span class="glyphicon glyphicon-trash"></span></button>
-                <button type="button" class="btn btn-warning" ng-click="vm.addExerciseClicked()" = true" ng-disabled="vm.addingExercise" data-toggle="tooltip"
+                <button type="button" class="btn btn-warning" ng-click="vm.addExerciseClicked()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
                     title="הוסף תרגיל חדש">
                 <span class="glyphicon glyphicon-plus"></span></button>
-            </div>
-            <br>
-        </div>
-        <div class="col-md-2 pull-right" ng-show="vm.exercise >= 0">
-            <div class="btn-toolbar pull-right">
-                <button type="button" class="btn btn-info" ng-click="vm.viewSelectedLearingTool()" data-toggle="tooltip" title="פרטים על העזר הנבחר">
-                    <span class="glyphicon glyphicon-info-sign"></span></button>
-                <button type="button" class="btn btn-info" ng-click="vm.editLearingTool()" data-toggle="tooltip" title="עדכן עזר נבחר">
-                    <span class="glyphicon glyphicon-edit"></span></button>
             </div>
             <br>
         </div>
@@ -103,12 +94,10 @@
         <div class="col-md-3 pull-right">
             <label ng-show="vm.newSubSubjectAdded" >!הוסף בהצלחה</label>
         </div>
-        <div class="col-md-2 pull-right">
+        <div class="col-md-3 pull-right">
         </div>
-        <div class="col-md-2 pull-right">
+        <div class="col-md-3 pull-right">
             <label ng-show="vm.newExerciseAdded" >!הוסף בהצלחה</label>
-        </div>
-        <div class="col-md-2 pull-right">
         </div>
     </div>
 </div>
