@@ -23,7 +23,7 @@ module.exports.getStudentsOfTeacher = function(req, res) {
     });
   } else {
     User
-      .find({'teacher': req.payload.teacher})
+      .find({'teacher': mongoose.Types.ObjectId(req.payload._id)})
       .exec(function(err, user) {
         res.status(200).json(user);
       });

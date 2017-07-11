@@ -1,9 +1,34 @@
 var mongoose = require('mongoose');
 var exercise = require('./exercise');
 var audit = require('./audit');
+var exercise = require('./assignments');
 
+var Assignment = mongoose.model('Assignment');
 var assignments = mongoose.model('Assignment');
 var progress = mongoose.model('userProgress');
+
+module.exports.newAssignment = function (req, res) {
+  var itemsProcessed = 0;
+  req.body.assignee.forEach(function(student) {
+    assignment = new Assignment();
+    assignment._id = new mongoose.mongo.ObjectId();
+    assignment.assigner = mongoose.Types.ObjectId(req.body.assigner);
+    assignment.assignee = mongoose.Types.ObjectId(student.id);
+    assignment.subsubjectId = mongoose.Types.ObjectId(req.body.subsubjectId);
+    // save the assignment
+    assignment.save(function (err) {
+      itemsProcessed++;
+      if (err) {
+        console.log(err);
+      }
+      else {
+        if(itemsProcessed == (req.body.assignee.length - 1)) {
+          res.status(200).json('success');
+        }
+      }
+    });
+  });
+}
 
 module.exports.getMyAssignments = function (req, res) {
   console.log('!!!!! getting assignments for ' + req.query._id);

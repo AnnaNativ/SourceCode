@@ -2,19 +2,19 @@
     <div class="row">
       <div class="col-md-1 pull-right">
       </div>
-      <div class="col-md-4 pull-right">
+      <div class="col-md-8 pull-right">
         <ul class="nav nav-pills navbar-right">
           <li class="nav-item">
-            <a class="nav-link  btn-xlarge" href="/teacher?tab=profile">אזור אישי</a>
+            <a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'profile'" href="#">אזור אישי</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn-xlarge" href="/teacher?tab=stats">סטטיסטיקות</a>
+            <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'stats'" href="#">סטטיסטיקות</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn-xlarge" href="/teacher?tab=data">הכנסת נתונים</a>
+            <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'data'" href="#">הכנסת נתונים</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn-xlarge active" href="/teacher?tab=assignments">ניהול משימות</a>
+            <a class="nav-link btn-xlarge active" ng-click="vm.currentTab = 'assignments'"  href="#">ניהול משימות</a>
           </li>
         </ul>
       </div>

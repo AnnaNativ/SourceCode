@@ -1,10 +1,12 @@
-var mongoose = require( 'mongoose');
-//var Schema = mongoose.Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var assignmentSchema = new mongoose.Schema({ 
-    //subSubject: {type: Schema.Types.ObjectId, ref: 'SubSubject'}
-    subsubjectId: String
-    });    
+    assigner: {type: Schema.Types.ObjectId, ref:'User'},
+    assignee: {type: Schema.Types.ObjectId, ref:'User'},
+    status: {type: String, enum: ['new', 'inprogress', 'done'], default: 'new'},
+    subsubjectId: {type: Schema.Types.ObjectId, ref:'SubSubject'},
+});    
 
 mongoose.model('Assignment', assignmentSchema);
 

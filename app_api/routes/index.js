@@ -49,6 +49,7 @@ router.post('/upload', multipartyMiddleware, ctrlUploads.uploadPic);
 //assignment
 router.get('/myAssignments', ctrlAssignment.getMyAssignments);
 router.get('/myLastLocation', ctrlAssignment.getMyLastLocation);
+router.post('/assignment', ctrlAssignment.newAssignment);
 
 //audit
 router.post('/auditExercise', ctrlAudit.auditExercise);

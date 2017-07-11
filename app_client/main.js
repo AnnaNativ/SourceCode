@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('meanApp', ['ngRoute', 'ngFileUpload', 'ngMessages']);
+  angular.module('meanApp', ['ngRoute', 'ngFileUpload', 'ngMessages', 'angularjs-dropdown-multiselect']);
 
   function config ($routeProvider, $locationProvider) {
     $routeProvider
