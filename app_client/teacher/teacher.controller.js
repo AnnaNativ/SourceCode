@@ -21,6 +21,7 @@
     vm.newSubjectAdded = false; 
     vm.newSubSubjectAdded = false; 
     vm.newExerciseAdded = false;
+    vm.newAssignmentAdded = false; 
     vm.addSubjectFormValid = true;
     vm.addSubSubjectFormValid = true;
     vm.currentTab = $location.search().tab;
@@ -275,6 +276,7 @@
 
     vm.schoolGradeSelected = function() {
       console.log('In schoolGradeSelected');
+      vm.newAssignmentAdded = false;
       meanData.getStudentsOfTeacher()
       .success(function(data){
         vm.students = [];
@@ -298,6 +300,7 @@
         .success(function(data){
           console.log('in teacher.controller addAssignment.success');
           vm.cancelAssignment();
+          vm.newAssignmentAdded = true;
         });
     }
 
