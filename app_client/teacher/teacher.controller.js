@@ -244,6 +244,8 @@
       meanData.getSubSubjects(vm.subjects[vm.subject]._id)
       .success(function(data){
         vm.subSubjects = data;
+        vm.level = undefined;
+        vm.exercises = [];
       })
       .error(function(e){
         console.log(e);
@@ -255,23 +257,16 @@
         vm.newSubjectAdded = false; 
         vm.newSubSubjectAdded = false; 
         vm.exercise = undefined;
-        console.log('In SubjectSelected');
-        if(vm.subject >= 0 && vm.subSubject >= 0) {
-          vm.getVideos();
-          vm.getExercises();       
-        } 
+        vm.level = undefined;
       }
     }
 
     vm.levelSelected = function() {
       console.log('In levelSelected');
-      meanData.getExercises(vm.subSubjects[vm.subSubject]._id, vm.level)
-      .success(function(data){
-        vm.exercises = data;
-      })
-      .error(function(e){
-        console.log(e);
-      })      
+      if(vm.subject >= 0 && vm.subSubject >= 0) {
+        vm.getVideos();
+        vm.getExercises();       
+      } 
     }
 
     vm.schoolGradeSelected = function() {

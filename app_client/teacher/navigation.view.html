@@ -1,17 +1,24 @@
 <br>
 <div class="well well-lg">
     <div class="row">
-        <div class="col-md-3 pull-right">
+        <p><h2>:הכנסת נתונים</h2></p><br>
+    </div>
+    <div class="row">
+        <div class="col-md-1 pull-right">
+        </div>
+        <div class="col-md-2 pull-right">
             <label>:בחר נושא</label>
             <select dir="rtl" name="subject" class="form-control form-fixer" ng-model="vm.subject" ng-options="vm.subjects.indexOf(subject) as subject.name for subject in vm.subjects"
                 ng-change="vm.subjectSelected()">
             </select>
         </div>
-        <div ng-if="vm.subject >= 0" class="col-md-3 pull-right">
+        <div ng-if="vm.subject >= 0" class="col-md-2 pull-right">
             <label>:בחר תת נושא</label>
-            <select dir="rtl" class="form-control form-fixer" ng-model="vm.subSubject" ng-options="vm.subSubjects.indexOf(subSubject) as subSubject.name for subSubject in vm.subSubjects"></select>
+            <select dir="rtl" class="form-control form-fixer" ng-model="vm.subSubject" ng-options="vm.subSubjects.indexOf(subSubject) as subSubject.name for subSubject in vm.subSubjects"
+                ng-change="vm.subSubjectSelected()" >
+            </select>
         </div>
-        <div ng-if="vm.subSubject >= 0" class="col-md-3 pull-right">
+        <div ng-if="vm.subSubject >= 0" class="col-md-2 pull-right">
             <label>:בחר רמת קושי</label>
             <select dir="rtl" class="form-control form-fixer" ng-model="vm.level" ng-options="idx as level for (idx, level) in vm.levels" 
                 ng-change="vm.levelSelected()">
@@ -26,7 +33,9 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-3 pull-right">
+        <div class="col-md-1 pull-right">
+        </div>
+        <div class="col-md-2 pull-right">
             <div class="btn-toolbar pull-right">
                 <button type="button" class="btn btn-info" ng-click="vm.viewSelectedSubject()" ng-disabled="vm.addingSubject" data-toggle="tooltip"
                     title="פרטים על נושא הלימוד הנבחר">
@@ -43,7 +52,7 @@
             </div>
             <br>
         </div>
-        <div class="col-md-3 pull-right" ng-show="vm.subject >= 0">
+        <div class="col-md-2 pull-right" ng-show="vm.subject >= 0">
             <div class="btn-toolbar pull-right">
                 <button type="button" class="btn btn-info" ng-click="vm.viewSelectedSubject()" ng-disabled="vm.addingSubSubject" data-toggle="tooltip"
                     title="פרטים על תת נושא הלימוד הנבחר">
@@ -60,7 +69,7 @@
             </div>
             <br>
         </div>
-        <div class="col-md-3 pull-right" ng-show="vm.subSubject >= 0">
+        <div class="col-md-2 pull-right" ng-show="vm.subSubject >= 0">
             <div class="btn-toolbar pull-right">
                 <button type="button" class="btn btn-info" ng-click="vm.viewSelectedLevel()" data-toggle="tooltip" title="פרטים על רמת הקושי הנבחרת">
                     <span class="glyphicon glyphicon-info-sign"></span></button>
