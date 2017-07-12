@@ -411,6 +411,14 @@
 
     vm.newAssignmentAdded = false; 
 
+    meanData.getAssignmentsOfTeacher()
+    .success(function(data){
+      vm.assignments = data;
+    })
+    .error(function(e){
+      console.log(e);
+    })      
+
     vm.addAssignment = function() {
       assignment
         .newAssignment({assigner: vm.user._id,

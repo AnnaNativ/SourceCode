@@ -74,6 +74,15 @@
       });
     }
 
+    var getAssignmentsOfTeacher = function() {
+      console.log('In data.service getAssignmentsOfTeacher');
+      return $http.get('/api/assignmentsOfTeacher', {
+        headers: {
+          Authorization: 'Bearer '+ authentication.getToken()
+        }        
+      });
+    }
+
     var getTeachersList = function() {
       console.log('In data.service getTeachersList');
       return $http.get('/api/teachersList', {});
@@ -92,6 +101,7 @@
       getVideos: getVideos,
       getExercises: getExercises,
       getStudentsOfTeacher: getStudentsOfTeacher,
+      getAssignmentsOfTeacher: getAssignmentsOfTeacher,
       getTeachersList: getTeachersList,
       getSchoolsList: getSchoolsList
     };

@@ -30,6 +30,41 @@ module.exports.newAssignment = function (req, res) {
   });
 }
 
+module.exports.getAssignmentsOfTeacher = function(req, res) {
+  if (!req.payload._id) {
+    res.status(401).json({
+      "message" : "UnauthorizedError: private profile"
+    });
+  } 
+  else {
+/*    Assignment
+      .find({'assigner': mongoose.Types.ObjectId(req.payload._id)})
+      .exec(function(err, user) {
+        res.status(200).json(user);
+      });*/
+
+    var teacher = mongoose.Types.ObjectId(req.payload._id);
+    console.log('teacher ID is ' + teacher);
+    assignments
+      .aggregate(
+      { $match: { assigner: teacher } },
+      { $lookup: { from: 'subsubjects', localField: 'subsubjectId', foreignField: '_id', as: 'subSubject' } },
+      { $lookup: { from: 'users', localField: 'assignee', foreignField: '_id', as: 'student' } },
+      { $project: {status:1, "subSubject.name" : 1, "student.name": 1}},
+      { $group : { _id : "$subSubject", assignments: { $push: "$$ROOT" } } }
+      )
+      .exec(function (err, data) {
+        if (err) {
+          console.log('Returned from aggregate with error ' + err);
+        }
+        else {
+          res.status(200).json(data);
+          console.log('came back with ' + data.length + ' assignments for teacher');
+        }
+      });
+  }
+}
+
 module.exports.getMyAssignments = function (req, res) {
   console.log('!!!!! getting assignments for ' + req.query._id);
   var userId = mongoose.Types.ObjectId(req.query._id);
