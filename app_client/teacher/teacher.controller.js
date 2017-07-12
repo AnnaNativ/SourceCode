@@ -234,6 +234,7 @@
     vm.addExerciseClicked = function() {
       console.log('in subjects.controller addExerciseClicked');
       vm.addingExercise = true;
+      vm.newExerciseAdded = false;
       // clrer the add subject successful message
     }
 

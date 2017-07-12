@@ -43,8 +43,9 @@
             </div>
         </div>
     </div>
-        <br>
-        <div ng-show="vm.addingExercise">
+    <div ng-show="vm.addingExercise" class="well well-lg">
+        <label>:סיום</label>
+        <div>
             <button type="button" class="btn btn-info" ng-click="vm.cancelNewExercise()" data-toggle="tooltip" title="בטל הוספת תרגיל חדש">
                 <span class="glyphicon glyphicon-remove"></span></button>
             <button type="button" class="btn btn btn-warning" ng-click="vm.addNewExercise()" data-toggle="tooltip" title="שמור תרגיל חדש">
@@ -55,5 +56,6 @@
             <div ng-if="!vm.formValid && vm.answerType == 'open'">
                 <div class="text-danger">&nbsp;&nbsp;התרגיל חייב להכיל לפחות טקסט או תמונה אחת, ותשובה נכונה&nbsp;&nbsp;</div>
             </div>   
-        </div> 
+        </div>
+    </div> 
 </div>
