@@ -27,9 +27,9 @@
     vm.currentTab = $location.search().tab;
     vm.schools = [];
     vm.user = {};
-
     vm.selectedStudents = [];
     vm.students = [];
+    vm.answerType = "closed";
 
     vm.transclusionSettings = { };
 		vm.studentSelectionTexts = {
@@ -66,6 +66,7 @@
     vm.newExercise = {
       level: undefined,
       body:[],
+      solutionPicture: [],
       solutions : [{solution: "", isCorrect: true}, 
                    {solution: "", isCorrect: false}, 
                    {solution: "", isCorrect: false}, 
@@ -134,12 +135,14 @@
       // clrer the add subject successful message
       vm.newSubjectAdded = false; 
       vm.newSubSubjectAdded = false; 
+      vm.newExerciseAdded = false; 
     }
     vm.addSubSubjectClicked = function() {
       vm.addingSubSubject = true;
       // clrer the add subject successful message
       vm.newSubjectAdded = false; 
       vm.newSubSubjectAdded = false; 
+      vm.newExerciseAdded = false; 
     }
     
     vm.addExerciseClicked = function() {
@@ -162,7 +165,8 @@
     }
 
     vm.cancelNewExercise = function() {
-      vm.newExercise.body = [];  
+      vm.newExercise.body = [];
+      vm.newExercise.solutionPicture = [];
       vm.newExercise.solutions = [{solution: "", isCorrect: true}, 
                                   {solution: "", isCorrect: false}, 
                                   {solution: "", isCorrect: false}, 
@@ -205,6 +209,7 @@
 
     vm.addTextArea = function(){
       vm.newExerciseAdded = false;
+      vm.answerType = "closed";
       vm.newExercise.body.push({type: 'text', content: '' });
     }
 
@@ -215,7 +220,12 @@
     vm.addPicture = function(){
       console.log('in teacher.controller addPicture:' + vm.picFile.content);
       vm.newExerciseAdded = false;
+      vm.answerType = "closed";
       vm.newExercise.body.push({type: 'picture', content: vm.picFile});
+    }
+
+    vm.addSolutionPicture = function(){
+      vm.newExercise.solutionPicture.push({type: 'solutionPicture', content: vm.solutionPicFile});
     }
 
     vm.updateShowAnswersStatus = function() {
@@ -237,6 +247,7 @@
      vm.subjectSelected = function() {
       vm.newSubjectAdded = false; 
       vm.newSubSubjectAdded = false; 
+      vm.newExerciseAdded = false; 
       vm.subSubject = undefined;
       vm.exercise = undefined;
       // clrear the add subject successful message
@@ -256,6 +267,7 @@
       if(vm.currentTab == 'data') {
         vm.newSubjectAdded = false; 
         vm.newSubSubjectAdded = false; 
+        vm.newExerciseAdded = false; 
         vm.exercise = undefined;
         vm.level = undefined;
       }
@@ -309,7 +321,8 @@
     vm.addNewExercise = function() {
       console.log('in teacher.controller onSubmit');
       if (vm.newExercise.body.length == 0 || 
-          vm.newExercise.solutions[0].solution.length == 0 || vm.newExercise.solutions[1].solution.length == 0) {
+          vm.newExercise.solutions[0].solution.length == 0 || 
+          (vm.answerType == 'closed') && (vm.newExercise.solutions[1].solution.length == 0)) {
         vm.formValid = false;
       }
       else {
@@ -322,7 +335,14 @@
         else {
           vm.newExercise.level = vm.defaultLevel;
         }
-              
+        // now remove the empty answers from the exercise
+        var solutions = [];
+        for(var i=0; i<vm.newExercise.solutions.length; i++) {
+          if(vm.newExercise.solutions[i].solution.length > 0) {
+            solutions.push(vm.newExercise.solutions[i]);
+          }
+        }
+        vm.newExercise.solutions = solutions;
         vm.allPicSavedCallback = function() { 
               console.log('in in teacher.controller allPicSavedCallback');
               exercise
@@ -343,9 +363,13 @@
 
         // first, upload all pictures to server 
         var itemsProcessed = 0;
+        // if we have a solution picture, lets add it to the body for uploading the picture.
+        if(vm.newExercise.solutionPicture.length > 0) {
+          vm.newExercise.body.push(vm.newExercise.solutionPicture[0]);
+        }
         angular.forEach(vm.newExercise.body, function(fileObj, index, array) {
             console.log('in teacher.controller onSubmit.forEach.body');
-            if(fileObj.type == 'picture') {
+            if(fileObj.type == 'picture' || fileObj.type == 'solutionPicture') {
               fileObj.content.upload = Upload.upload({
                   url: '/api/upload',
                   method: 'POST',

@@ -1,10 +1,10 @@
-<div class="col-md-10 pull-right">
+<div class="col-md-6 pull-right">
     <div ng-show="vm.addingExercise" class="well well-lg">
         <label>:הכנס תרגיל</label>
         <div>
             <div ng-if="vm.newExercise.body.length == 0">
-                <label class="btn btn btn-info" ng-click="vm.addTextArea()">לחץ להוספת טקסט</label>
-                <label for="files" class="btn btn btn-info">לחץ להוספת תמונה</label>
+                <label class="btn btn btn-info" ng-click="vm.addTextArea()">הוספת טקסט</label>
+                <label for="files" class="btn btn btn-info">הוספת תמונה</label>
                 <input id="files" type="file" style="visibility:hidden;" ngf-select="vm.addPicture()" ng-model="vm.picFile" name="file" accept="image/*"
                 ngf-max-size="2MB" ngf-model-invalid="errorFile">
                 <img ngf-thumbnail="vm.newExercise.body[0].content" class="thumb">
@@ -33,8 +33,8 @@
                 <div ng-if="$index == vm.newExercise.body.length - 1" class="row">
                 <div class="col-md-8 center">
                     <br>
-                    <label class="btn btn btn-info" ng-click="vm.addTextArea()">לחץ להוספת טקסט</label>
-                    <label for="files" class="btn btn btn-info">לחץ להוספת תמונה</label>
+                    <label class="btn btn btn-info" ng-click="vm.addTextArea()">הוספת טקסט</label>
+                    <label for="files" class="btn btn btn-info">הוספת תמונה</label>
                     <input id="files" type="file" style="visibility:hidden;" ngf-select="vm.addPicture()" ng-model="vm.picFile" name="file" accept="image/*"
                     ngf-max-size="2MB" ngf-model-invalid="errorFile">
                 </div>
@@ -45,8 +45,11 @@
                 <span class="glyphicon glyphicon-remove"></span></button>
             <button type="button" class="btn btn btn-warning" ng-click="vm.addNewExercise()" data-toggle="tooltip" title="שמור תרגיל חדש">
                 <span class="glyphicon glyphicon-ok"></span></button>
-            <div ng-if="!vm.formValid">
+            <div ng-if="!vm.formValid && vm.answerType == 'closed'">
                 <div class="text-danger">&nbsp;&nbsp;התרגיל חייב להכיל לפחות טקסט או תמונה אחת, ושתי תשובות ראשונות&nbsp;&nbsp;</div>
+            </div>    
+            <div ng-if="!vm.formValid && vm.answerType == 'open'">
+                <div class="text-danger">&nbsp;&nbsp;התרגיל חייב להכיל לפחות טקסט או תמונה אחת, ותשובה נכונה&nbsp;&nbsp;</div>
             </div>    
         </div>
     </div>

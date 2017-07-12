@@ -183,10 +183,17 @@ module.exports.newExercise = function (req, res) {
   exercise.level = req.body.level;
   // create the exercise body from its parts
   req.body.body.forEach(function (bodyPart) {
-    var part = new BodyPart();
-    part.type = bodyPart.type;
-    part.content = bodyPart.content;
-    exercise.body.push(part);
+    // is this a solution Picture?
+    if(bodyPart.type == 'solutionPicture') {
+      exercise.solutionPicture = bodyPart.content;
+    }
+    // if not then it is a body part
+    else {
+      var part = new BodyPart();
+      part.type = bodyPart.type;
+      part.content = bodyPart.content;
+      exercise.body.push(part);
+    }
   });
   // create all the solutions from all solution parts
   req.body.solutions.forEach(function (solution) {
