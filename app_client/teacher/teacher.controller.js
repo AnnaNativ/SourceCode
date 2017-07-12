@@ -318,6 +318,17 @@
       vm.subSubject = undefined;
     } 
 
+    vm.removeSolutionPicture = function() {
+      vm.solutionPicFile = undefined;
+      vm.newExercise.solutionPicture = [];
+    }
+
+    vm.openAnswerClicked = function() {
+      for(var i=1; i<vm.newExercise.solutions.length; i++) {
+        vm.newExercise.solutions[i] = {solution: "", isCorrect: false};
+      }
+    }
+    
     vm.addNewExercise = function() {
       console.log('in teacher.controller onSubmit');
       if (vm.newExercise.body.length == 0 || 
