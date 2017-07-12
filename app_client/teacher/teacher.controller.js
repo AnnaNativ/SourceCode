@@ -6,31 +6,29 @@
 
   teacherCtrl.$inject = ['$location', '$routeParams', 'exercise', 'meanData', 'Upload', '$timeout', 'subject', 'assignment'];
   function teacherCtrl($location, $routeParams, exercise, meanData, Upload, $timeout, subject, assignment) {
+    //####################################################################################
+    //########## Teacher ###########
+    //####################################################################################
+
     var vm = this;
     vm.formValid = true;
-    vm.showAnswers = false;
-    vm.subjects = {};
-    vm.subSubjects = {};
-    vm.levels = ['1 קל', '2', '3 בינוני', '4', '5 מתקדם', 'לא יודע'];
-    vm.defaultLevel = 2;
-    vm.schoolGrades = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'י"א', 'י"ב'];
-    vm.schoolLevels = ['1', '2', '3', '4', '5'];
-
-    vm.newSubject = {};
-    vm.newSubSubject = {};
-    vm.newSubjectAdded = false; 
-    vm.newSubSubjectAdded = false; 
-    vm.newExerciseAdded = false;
-    vm.newAssignmentAdded = false; 
-    vm.addSubjectFormValid = true;
-    vm.addSubSubjectFormValid = true;
     vm.currentTab = $location.search().tab;
-    vm.schools = [];
     vm.user = {};
+
+    meanData.getProfile()
+      .success(function (data) {
+        vm.user = data;
+      })
+      .error(function (e) {
+        console.log(e);
+      });
+
+    //####################################################################################
+    //########## Students ###########
+    //####################################################################################
+
     vm.selectedStudents = [];
     vm.students = [];
-    vm.answerType = "closed";
-
     vm.transclusionSettings = { };
 		vm.studentSelectionTexts = {
 				checkAll: 'בחר הכל',
@@ -46,13 +44,16 @@
 				allSelectedText: 'All'
 			};
     
-    meanData.getProfile()
-      .success(function (data) {
-        vm.user = data;
-      })
-      .error(function (e) {
-        console.log(e);
-      });
+    //####################################################################################
+    //########## Subjects ###########
+    //####################################################################################
+
+    vm.subjects = {};
+    vm.schoolLevels = ['1', '2', '3', '4', '5'];
+    vm.schoolGrades = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'י"א', 'י"ב'];
+    vm.newSubject = {};
+    vm.newSubjectAdded = false; 
+    vm.addSubjectFormValid = true;
 
     meanData.getSubjects()
     .success(function(data){
@@ -62,19 +63,6 @@
     .error(function(e){
       console.log(e);
     })
-
-    vm.newExercise = {
-      level: undefined,
-      body:[],
-      solutionPicture: [],
-      solutions : [{solution: "", isCorrect: true}, 
-                   {solution: "", isCorrect: false}, 
-                   {solution: "", isCorrect: false}, 
-                   {solution: "", isCorrect: false}, 
-                   {solution: "", isCorrect: false}],
-      subject: "",
-      subSubject: ""
-    };
 
     vm.addNewSubject = function() {
       if(vm.newSubject.name == undefined || vm.newSubject.name.length == 0 || 
@@ -104,6 +92,48 @@
       }  
     }
 
+    vm.addSubjectClicked = function() {
+      vm.addingSubject = true;
+      // clrer the add subject successful message
+      vm.newSubjectAdded = false; 
+      vm.newSubSubjectAdded = false; 
+      vm.newExerciseAdded = false; 
+    }
+
+    vm.cancelNewSubject = function() {
+      vm.newSubject = {};
+      vm.addingSubject = false;
+      vm.addSubjectFormValid = true;
+    }
+
+     vm.subjectSelected = function() {
+      vm.newSubjectAdded = false; 
+      vm.newSubSubjectAdded = false; 
+      vm.newExerciseAdded = false; 
+      vm.subSubject = undefined;
+      vm.exercise = undefined;
+      // clrear the add subject successful message
+      vm.newSubjectAdded = false; 
+      meanData.getSubSubjects(vm.subjects[vm.subject]._id)
+      .success(function(data){
+        vm.subSubjects = data;
+        vm.level = undefined;
+        vm.exercises = [];
+      })
+      .error(function(e){
+        console.log(e);
+      })
+    }
+
+    //####################################################################################
+    //########## Sub Subjects ###########
+    //####################################################################################
+
+    vm.subSubjects = {};
+    vm.newSubSubject = {};
+    vm.newSubSubjectAdded = false; 
+    vm.addSubSubjectFormValid = true;
+
     vm.addNewSubSubject = function() {
       if(vm.newSubSubject.name == undefined || vm.newSubSubject.name.length == 0) {
         vm.addSubSubjectFormValid = false;
@@ -130,13 +160,6 @@
       }
     }
 
-    vm.addSubjectClicked = function() {
-      vm.addingSubject = true;
-      // clrer the add subject successful message
-      vm.newSubjectAdded = false; 
-      vm.newSubSubjectAdded = false; 
-      vm.newExerciseAdded = false; 
-    }
     vm.addSubSubjectClicked = function() {
       vm.addingSubSubject = true;
       // clrer the add subject successful message
@@ -144,24 +167,74 @@
       vm.newSubSubjectAdded = false; 
       vm.newExerciseAdded = false; 
     }
-    
-    vm.addExerciseClicked = function() {
-      console.log('in subjects.controller addExerciseClicked');
-      vm.addingExercise = true;
-      // clrer the add subject successful message
-    }
-
-
-    vm.cancelNewSubject = function() {
-      vm.newSubject = {};
-      vm.addingSubject = false;
-      vm.addSubjectFormValid = true;
-    }
 
     vm.cancelNewSubSubject = function() {
       vm.newSubSubject = {};
       vm.addingSubSubject = false;
       vm.addSubSubjectFormValid = true;
+    }
+
+    vm.subSubjectSelected = function() {
+      if(vm.currentTab == 'data') {
+        vm.newSubjectAdded = false; 
+        vm.newSubSubjectAdded = false; 
+        vm.newExerciseAdded = false; 
+        vm.exercise = undefined;
+        vm.level = undefined;
+      }
+    }
+    
+    //####################################################################################
+    //########## Levels ###########
+    //####################################################################################
+
+    vm.levels = ['1 קל', '2', '3 בינוני', '4', '5 מתקדם', 'לא יודע'];
+    vm.defaultLevel = 2;
+
+    vm.levelSelected = function() {
+      console.log('In levelSelected');
+      if(vm.subject >= 0 && vm.subSubject >= 0) {
+        vm.getExercises();       
+      } 
+    }
+
+    //####################################################################################
+    //########## Schools ###########
+    //####################################################################################
+
+    vm.schools = [];
+
+    meanData.getSchoolsList()
+    .success(function(data){
+      vm.schools = data;
+    })
+    .error(function(e){
+      console.log(e);
+    })
+
+    //####################################################################################
+    //########## Exercises ###########
+    //####################################################################################
+
+    vm.newExerciseAdded = false;
+
+    vm.newExercise = {
+      level: undefined,
+      body:[],
+      solutionPicture: [],
+      solutions : [{solution: "", isCorrect: true}, 
+                   {solution: "", isCorrect: false}, 
+                   {solution: "", isCorrect: false}, 
+                   {solution: "", isCorrect: false}, 
+                   {solution: "", isCorrect: false}],
+      subject: "",
+      subSubject: ""
+    };
+
+    vm.addExerciseClicked = function() {
+      console.log('in subjects.controller addExerciseClicked');
+      vm.addingExercise = true;
+      // clrer the add subject successful message
     }
 
     vm.cancelNewExercise = function() {
@@ -176,26 +249,6 @@
       vm.formValid = true;
       vm.addingExercise = false;
     }
-    
-    vm.getVideos = function() {
-      var videos = vm.subSubjects[vm.subSubject].sample_videos;
-      videos.push(vm.subSubjects[vm.subSubject].tutorial_video);
-      meanData.getVideos(videos)
-      .success(function(data){
-        vm.videos = data;
-      })
-      .error(function(e){
-        console.log(e);
-      })
-    }
-    
-    meanData.getSchoolsList()
-    .success(function(data){
-      vm.schools = data;
-    })
-    .error(function(e){
-      console.log(e);
-    })
 
     vm.getExercises = function() {
       meanData.getExercises(vm.subSubjects[vm.subSubject]._id, vm.level)
@@ -213,25 +266,11 @@
       vm.newExercise.body.push({type: 'text', content: '' });
     }
 
-    vm.addAnswers = function(){
-      vm.showAnswers = true;
-    }
-
     vm.addPicture = function(){
       console.log('in teacher.controller addPicture:' + vm.picFile.content);
       vm.newExerciseAdded = false;
       vm.answerType = "closed";
       vm.newExercise.body.push({type: 'picture', content: vm.picFile});
-    }
-
-    vm.addSolutionPicture = function(){
-      vm.newExercise.solutionPicture.push({type: 'solutionPicture', content: vm.solutionPicFile});
-    }
-
-    vm.updateShowAnswersStatus = function() {
-      if(vm.newExercise.body.length == 0) {
-        vm.showAnswers = false;
-      }
     }
 
     vm.removeTextArea = function(index){
@@ -244,91 +283,6 @@
       vm.updateShowAnswersStatus();
     }
 
-     vm.subjectSelected = function() {
-      vm.newSubjectAdded = false; 
-      vm.newSubSubjectAdded = false; 
-      vm.newExerciseAdded = false; 
-      vm.subSubject = undefined;
-      vm.exercise = undefined;
-      // clrear the add subject successful message
-      vm.newSubjectAdded = false; 
-      meanData.getSubSubjects(vm.subjects[vm.subject]._id)
-      .success(function(data){
-        vm.subSubjects = data;
-        vm.level = undefined;
-        vm.exercises = [];
-      })
-      .error(function(e){
-        console.log(e);
-      })
-    }
-
-    vm.subSubjectSelected = function() {
-      if(vm.currentTab == 'data') {
-        vm.newSubjectAdded = false; 
-        vm.newSubSubjectAdded = false; 
-        vm.newExerciseAdded = false; 
-        vm.exercise = undefined;
-        vm.level = undefined;
-      }
-    }
-
-    vm.levelSelected = function() {
-      console.log('In levelSelected');
-      if(vm.subject >= 0 && vm.subSubject >= 0) {
-        vm.getVideos();
-        vm.getExercises();       
-      } 
-    }
-
-    vm.schoolGradeSelected = function() {
-      console.log('In schoolGradeSelected');
-      vm.newAssignmentAdded = false;
-      meanData.getStudentsOfTeacher()
-      .success(function(data){
-        vm.students = [];
-        data.forEach(function (item) {
-          vm.students.push({id: item._id, label: item.name});
-        });
-      })
-      .error(function(e){
-        console.log(e);
-      })      
-    }
-
-    vm.addAssignment = function() {
-      assignment
-        .newAssignment({assigner: vm.user._id,
-                        assignee: vm.selectedStudents, 
-                        subsubjectId: vm.subSubjects[vm.subSubject]._id})
-        .error(function(err){
-          alert("There was an error : " + err);
-        })
-        .success(function(data){
-          console.log('in teacher.controller addAssignment.success');
-          vm.cancelAssignment();
-          vm.newAssignmentAdded = true;
-        });
-    }
-
-    vm.cancelAssignment = function() {
-      vm.schoolGrade = undefined;
-      vm.selectedStudents = [];
-      vm.subject = undefined;
-      vm.subSubject = undefined;
-    } 
-
-    vm.removeSolutionPicture = function() {
-      vm.solutionPicFile = undefined;
-      vm.newExercise.solutionPicture = [];
-    }
-
-    vm.openAnswerClicked = function() {
-      for(var i=1; i<vm.newExercise.solutions.length; i++) {
-        vm.newExercise.solutions[i] = {solution: "", isCorrect: false};
-      }
-    }
-    
     vm.addNewExercise = function() {
       console.log('in teacher.controller onSubmit');
       if (vm.newExercise.body.length == 0 || 
@@ -417,5 +371,84 @@
           });
       };
    }
+
+    //####################################################################################
+    //########## Answers ###########
+    //####################################################################################
+
+    vm.showAnswers = false;
+    vm.answerType = "closed";
+
+    vm.addAnswers = function(){
+      vm.showAnswers = true;
+    }
+
+    vm.addSolutionPicture = function(){
+      vm.newExercise.solutionPicture.push({type: 'solutionPicture', content: vm.solutionPicFile});
+    }
+
+    vm.updateShowAnswersStatus = function() {
+      if(vm.newExercise.body.length == 0) {
+        vm.showAnswers = false;
+      }
+    }
+
+    vm.removeSolutionPicture = function() {
+      vm.solutionPicFile = undefined;
+      vm.newExercise.solutionPicture = [];
+    }
+
+    vm.openAnswerClicked = function() {
+      for(var i=1; i<vm.newExercise.solutions.length; i++) {
+        vm.newExercise.solutions[i] = {solution: "", isCorrect: false};
+      }
+    }
+
+    //####################################################################################
+    //########## Assignments ###########
+    //####################################################################################
+
+    vm.newAssignmentAdded = false; 
+
+    vm.addAssignment = function() {
+      assignment
+        .newAssignment({assigner: vm.user._id,
+                        assignee: vm.selectedStudents, 
+                        subsubjectId: vm.subSubjects[vm.subSubject]._id})
+        .error(function(err){
+          alert("There was an error : " + err);
+        })
+        .success(function(data){
+          console.log('in teacher.controller addAssignment.success');
+          vm.cancelAssignment();
+          vm.newAssignmentAdded = true;
+        });
+    }
+
+    vm.cancelAssignment = function() {
+      vm.schoolGrade = undefined;
+      vm.selectedStudents = [];
+      vm.subject = undefined;
+      vm.subSubject = undefined;
+    } 
+
+    //####################################################################################
+    //########## School Grade ###########
+    //####################################################################################
+
+    vm.schoolGradeSelected = function() {
+      console.log('In schoolGradeSelected');
+      vm.newAssignmentAdded = false;
+      meanData.getStudentsOfTeacher()
+      .success(function(data){
+        vm.students = [];
+        data.forEach(function (item) {
+          vm.students.push({id: item._id, label: item.name});
+        });
+      })
+      .error(function(e){
+        console.log(e);
+      })      
+    }
   }
 })();
