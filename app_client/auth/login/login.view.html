@@ -7,7 +7,7 @@
       <div ng-if="!vm.formValid" class="text-danger">!אנא מלאו את כל השדות</div>
       <div ng-if="vm.formValid && !vm.passwordValid" class="text-danger">!סיסמה שגויה</div>
       <h1 class="form-signin-heading">:כניסה</h1>
-      <form name="registrationForm" novalidate ng-submit="vm.submit(registrationForm.$valid)" ">
+      <form name="registrationForm" novalidate ng-submit="vm.submit(registrationForm.$valid)">
         <div class="form-group text-right ">
           <h3>:כתובת אימייל</h3>
           <input type="email " name="email " class="form-control text-right " id="email " ng-model="vm.credentials.email " required>

@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-    <div ng-show="vm.addingExercise" class="well well-lg">
+    <div ng-if="vm.newExercise.body.length > 0" class="well well-lg">
         <label>:סיום</label>
         <div>
             <button type="button" class="btn btn-info" ng-click="vm.cancelNewExercise()" data-toggle="tooltip" title="בטל הוספת תרגיל חדש">

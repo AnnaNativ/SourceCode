@@ -411,18 +411,24 @@
 
     vm.newAssignmentAdded = false; 
 
-    meanData.getAssignmentsOfTeacher()
-    .success(function(data){
-      vm.assignments = data;
-    })
-    .error(function(e){
-      console.log(e);
-    })      
+
+    vm.loadAssignments = function() {
+      meanData.getAssignmentsOfTeacher()
+      .success(function(data){
+        vm.assignments = data;
+      })
+      .error(function(e){
+        console.log(e);
+      })      
+    }
+    
+    vm.loadAssignments();
 
     vm.addAssignment = function() {
       assignment
         .newAssignment({assigner: vm.user._id,
-                        assignee: vm.selectedStudents, 
+                        assignee: vm.selectedStudents,
+                        subjectId: vm.subjects[vm.subject]._id,
                         subsubjectId: vm.subSubjects[vm.subSubject]._id})
         .error(function(err){
           alert("There was an error : " + err);
@@ -431,10 +437,12 @@
           console.log('in teacher.controller addAssignment.success');
           vm.cancelAssignment();
           vm.newAssignmentAdded = true;
+          vm.loadAssignments();
         });
     }
 
     vm.cancelAssignment = function() {
+      console.log('in cancelAssignment');
       vm.schoolGrade = undefined;
       vm.selectedStudents = [];
       vm.subject = undefined;

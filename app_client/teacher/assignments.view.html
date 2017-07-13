@@ -55,7 +55,36 @@
     <div class="well well-lg">
         <div class="row">
             <p><h2>:משימות פעילות</h2></p><br>
-        </div>
+            <hr>
+            <div ng-repeat="obj in vm.assignments">
+                <div class="form-group text-right">
+                    <div class="row">
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            <label>נושא:</label><br>
+                            {{obj._id.subject[0]}}<br>
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            <label>תת נושא:</label><br>
+                            {{obj._id.subSubject[0]}}<br>
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            <label>תלמידים:</label><br>
+                            <div ng-repeat="assignment in obj.assignments">
+                                {{assignment.student[0]}}<br>
+                            </div>
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            <label>סטטוס משימה:</label><br>
+                            <div ng-repeat="assignment in obj.assignments">
+                                <span ng-if="assignment.status == 'new'" class="label label-danger">חדש</span>
+                                <span ng-if="assignment.status == 'inprogress'" class="label label-info">בעבודה</span>
+                                <span ng-if="assignment.status == 'done'" class="label label-success">גמור</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
         <div class="row">
         </div>
         <br>

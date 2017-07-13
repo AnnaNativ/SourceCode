@@ -14,6 +14,7 @@ module.exports.newAssignment = function (req, res) {
     assignment._id = new mongoose.mongo.ObjectId();
     assignment.assigner = mongoose.Types.ObjectId(req.body.assigner);
     assignment.assignee = mongoose.Types.ObjectId(student.id);
+    assignment.subjectId = mongoose.Types.ObjectId(req.body.subjectId);
     assignment.subsubjectId = mongoose.Types.ObjectId(req.body.subsubjectId);
     // save the assignment
     assignment.save(function (err) {
@@ -22,7 +23,7 @@ module.exports.newAssignment = function (req, res) {
         console.log(err);
       }
       else {
-        if(itemsProcessed == (req.body.assignee.length - 1)) {
+        if(itemsProcessed == (req.body.assignee.length)) {
           res.status(200).json('success');
         }
       }
@@ -37,21 +38,16 @@ module.exports.getAssignmentsOfTeacher = function(req, res) {
     });
   } 
   else {
-/*    Assignment
-      .find({'assigner': mongoose.Types.ObjectId(req.payload._id)})
-      .exec(function(err, user) {
-        res.status(200).json(user);
-      });*/
-
     var teacher = mongoose.Types.ObjectId(req.payload._id);
     console.log('teacher ID is ' + teacher);
     assignments
       .aggregate(
       { $match: { assigner: teacher } },
+      { $lookup: { from: 'subjects', localField: 'subjectId', foreignField: '_id', as: 'subject' } },
       { $lookup: { from: 'subsubjects', localField: 'subsubjectId', foreignField: '_id', as: 'subSubject' } },
       { $lookup: { from: 'users', localField: 'assignee', foreignField: '_id', as: 'student' } },
-      { $project: {status:1, "subSubject.name" : 1, "student.name": 1}},
-      { $group : { _id : "$subSubject", assignments: { $push: "$$ROOT" } } }
+      { $project: {status:1, "subSubject._id" : 1, "subject.name" : 1, "subSubject.name" : 1, "student.name": 1}},
+      { $group : { _id : {subSubject: "$subSubject.name", subject: "$subject.name"}, assignments: { $push: {status: "$status", student: "$student.name"} } } }
       )
       .exec(function (err, data) {
         if (err) {
