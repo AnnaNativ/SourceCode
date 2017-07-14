@@ -31,9 +31,11 @@
             meanData.getProfile()
               .success(function (data) {
                 if(data.role == "student") {
-                  $location.path('profile');
+                  console.log('in submit if');
+                  $location.path('/student').search({tab: 'assignments'});
                 }
                 else {
+                  console.log('in submit else');
                   $location.path('/teacher').search({tab: 'assignments'});   
                 }
               })
