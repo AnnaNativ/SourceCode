@@ -2,8 +2,9 @@
     <div class="row">
       <div class="col-md-1 pull-right">
       </div>
-      <div class="col-md-6 pull-right">
-        <ul id="menu_area" class="nav nav-pills nav-justified custom">
+      <div class="col-md-10 pull-right">
+        <div class="well well-lg">
+          <ul id="menu_area" class="nav nav-pills nav-justified custom">
             <li ng-if="vm.currentTab == 'profile'" class="active">
               <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'profile'" href="" data-toggle="tab">אזור אישי</a>
             </li>
@@ -31,6 +32,7 @@
             <li ng-if="vm.currentTab != 'assignments'">
               <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'assignments'" href="" data-toggle="tab">ניהול משימות</a>                                                    
             </li>
-        </ul>
+          </ul>
+        </div>
        </div>
 </div>

@@ -1,15 +1,18 @@
 <div class="container-fluid" ng-cloak>
-    <div class="row">
-      <div class="col-md-1 pull-right">
+      <div class="row">
+        <div class="col-md-1 pull-right">
+        </div>
+        <div class="col-md-10 pull-right">
+          <div class="well well-lg">
+            <ul id="menu_area" class="nav nav-pills nav-justified custom">
+                <li><a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'profile'" href="#s" data-toggle="tab">אזור אישי</a></li>
+                <li><a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'stats'" href="#s" data-toggle="tab">סטטיסטיקות</a></li>
+                <li><a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'data'" href="#s" data-toggle="tab">הכנסת נתונים</a></li>                                                    
+                <li class="active">
+                  <a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'assignments'" href="#s" data-toggle="tab">ניהול משימות</a>                                                    
+                </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="col-md-6 pull-right">
-        <ul id="menu_area" class="nav nav-pills nav-justified custom">
-            <li><a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'profile'" href="#s" data-toggle="tab">אזור אישי</a></li>
-            <li><a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'stats'" href="#s" data-toggle="tab">סטטיסטיקות</a></li>
-            <li><a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'data'" href="#s" data-toggle="tab">הכנסת נתונים</a></li>                                                    
-            <li class="active">
-              <a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'assignments'" href="#s" data-toggle="tab">ניהול משימות</a>                                                    
-            </li>
-        </ul>
-       </div>
 </div>
