@@ -4,9 +4,10 @@
     .module('meanApp')
     .controller('studentCtrl', studentCtrl);
 
-  studentCtrl.$inject = ['$location', '$routeParams', 'meanData','$window','audit','exercise'];
-  function studentCtrl($location, $routeParams, meanData,$window,audit,exercise) {
+  studentCtrl.$inject = ['$location', '$routeParams', 'meanData','$window','audit','exercise', 'assignment'];
+  function studentCtrl($location, $routeParams, meanData, $window, audit, exercise, assignment) {
     var vm = this;
+    vm.currentTab = 'assignments';
     vm.currentSelection = false;
     vm.finalSelection = null;
     vm.subjectVideoOn = false;
@@ -16,15 +17,57 @@
       level:'',
       subsubject:''
     };
-    
-    vm.exercise.exe =$routeParams.param.exe;
-    vm.exercise.level = $routeParams.param.level;
-    vm.exercise.subsubject = $routeParams.param.subsubject;
+    vm.myAssignments;
+  
+//    vm.exercise.exe =$routeParams.param.exe;
+//    vm.exercise.level = $routeParams.param.level;
+//    vm.exercise.subsubject = $routeParams.param.subsubject;
     
 
     //vm.exercise = $routeParams.config.exe;
     //vm.selectedAssignment = $routeParams.config.selectedAssignment;
 
+    meanData.getProfile()
+      .success(function (data) {
+        vm.user = data;
+
+        //save in session
+        $window.sessionStorage['userId'] = vm.user._id;
+        console.log('Got user profile ' + JSON.stringify(vm.user._id));
+        console.log(' $window.sessionStorage["userId"] ' +  $window.sessionStorage['userId']);
+        assignment.myAssignments(vm.user)
+          .success(function (data) {
+            console.log('got back with ' + data.length + ' assignments to do');
+            vm.myAssignments = data;
+          })
+          .error(function (e) {
+            console.log(e);
+          });
+
+      })
+      .error(function (e) {
+        console.log(e);
+      });
+
+    vm.lastLocation = function () {
+      //console.log('checking where you left it of in your previous session: ' + JSON.stringify(vm.selectedAssignment));
+      assignment.myLastLocation(vm.selectedAssignment)
+        .success(function (data) {
+          console.log('Your next exe is: '+ JSON.stringify(data));
+          $window.sessionStorage['selectedAssignment'] = vm.selectedAssignment;
+          $location.path('student').search({param: data});
+
+        })
+        .error(function (e) {
+          console.log(e);
+        })
+    };
+
+    vm.assignmentClicked = function($index) {
+      console.log('in assignmentClicked');
+      vm.selectedAssignment = vm.myAssignments[$index]._id;
+      vm.currentTab = 'current assignment';
+    }
 
     vm.random = function() {
       return Math.round(Math.random() * vm.exercise.solutions.length);

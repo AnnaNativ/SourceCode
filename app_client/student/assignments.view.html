@@ -1,0 +1,21 @@
+<br>
+<div class="container" ng-cloak>
+    <div class="container text-right">
+        <div class="well well-lg">
+            <div class="row">
+                <p><h2>:משימות פעילות</h2></p>
+                <hr>
+                <div ng-repeat="assignment in vm.myAssignments">
+                    <div class="form-group text-right">
+                        <div class="row">
+                            <div dir="rtl" class="col-md-2 pull-right">
+                                <a ng-click="vm.assignmentClicked($index)" href="/student">{{assignment.subSubject[0].name}}</a><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
