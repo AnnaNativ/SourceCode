@@ -5,12 +5,33 @@
         <div class="col-md-10 pull-right">
           <div class="well well-lg">
             <ul id="menu_area" class="nav nav-pills nav-justified custom">
-                <li><a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'profile'" href="#s" data-toggle="tab">אזור אישי</a></li>
-                <li><a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'stats'" href="#s" data-toggle="tab">סטטיסטיקות</a></li>
-                <li><a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'data'" href="#s" data-toggle="tab">הכנסת נתונים</a></li>                                                    
-                <li class="active">
-                  <a class="nav-link  btn-xlarge" ng-click="vm.currentTab = 'assignments'" href="#s" data-toggle="tab">ניהול משימות</a>                                                    
-                </li>
+              <li ng-if="vm.currentTab == 'profile'" class="active">
+                <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'profile'" href="">אזור אישי</a>
+              </li>
+              <li ng-if="vm.currentTab != 'profile'">
+                <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'profile'" href="">אזור אישי</a>
+              </li>
+
+              <li ng-if="vm.currentTab == 'stats'" class="active">
+                <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'stats'" href="">סטטיסטיקות</a>
+              </li>
+              <li ng-if="vm.currentTab != 'stats'">
+                <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'stats'" href="">סטטיסטיקות</a>
+              </li>
+
+              <li ng-if="vm.currentTab == 'data'" class="active">
+                <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'data'" href="">הכנסת נתונים</a>
+              </li>
+              <li ng-if="vm.currentTab != 'data'">
+                <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'data'" href="">הכנסת נתונים</a>
+              </li>
+                
+              <li ng-if="vm.currentTab == 'assignments'" class="active">
+                <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'assignments'" href="">ניהול משימות</a>
+              </li>
+              <li ng-if="vm.currentTab != 'assignments'">
+                <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'assignments'" href="">ניהול משימות</a>
+              </li>                
             </ul>
           </div>
         </div>

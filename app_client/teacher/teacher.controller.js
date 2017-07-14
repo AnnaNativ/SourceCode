@@ -12,7 +12,7 @@
 
     var vm = this;
     vm.formValid = true;
-    vm.currentTab = $location.search().tab;
+    vm.currentTab = 'assignments';
     vm.user = {};
 
     meanData.getProfile()
