@@ -7,6 +7,7 @@
   studentCtrl.$inject = ['$location', '$routeParams', 'meanData','$window','audit','exercise', 'assignment'];
   function studentCtrl($location, $routeParams, meanData, $window, audit, exercise, assignment) {
     var vm = this;
+    console.log('Init studentCtrl');
     vm.currentTab = 'assignments';
     vm.currentSelection = false;
     vm.finalSelection = null;
@@ -33,7 +34,7 @@
 
         //save in session
         $window.sessionStorage['userId'] = vm.user._id;
-        console.log('Got user profile ' + JSON.stringify(vm.user._id));
+        console.log('In studentCtrl getProfile - Got user profile ' + JSON.stringify(vm.user._id));
         console.log(' $window.sessionStorage["userId"] ' +  $window.sessionStorage['userId']);
         assignment.myAssignments(vm.user)
           .success(function (data) {
@@ -64,8 +65,9 @@
     };
 
     vm.assignmentClicked = function($index) {
-      console.log('in assignmentClicked');
+      console.log('in assignmentClicked with index:' + $index);
       vm.selectedAssignment = vm.myAssignments[$index]._id;
+      console.log('in assignmentClicked before changing current tab to current assignment');
       vm.currentTab = 'current assignment';
     }
 
