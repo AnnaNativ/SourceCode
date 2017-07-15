@@ -50,25 +50,20 @@
         console.log(e);
       });
 
-    vm.lastLocation = function () {
-      //console.log('checking where you left it of in your previous session: ' + JSON.stringify(vm.selectedAssignment));
+    vm.assignmentClicked = function($index) {
+      console.log('in assignmentClicked with index:' + $index);
+      vm.selectedAssignment = vm.myAssignments[$index];
+      vm.currentTab = 'current assignment';
       assignment.myLastLocation(vm.selectedAssignment)
         .success(function (data) {
-          console.log('Your next exe is: '+ JSON.stringify(data));
-          $window.sessionStorage['selectedAssignment'] = vm.selectedAssignment;
-          $location.path('student').search({param: data});
-
+          vm.exercise = data;
+//          console.log('Your next exe is: '+ JSON.stringify(data));
+//          $window.sessionStorage['selectedAssignment'] = vm.selectedAssignment;
+//          $location.path('student').search({param: data});
         })
         .error(function (e) {
           console.log(e);
         })
-    };
-
-    vm.assignmentClicked = function($index) {
-      console.log('in assignmentClicked with index:' + $index);
-      vm.selectedAssignment = vm.myAssignments[$index]._id;
-      console.log('in assignmentClicked before changing current tab to current assignment');
-      vm.currentTab = 'current assignment';
     }
 
     vm.random = function() {

@@ -1,21 +1,23 @@
 var mongoose = require('mongoose');
 var exercise = require('./exercise');
 var audit = require('./audit');
-var exercise = require('./assignments');
 
 var Assignment = mongoose.model('Assignment');
+var Progress = mongoose.model('userProgress');
 var assignments = mongoose.model('Assignment');
 var progress = mongoose.model('userProgress');
 
 module.exports.newAssignment = function (req, res) {
   var itemsProcessed = 0;
-  req.body.assignee.forEach(function(student) {
+  var assignments = [];
+  req.body.assignee.forEach(function(student) {    
     assignment = new Assignment();
     assignment._id = new mongoose.mongo.ObjectId();
     assignment.assigner = mongoose.Types.ObjectId(req.body.assigner);
     assignment.assignee = mongoose.Types.ObjectId(student.id);
     assignment.subjectId = mongoose.Types.ObjectId(req.body.subjectId);
     assignment.subsubjectId = mongoose.Types.ObjectId(req.body.subsubjectId);
+    assignments.push(assignment);
     // save the assignment
     assignment.save(function (err) {
       itemsProcessed++;
@@ -24,11 +26,34 @@ module.exports.newAssignment = function (req, res) {
       }
       else {
         if(itemsProcessed == (req.body.assignee.length)) {
-          res.status(200).json('success');
+          createUserProgressRecord();
         }
       }
     });
   });
+
+  // create a user progress entry in the userProgress collection
+  createUserProgressRecord = function() {
+    var itemsProcessed = 0;
+    assignments.forEach(function(assignment) {    
+      progress = new Progress();
+      progress.userId = assignment.assignee;
+      progress.subsubjectId = assignment.subsubjectId;
+      progress.assignmentId = assignment._id;
+      // save the user progress record
+      progress.save(function (err) {
+        itemsProcessed++;
+        if (err) {
+          console.log(err);
+        }
+        else {
+          if(itemsProcessed == (assignments.length)) {
+            res.status(200).json('success');
+          }
+        }
+       });
+    });
+  }
 }
 
 module.exports.getAssignmentsOfTeacher = function(req, res) {
@@ -81,7 +106,7 @@ module.exports.getMyAssignments = function (req, res) {
 };
 
 module.exports.getMyLastLocation = function (req, res) {
-  console.log('!!!!! getting last location for ' + req.query);
+  console.log('!!!!! getting last location for ' + req.query._id);
 
   var myAssignmentId = mongoose.Types.ObjectId(req.query._id);
   var lastSubSubject;
