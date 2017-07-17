@@ -16,35 +16,35 @@
         </div>
         <div class="col-md-6 pull-right">
             <div dir="rtl" class="well custom-well">
-                <div ng-if="vm.assistent == 'tutorial'">
+                <div ng-if="vm.assistant == 'tutorial'">
                     <div class="centerBlock">
                         <h2>וידאו הדרכה:</h2>
                         <iframe id="ytplayer" type="text/html" width="512" height="280" ng-src="{{vm.tutorialVideoLink}}" frameborder="0"></iframe><br>
-                        <button class="btn btn-info" ng-click="vm.closeAssistence()" data-toggle="tooltip" title="סגור וידאו">
+                        <button class="btn btn-info" ng-click="vm.closeAssistance()" data-toggle="tooltip" title="סגור וידאו">
                             <span class="glyphicon glyphicon-remove"></span></button>
                     </div>
                 </div>
-                <div ng-if="vm.assistent == 'sample_solution'">
+                <div ng-if="vm.assistant == 'sample_solution'">
                     <div class="centerBlock">
                         <h2>וידאו פתרון לדוגמה:</h2>
                         <iframe id="ytplayer" type="text/html" width="512" height="280" src="{{vm.sampleSolutionVideoLink}}" frameborder="0"></iframe><br>
-                        <button class="btn btn-info" ng-click="vm.closeAssistence()" data-toggle="tooltip" title="סגור וידאו">
+                        <button class="btn btn-info" ng-click="vm.closeAssistance()" data-toggle="tooltip" title="סגור וידאו">
                             <span class="glyphicon glyphicon-remove"></span></button>
                     </div>
                 </div>
-                <div ng-if="vm.assistent == 'picture_solution'">
+                <div ng-if="vm.assistant == 'picture_solution'">
                     <div class="centerBlock">
                         <h2>פתרון התרגיל:</h2>
                         <img ng-src="{{vm.exercise.exe.solutionPicture}}"><br>
-                        <button class="btn btn-info" ng-click="vm.closeAssistence()" data-toggle="tooltip" title="סגור פתרון">
+                        <button class="btn btn-info" ng-click="vm.closeAssistance()" data-toggle="tooltip" title="סגור פתרון">
                             <span class="glyphicon glyphicon-remove"></span></button>
                     </div>      
                 </div>
-                <div ng-if="vm.assistent == undefined">
+                <div ng-if="vm.assistant == undefined">
                     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
                 </div>
                 <div class="centerBlock">
-                    <button class="btn btn-primary" ng-click="vm.assistent = 'picture_solution'">הצג פתרון</button>&nbsp;   
+                    <button class="btn btn-primary" ng-click="vm.assistant = 'picture_solution'">הצג פתרון</button>&nbsp;   
                     <button class="btn btn-info" ng-click="vm.getSampleSolutionVideo()">וידאו פתרונות לדוגמה</button>&nbsp;
                     <button class="btn btn-info" ng-click="vm.getTutorialVideo()">וידאו הדרכה</button>&nbsp;
                 </div>      
@@ -119,4 +119,5 @@
         </div>
     </div>
 <div style="height:100px"></div>
+
 
