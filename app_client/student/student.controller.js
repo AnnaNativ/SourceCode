@@ -10,7 +10,7 @@
     console.log('Init studentCtrl');
     vm.currentTab = 'assignments';
     vm.currentSelection = undefined;
-    vm.finalSelection = null;
+    vm.finalSelection = undefined;
     vm.assistent = undefined;
     vm.correctAnswerNextStep = 'moreOfTheSame';
     vm.wrongAnswerNextStep = 'moreOfTheSame';
@@ -78,7 +78,7 @@
 
     // check user's answer
     vm.checkAnswer = function () {
-      vm.finalSelection = null;
+      vm.finalSelection = undefined;
       if(vm.currentSelection != undefined) {
         vm.finalSelection = (vm.exercise.exe.solutions[vm.currentSelection].isCorrect);
         
@@ -159,7 +159,7 @@
 
     vm.handleRadioClick = function ($index) {
       console.log(vm.exercise.exe.solutions[$index].isCorrect);
-      vm.finalSelection = null;
+      vm.finalSelection = undefined;
       vm.currentSelection = $index;
     };
 

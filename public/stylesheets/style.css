@@ -50,7 +50,7 @@ label {
 }
 
 h2 {
-  color: darkcyan
+  color: darkcyan;
 }
 
 h3 {
@@ -74,4 +74,12 @@ hr{
 div.ex1 {
     direction: rtl;
     unicode-bidi: bidi-override;
+}
+.well.custom-well {
+  min-height: 458px;
+}
+
+.centerBlock {
+  display: table;
+  margin: auto;
 }

@@ -1,62 +1,72 @@
 <br>
-<div dir="rtl" class="well well-lg">
     <div class="row">
         <div class="col-md-6 pull-right">
-            <p><h2>פתור תרגיל:</h2></p>
+            <div dir="rtl" class="well custom-well">
+                <h2>פתור תרגיל:</h2>
+                <div ng-repeat="obj in vm.exercise.exe.body">
+                    <div ng-if="obj.type == 'picture'">
+                        <img ng-src="{{obj.content}}">
+                    </div>
+                    <div class="ex1" ng-if="obj.type == 'text'">
+                        {{obj.content}}
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 pull-right">
+            <div dir="rtl" class="well custom-well">
+                <div ng-if="vm.assistent == 'tutorial'">
+                    <div class="centerBlock">
+                        <h2>וידאו הדרכה:</h2>
+                        <iframe id="ytplayer" type="text/html" width="512" height="280" ng-src="{{vm.tutorialVideoLink}}" frameborder="0"></iframe><br>
+                        <button class="btn btn-info" ng-click="vm.closeAssistence()" data-toggle="tooltip" title="סגור וידאו">
+                            <span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </div>
+                <div ng-if="vm.assistent == 'sample_solution'">
+                    <div class="centerBlock">
+                        <h2>וידאו פתרון לדוגמה:</h2>
+                        <iframe id="ytplayer" type="text/html" width="512" height="280" src="{{vm.sampleSolutionVideoLink}}" frameborder="0"></iframe><br>
+                        <button class="btn btn-info" ng-click="vm.closeAssistence()" data-toggle="tooltip" title="סגור וידאו">
+                            <span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </div>
+                <div ng-if="vm.assistent == 'picture_solution'">
+                    <div class="centerBlock">
+                        <h2>פתרון התרגיל:</h2>
+                        <img ng-src="{{vm.exercise.exe.solutionPicture}}"><br>
+                        <button class="btn btn-info" ng-click="vm.closeAssistence()" data-toggle="tooltip" title="סגור פתרון">
+                            <span class="glyphicon glyphicon-remove"></span></button>
+                    </div>      
+                </div>
+                <div ng-if="vm.assistent == undefined">
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                </div>
+                <div class="centerBlock">
+                    <button class="btn btn-primary" ng-click="vm.assistent = 'picture_solution'">הצג פתרון</button>&nbsp;   
+                    <button class="btn btn-info" ng-click="vm.getSampleSolutionVideo()">וידאו פתרונות לדוגמה</button>&nbsp;
+                    <button class="btn btn-info" ng-click="vm.getTutorialVideo()">וידאו הדרכה</button>&nbsp;
+                </div>      
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6 pull-right">
-            <div ng-repeat="obj in vm.exercise.exe.body">
-                <div ng-if="obj.type == 'picture'">
-                    <img ng-src="{{obj.content}}">
-                </div>
-                <div class="ex1" ng-if="obj.type == 'text'">
-                    {{obj.content}}
-                </div>
-                <br>
-            </div>
-        </div>
-        <div ng-if="vm.assistent == 'tutorial'" class="row">
-            <div class="col-md-6 pull-right">
-                <p><h3>וידאו הדרכה:</h3></p>
-                <iframe id="ytplayer" type="text/html" width="512" height="280" ng-src="{{vm.tutorialVideoLink}}" frameborder="0"></iframe><br>
-                <button class="btn btn-info" ng-click="vm.closeAssistence()" data-toggle="tooltip" title="סגור וידאו">
-                    <span class="glyphicon glyphicon-remove"></span></button>
-            </div>
-        </div>
-        <div ng-if="vm.assistent == 'sample_solution'" class="row">
-            <div class="col-md-6 pull-right">
-                <p><h3>וידאו פתרון לדוגמה:</h3></p>
-                <iframe id="ytplayer" type="text/html" width="512" height="280" src="{{vm.sampleSolutionVideoLink}}" frameborder="0"></iframe><br>
-                <button class="btn btn-info" ng-click="vm.closeAssistence()" data-toggle="tooltip" title="סגור וידאו">
-                    <span class="glyphicon glyphicon-remove"></span></button>
-            </div>
-        </div>
-        <div ng-if="vm.assistent == 'picture_solution'" class="row">
-            <div class="col-md-6 pull-right">
-                <p><h3>פתרון התרגיל:</h3></p>
-                <img ng-src="{{vm.exercise.exe.solutionPicture}}"><br>
-                <button class="btn btn-info" ng-click="vm.closeAssistence()" data-toggle="tooltip" title="סגור פתרון">
-                    <span class="glyphicon glyphicon-remove"></span></button>
-            </div>
-        </div>
-    </div>
-    <br><br>
-    <div class="row">
-        <div class="col-md-6 pull-right">
-            <p><h3>בחר תשובה נכונה:</h3</p>
-            <div ng-repeat="obj in vm.exercise.exe.solutions" id="{{obj.solution}}">
-                <div class="ex1">
-                    <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"
-                    />&nbsp;&nbsp;
-                    <label>{{obj.solution}}</label>
+            <div dir="rtl" class="well well-lg">
+                <p><h2>בחר תשובה נכונה:</h2></p>
+                <div ng-repeat="obj in vm.exercise.exe.solutions" id="{{obj.solution}}">
+                    <div class="ex1">
+                        <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"
+                        />&nbsp;&nbsp;
+                        <label>{{obj.solution}}</label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <br>
-    <div class="row">
+    <div dir="rtl" class="row">
         <div class="col-md-6 pull-right">
             <button type="button" class="btn btn-warning pull-right" ng-click="vm.checkAnswer()" data-toggle="modal" data-target="#myModal">סיים תרגיל</button>
             <!-- Modal -->
@@ -64,7 +74,7 @@
                 <div class="modal-dialog"> 
                     <!-- Modal content-->
                     <div class="modal-content">
-                        <div ng-if="vm.finalSelection == null">
+                        <div ng-if="vm.finalSelection == undefined">
                             <div class="modal-header">
                                 <h2 class="modal-title">&nbsp;אופס!</h2>
                             </div>
@@ -80,10 +90,9 @@
                                 <h2 class="modal-title">&nbsp;פתרון נכון!</h2>
                             </div>
                             <div class="modal-body">
-                                <h3 class="modal-title">עכשיו אני רוצה:</h3><br>
-                                <input type="radio" ng-model="vm.correctAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
-                                <label>עוד תרגילים כאלו</label><br>
-                                <input type="radio" ng-model="vm.correctAnswerNextStep" value="readyForNextLevel"/>&nbsp;&nbsp;
+                                &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.correctAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
+                                <label>אני רוצה עוד תרגילים כאלו</label><br>
+                                &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.correctAnswerNextStep" value="readyForNextLevel"/>&nbsp;&nbsp;
                                 <label>מוכן לשלב הבא</label><br>
                             </div>
                             <div class="modal-footer">
@@ -95,10 +104,9 @@
                                 <h2 class="modal-title">&nbsp;פתרון שגוי!</h2>
                             </div>
                             <div class="modal-body">
-                                <h3 class="modal-title">עכשיו אני רוצה:</h3><br>
-                                <input type="radio" ng-model="vm.wrongAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
-                                <label>עוד תרגילים כאלו</label><br>
-                                <input type="radio" ng-model="vm.wrongAnswerNextStep" value="preReq"/>&nbsp;&nbsp;
+                                &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
+                                <label>אני רוצה עוד תרגילים כאלו</label><br>
+                                &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="preReq"/>&nbsp;&nbsp;
                                 <label>אנסה שלב קל יותר</label><br>
                             </div>
                             <div class="modal-footer">
@@ -109,16 +117,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 center">
-            <button class="btn btn-primary" ng-click="vm.assistent = 'picture_solution'">הצג פתרון</button>    
-            <button class="btn btn-info" ng-click="vm.getSampleSolutionVideo()">וידאו פתרונות לדוגמה</button>
-            <button class="btn btn-info" ng-click="vm.getTutorialVideo()">וידאו הדרכה</button>
-        </div>
     </div>
-</div>
 <div style="height:100px"></div>
-vm.assistent - {{vm.assistent}}<br>
-vm.tutorialVideoLink - {{vm.tutorialVideoLink}}<br>
-vm.sampleSolutionVideoLink - {{vm.sampleSolutionVideoLink}}<br>
-vm.exercise - {{vm.exercise}}<br>
-vm.selectedAssignment - {{vm.selectedAssignment}}<br>
+
