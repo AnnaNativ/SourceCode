@@ -4,8 +4,8 @@
     .module('meanApp')
     .controller('studentCtrl', studentCtrl);
 
-  studentCtrl.$inject = ['$location', 'meanData','$window','audit','exercise', 'assignment', '$sce'];
-  function studentCtrl($location, meanData, $window, audit, exercise, assignment, $sce) {
+  studentCtrl.$inject = ['$scope', '$location', 'meanData','$window','audit','exercise', 'assignment', '$sce'];
+  function studentCtrl($scope, $location, meanData, $window, audit, exercise, assignment, $sce) {
     var vm = this;
     console.log('Init studentCtrl');
     vm.currentTab = 'assignments';
@@ -21,6 +21,23 @@
     };
     vm.myAssignments;
   
+    Array.prototype.shuffle = function() {
+        var input = this; 
+        for (var i = input.length-1; i >=0; i--) {
+            var randomIndex = Math.floor(Math.random()*(i+1)); 
+            var itemAtIndex = input[randomIndex]; 
+            input[randomIndex] = input[i]; 
+            input[i] = itemAtIndex;
+        }
+        return input;
+    }
+    
+    $scope.$watch('vm.exercise.exe', function() {
+        if(vm.exercise.exe.solutions != undefined) {
+          vm.exercise.exe.solutions.shuffle();
+        }
+    });
+
     meanData.getProfile()
       .success(function (data) {
         vm.user = data;
@@ -51,17 +68,13 @@
         .success(function (data) {
           vm.exercise = data;
 //          console.log('Your next exe is: '+ JSON.stringify(data));
-//          $window.sessionStorage['selectedAssignment'] = vm.selectedAssignment;
+          $window.sessionStorage['selectedAssignment'] = vm.selectedAssignment;
 //          $location.path('student').search({param: data});
         })
         .error(function (e) {
           console.log(e);
         })
     }
-
-    vm.random = function() {
-      return Math.round(Math.random() * vm.exercise.solutions.length);
-    };
 
     // check user's answer
     vm.checkAnswer = function () {
@@ -208,8 +221,7 @@
       .error(function(e){
         console.log(e);
       })
-    }
-  
+    }  
   }
 
 })();
