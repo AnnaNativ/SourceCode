@@ -4,15 +4,16 @@
     .module('meanApp')
     .controller('studentCtrl', studentCtrl);
 
-  studentCtrl.$inject = ['$location', '$routeParams', 'meanData','$window','audit','exercise', 'assignment'];
-  function studentCtrl($location, $routeParams, meanData, $window, audit, exercise, assignment) {
+  studentCtrl.$inject = ['$location', 'meanData','$window','audit','exercise', 'assignment', '$sce'];
+  function studentCtrl($location, meanData, $window, audit, exercise, assignment, $sce) {
     var vm = this;
     console.log('Init studentCtrl');
     vm.currentTab = 'assignments';
-    vm.currentSelection = false;
+    vm.currentSelection = undefined;
     vm.finalSelection = null;
-    vm.subjectVideoOn = false;
-    vm.solutionVideoOn = false;
+    vm.assistent = undefined;
+    vm.correctAnswerNextStep = 'moreOfTheSame';
+    vm.wrongAnswerNextStep = 'moreOfTheSame';
     vm.exercise = {
       exe:{},
       level:'',
@@ -20,14 +21,6 @@
     };
     vm.myAssignments;
   
-//    vm.exercise.exe =$routeParams.param.exe;
-//    vm.exercise.level = $routeParams.param.level;
-//    vm.exercise.subsubject = $routeParams.param.subsubject;
-    
-
-    //vm.exercise = $routeParams.config.exe;
-    //vm.selectedAssignment = $routeParams.config.selectedAssignment;
-
     meanData.getProfile()
       .success(function (data) {
         vm.user = data;
@@ -72,27 +65,34 @@
 
     // check user's answer
     vm.checkAnswer = function () {
-      vm.finalSelection = (vm.exercise.exe.solutions[vm.currentSelection].isCorrect);
-      
-      console.log('vm.exercise ' + vm.exercise);
-       
-      // update audit with the results
-      var param = {};
-      param.userId = $window.sessionStorage['userId'];
-      param.exeId = vm.exercise.exe._id;
-      param.subsubject = vm.exercise.subsubject;
-      param.level = vm.exercise.level;
-      if(vm.finalSelection)
-        param.outcome = 'success';
-      else
-        param.outcome = 'failure';
-      console.log('calling auditExercise ' + JSON.stringify(param ));
-      audit.auditExercise(param);
+      vm.finalSelection = null;
+      if(vm.currentSelection != undefined) {
+        vm.finalSelection = (vm.exercise.exe.solutions[vm.currentSelection].isCorrect);
+        
+        console.log('vm.exercise ' + vm.exercise);
+        
+        // update audit with the results
+        var param = {};
+        param.userId = $window.sessionStorage['userId'];
+        param.exeId = vm.exercise.exe._id;
+        param.subsubject = vm.exercise.subsubject;
+        param.level = vm.exercise.level;
+        if(vm.finalSelection)
+          param.outcome = 'success';
+        else
+          param.outcome = 'failure';
+        console.log('calling auditExercise ' + JSON.stringify(param ));
+        audit.auditExercise(param);
+      }   
+      else {
+        console.log('No answer selected. Will ignore');
+      }
+      vm.currentSelection = undefined;
     }
-    
     
    vm.LoadPrereq = function(){
       console.log("let's review prerequisites for this exe");
+      vm.LoadSimilarExe(); // TBD, this needs to be changed to the final implementation
    };
    vm.LoadNextExe = function(){
 
@@ -140,9 +140,8 @@
 
     };
 
-    vm.closeVideos = function() {
-      vm.subjectVideoOn = false;
-      vm.solutionVideoOn = false;
+    vm.closeAssistence = function() {
+      vm.assistent = undefined;
     }
 
     vm.handleRadioClick = function ($index) {
@@ -150,6 +149,67 @@
       vm.finalSelection = null;
       vm.currentSelection = $index;
     };
+
+    vm.correctAnswerNextStepClicked = function() {
+      if(vm.correctAnswerNextStep == 'moreOfTheSame') {
+        console.log('In studentCtrl.correctAnswerNextStep.if')
+        vm.LoadSimilarExe();
+      }
+      else {
+        if(vm.correctAnswerNextStep == 'readyForNextLevel') {
+          console.log('In studentCtrl.correctAnswerNextStep.else.if')
+          vm.LoadNextExe();
+        }
+        else {
+          console.log('In studentCtrl.correctAnswerNextStep.else.else - Error state');          
+        }
+      }
+      vm.correctAnswerNextStep = 'moreOfTheSame';
+      vm.assistent = undefined;      
+    }
+
+    vm.wrongAnswerNextStepClicked = function() {
+      if(vm.wrongAnswerNextStep == 'moreOfTheSame') {
+        console.log('In studentCtrl.wrongAnswerNextStep.if')
+        vm.LoadSimilarExe();
+      }
+      else {
+        if(vm.wrongAnswerNextStep == 'preReq') {
+          console.log('In studentCtrl.wrongAnswerNextStep.else.if')
+          vm.LoadPrereq();
+        }
+        else {
+          console.log('In studentCtrl.wrongAnswerNextStep.else.else - Error state');          
+        }
+      }
+      vm.wrongAnswerNextStep = 'moreOfTheSame';
+      vm.assistent = undefined;
+    }
+
+    vm.getTutorialVideo = function() {
+      meanData.getVideo(vm.selectedAssignment.subSubject[0].tutorial_video)
+      .success(function(data){
+        vm.assistent = 'tutorial';
+        vm.tutorialVideoLink =  $sce.trustAsResourceUrl(data[0].link);
+        console.log('In getTutorialVideo.success with: ' + data);
+      })
+      .error(function(e){
+        console.log(e);
+      })
+    }
+
+    vm.getSampleSolutionVideo = function() {
+      meanData.getVideo(vm.selectedAssignment.subSubject[0].sample_videos[0])
+      .success(function(data){
+        vm.assistent = 'sample_solution';
+        vm.sampleSolutionVideoLink =  $sce.trustAsResourceUrl(data[0].link);
+        console.log('In getSampleSolutionVideo.success with: ' + data);
+      })
+      .error(function(e){
+        console.log(e);
+      })
+    }
+  
   }
 
 })();

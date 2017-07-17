@@ -324,6 +324,7 @@
                 vm.exercises = {};
                 vm.levelSelected();
                 vm.newExerciseAdded = true;
+                vm.solutionPicFile = undefined;
               });
           }
 

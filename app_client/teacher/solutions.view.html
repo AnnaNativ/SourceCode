@@ -33,15 +33,15 @@
                 <label>:עזרים</label>
             </div><br>
             <div class="col-md-8 center">
-                <label for="Solutionfile" ng-if="vm.solutionPicFile == undifined" class="btn btn btn-info">הוספת פיתרון בתמונה</label>
+                <label for="Solutionfile" ng-if="vm.solutionPicFile == undefined" class="btn btn btn-info">הוספת פיתרון בתמונה</label>
                 <input id="Solutionfile" type="file" style="visibility:hidden;" ngf-select="vm.addSolutionPicture()" ng-model="vm.solutionPicFile" name="file" accept="image/*"
                 ngf-max-size="2MB" ngf-model-invalid="errorFile">
-                <img ng-if="vm.solutionPicFile != undifined" ngf-thumbnail="vm.newExercise.solutionPicture[0].content" class="thumb">
+                <img ng-if="vm.solutionPicFile != undefined" ngf-thumbnail="vm.newExercise.solutionPicture[0].content" class="thumb">
                 <br>
             </div>
         </div>
         <div class="row">
-            <div ng-if="vm.solutionPicFile != undifined" class="col-md-1 pull-right">
+            <div ng-if="vm.solutionPicFile != undefined" class="col-md-1 pull-right">
                 <button type="button" class="btn btn-info" ng-click="vm.removeSolutionPicture()" data-toggle="tooltip" title="מחק תמונה">
                         <span class="glyphicon glyphicon-remove"></span></button>
             </div>

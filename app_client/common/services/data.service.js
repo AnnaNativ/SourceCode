@@ -33,7 +33,7 @@
     }
 
     var getVideos = function(videos) {
-      console.log('In data.service getVideos');
+      console.log('In data.service getVideos with: ' + videos);
 
       var config = {
         params: {videos: videos},
@@ -41,6 +41,17 @@
       };
 
       return $http.get('/api/videos', config);
+    }
+
+    var getVideo = function(video) {
+      console.log('In data.service getVideo with: ' + video);
+
+      var config = {
+        params: {video: video},
+        headers : {Authorization: 'Bearer '+ authentication.getToken()}
+      };
+
+      return $http.get('/api/video', config);
     }
 
     var getSubSubjects = function(subject) {
@@ -98,6 +109,7 @@
       getExercise: getExercise,
       getSubjects: getSubjects,
       getSubSubjects: getSubSubjects,
+      getVideo: getVideo,
       getVideos: getVideos,
       getExercises: getExercises,
       getStudentsOfTeacher: getStudentsOfTeacher,

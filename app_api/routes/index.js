@@ -33,6 +33,7 @@ router.get('/similarExercise', ctrlExercise.getSimilarExercise);
 router.get('/subjects', auth, ctrlSubjects.getSubjects);
 router.get('/subSubjects', auth, ctrlSubjects.getSubSubjects);
 router.get('/videos', auth, ctrlSubjects.getVideos);
+router.get('/video', auth, ctrlSubjects.getVideo);
 
 
 // authentication
