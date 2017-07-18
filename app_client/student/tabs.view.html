@@ -19,10 +19,13 @@
               <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'stats'" href="">סטטיסטיקות</a>
             </li>
 
-            <li ng-if="vm.currentTab == 'current assignment'" class="active">
+            <li ng-if="vm.selectedAssignment == undefined" class="disabled">
                 <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'current assignment'" href="">משימה נבחרת</a>
             </li>
-            <li ng-if="vm.currentTab != 'current assignment'">
+            <li ng-if="vm.currentTab == 'current assignment' && vm.selectedAssignment != undefined" class="active">
+                <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'current assignment'" href="">משימה נבחרת</a>
+            </li>
+            <li ng-if="vm.currentTab != 'current assignment' && vm.selectedAssignment != undefined">
               <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'current assignment'" href="">משימה נבחרת</a>
             </li>
             

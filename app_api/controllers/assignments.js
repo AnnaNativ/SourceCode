@@ -92,7 +92,9 @@ module.exports.getMyAssignments = function (req, res) {
   assignments
     .aggregate(
     { $match: { assignee: userId } },
-    { $lookup: { from: 'subsubjects', localField: 'subsubjectId', foreignField: '_id', as: 'subSubject' } }
+    { $lookup: { from: 'subjects', localField: 'subjectId', foreignField: '_id', as: 'subject' } },
+    { $lookup: { from: 'subsubjects', localField: 'subsubjectId', foreignField: '_id', as: 'subSubject' } },
+    { $lookup: { from: 'users', localField: 'assigner', foreignField: '_id', as: 'assigner' } }
     )
     .exec(function (err, data) {
       if (err) {

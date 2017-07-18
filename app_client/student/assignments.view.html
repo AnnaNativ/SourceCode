@@ -50,9 +50,50 @@
                 <div class="form-group text-right">
                     <div class="row">
                         <div dir="rtl" class="col-md-2 pull-right">
-                            <a ng-click="vm.assignmentClicked($index)" href="">{{assignment.subSubject[0].name}}</a><br>
+                            <div ng-if="$index == 0">
+                                <label >בחירה:</label><br>
+                            </div>
+                            <div ng-if="vm.selectedAssignmentIndex != $index">
+                                <a ng-if="assignment.status == 'new'" ng-click="vm.assignmentClicked($index)" href="">התחל משימה</a>
+                                <a ng-if="assignment.status == 'inprogress'" ng-click="vm.assignmentClicked($index)" href="">המשך משימה</a>
+                                <span ng-if="assignment.status == 'done'">משימה גמורה</span>
+                            </div>
+                            <div ng-if="vm.selectedAssignmentIndex == $index">
+                                <a ng-click="vm.assignmentClicked($index)" href=""><u><em><b>משימה פעילה</em></b><u></a>
+                            </div>
                         </div>
-                    </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            <div ng-if="$index == 0">
+                                <label>ניתן על ידי:</label><br>
+                            </div>
+                            <div ng-if="assignment.assigner[0]._id != assignment.assignee">
+                                {{assignment.assigner[0].name}}
+                            </div>
+                            <div ng-if="assignment.assigner[0]._id == assignment.assignee">
+                                אני
+                            </div>
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            <div ng-if="$index == 0">
+                                <label>נושא:</label><br>
+                            </div>
+                            {{assignment.subject[0].name}}
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            <div ng-if="$index == 0">
+                                <label ng-if="$index == 0">תת נושא:</label><br>
+                            </div>
+                            {{assignment.subSubject[0].name}}
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            <div ng-if="$index == 0">
+                                <label ng-if="$index == 0">סטטוס משימה:</label><br>
+                            </div>
+                            <span ng-if="assignment.status == 'new'" class="label label-danger">חדש</span>
+                            <span ng-if="assignment.status == 'inprogress'" class="label label-info">בעבודה</span>
+                            <span ng-if="assignment.status == 'done'" class="label label-success">גמור</span>
+                        </div>
+                    </div>                    
                 </div>
             </div>
         </div>

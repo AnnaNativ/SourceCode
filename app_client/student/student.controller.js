@@ -41,6 +41,8 @@
     //####################################################################################
     vm.myAssignments;
     vm.user = {};
+    vm.selectedAssignment = undefined;
+    vm.selectedAssignmentIndex = undefined;
 
     meanData.getProfile()
       .success(function (data) {
@@ -66,6 +68,7 @@
     vm.assignmentClicked = function($index) {
       console.log('in assignmentClicked with index:' + $index);
       vm.selectedAssignment = vm.myAssignments[$index];
+      vm.selectedAssignmentIndex = $index;
       vm.currentTab = 'current assignment';
       assignment.myLastLocation(vm.selectedAssignment)
         .success(function (data) {
