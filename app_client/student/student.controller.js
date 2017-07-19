@@ -192,9 +192,15 @@
 
     vm.checkAnswer = function () {
       vm.finalSelection = undefined;
-      if(vm.currentSelection != undefined) {
-        vm.finalSelection = (vm.exercise.exe.solutions[vm.currentSelection].isCorrect);
-        
+
+      if(vm.currentSelection != undefined || vm.exercise.exe.solutions.length == 1) {
+        // is this an open ended question?
+        if(vm.exercise.exe.solutions.length == 1) {
+            vm.finalSelection = (vm.openSolution == vm.exercise.exe.solutions[0].solution);
+        }
+        else {
+          vm.finalSelection = vm.exercise.exe.solutions[vm.currentSelection].isCorrect;
+        }
         console.log('vm.exercise ' + vm.exercise);
         
         // update audit with the results
@@ -238,6 +244,7 @@
       }
       vm.correctAnswerNextStep = 'moreOfTheSame';
       vm.assistant = undefined;      
+      vm.openSolution = undefined;
     }
 
     vm.wrongAnswerNextStepClicked = function() {
@@ -256,6 +263,7 @@
       }
       vm.wrongAnswerNextStep = 'moreOfTheSame';
       vm.assistant = undefined;
+      vm.openSolution = undefined;
     }
    
     //####################################################################################

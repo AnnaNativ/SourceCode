@@ -54,13 +54,23 @@
     <div class="row">
         <div class="col-md-6 pull-right">
             <div dir="rtl" class="well well-lg">
-                <p><h2>בחר תשובה נכונה:</h2></p>
-                <div ng-repeat="obj in vm.exercise.exe.solutions" id="{{obj.solution}}">
-                    <div class="ex1">
-                        <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"
-                        />&nbsp;&nbsp;
-                        <label>{{obj.solution}}</label>
+                <div ng-if="vm.exercise.exe.solutions.length > 1">
+                    <p><h2>בחר תשובה נכונה:</h2></p>
+                    <div ng-repeat="obj in vm.exercise.exe.solutions" id="{{obj.solution}}">
+                        <div class="ex1">
+                            <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"
+                            />&nbsp;&nbsp;
+                            <label>{{obj.solution}}</label>
+                        </div>
                     </div>
+                </div>
+                <div ng-if="vm.exercise.exe.solutions.length == 1">
+                    <p><h2>הכנס תשובה:</h2></p>
+                    <div class="row">
+                        <div class="col-md-4 pull-right">
+                            <input dir="rtl" type="text" class="form-control form-fixer" ng-model="vm.openSolution">  
+                        </div>
+                    </div>     
                 </div>
             </div>
         </div>
@@ -119,5 +129,6 @@
         </div>
     </div>
 <div style="height:100px"></div>
+vm.exercise.exe.solutions[0].solution - {{vm.exercise.exe.solutions[0].solution}}
 
 
