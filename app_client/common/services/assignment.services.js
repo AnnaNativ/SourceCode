@@ -24,9 +24,16 @@
         return $http.get('/api/myLastLocation', congif);
         
     };
+    
+    var newAssignment = function(assignment) {
+      console.log("In assignment.newAssignment with: " + assignment);
+      return $http.post('/api/assignment', assignment);
+    };
+
   return {
-      myAssignments:myAssignments,
-      myLastLocation:myLastLocation
+      myAssignments: myAssignments,
+      myLastLocation: myLastLocation,
+      newAssignment: newAssignment
   };
   }
 })();

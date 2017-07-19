@@ -33,6 +33,7 @@ router.get('/similarExercise', ctrlExercise.getSimilarExercise);
 router.get('/subjects', auth, ctrlSubjects.getSubjects);
 router.get('/subSubjects', auth, ctrlSubjects.getSubSubjects);
 router.get('/videos', auth, ctrlSubjects.getVideos);
+router.get('/video', auth, ctrlSubjects.getVideo);
 
 
 // authentication
@@ -49,6 +50,8 @@ router.post('/upload', multipartyMiddleware, ctrlUploads.uploadPic);
 //assignment
 router.get('/myAssignments', ctrlAssignment.getMyAssignments);
 router.get('/myLastLocation', ctrlAssignment.getMyLastLocation);
+router.get('/assignmentsOfTeacher', auth, ctrlAssignment.getAssignmentsOfTeacher);
+router.post('/assignment', ctrlAssignment.newAssignment);
 
 //audit
 router.post('/auditExercise', ctrlAudit.auditExercise);

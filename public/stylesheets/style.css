@@ -23,3 +23,63 @@ a {
   padding-bottom: 10px;
   color: red;
 }
+
+input.form-fixer {
+    padding: 8px;
+    font-size: 14px;
+    height: 28px;
+}
+
+select.form-fixer {
+    padding: 4px;
+    font-size: 14px;
+    height: 28px;
+}
+
+.form-horizontal .form-group input, 
+.form-horizontal .form-group select,
+.form-horizontal .form-group label
+ { 
+    height: 14px;
+    line-height: 14px;
+}
+
+label {
+  font-size: 19px;
+  color: darkcyan
+}
+
+h2 {
+  color: darkcyan;
+}
+
+h3 {
+  color: darkcyan
+}
+
+.btn-xlarge {
+    color: darkcyan;
+    padding: 18px 28px;
+    font-size: 22px;
+    line-height: normal;
+    -webkit-border-radius: 8px;
+       -moz-border-radius: 8px;
+            border-radius: 8px;
+}
+
+hr{
+  border-top: 1px dashed darkcyan;
+}
+
+div.ex1 {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+.well.custom-well {
+  min-height: 458px;
+}
+
+.centerBlock {
+  display: table;
+  margin: auto;
+}

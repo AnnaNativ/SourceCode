@@ -114,17 +114,30 @@ module.exports.getExercises = function (req, res) {
     res.status(401).json({
       "message": "UnauthorizedError: private exercise"
     });
-  } else {
+  } 
+  else {
     var subSubject = new mongoose.mongo.ObjectId(req.query.subSubject);
+    var level = parseInt(req.query.level);
     SubSubject
-      .find({ '_id': subSubject })
-      .exec(function (err, exercises) {
-        Exercise
-          .find({})
-        res.status(200).json(exercises);
+      .aggregate(
+      { $match: { '_id': subSubject } },
+      {
+        $project: {
+          exercises: {
+            $filter: {
+              input: '$exercises',
+              as: 'exer',
+              cond: { $eq: ["$$exer.level", level] }
+            }
+          }
+        }
+      }
+      )
+      .exec(function (err, result) {
+        console.log('exe for this subsubject and level:' + result[0].exercises.length);
+        res.status(200).json(result[0].exercises);
       });
   }
-
 }
 
 getExerciseForId = function (exeId, PostGetExeForIdFunc) {
@@ -158,6 +171,7 @@ internalCleanUpExercisesFromSeen = function(exeforLevel,seenExe){
       };
       return exeforLevel;
 };
+
 module.exports.CleanUpExercisesFromSeen = function (exeforLevel,seenExe) {
    return internalCleanUpExercisesFromSeen(exeforLevel,seenExe);
 };
@@ -170,10 +184,17 @@ module.exports.newExercise = function (req, res) {
   exercise.level = req.body.level;
   // create the exercise body from its parts
   req.body.body.forEach(function (bodyPart) {
-    var part = new BodyPart();
-    part.type = bodyPart.type;
-    part.content = bodyPart.content;
-    exercise.body.push(part);
+    // is this a solution Picture?
+    if(bodyPart.type == 'solutionPicture') {
+      exercise.solutionPicture = bodyPart.content;
+    }
+    // if not then it is a body part
+    else {
+      var part = new BodyPart();
+      part.type = bodyPart.type;
+      part.content = bodyPart.content;
+      exercise.body.push(part);
+    }
   });
   // create all the solutions from all solution parts
   req.body.solutions.forEach(function (solution) {

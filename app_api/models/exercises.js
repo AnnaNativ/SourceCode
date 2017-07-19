@@ -15,6 +15,7 @@ var exerciseSchema = new Schema({
   body: [bodyPartSchema],
   solutions: [solutionSchema],
   videoSolution: {type: Schema.Types.ObjectId, ref: 'Video'},
+  solutionPicture: {type: String},
   tries: {type: Number, default: 0},
   successes: {type: Number, default: 0},
   failures: {type: Number, default: 0},

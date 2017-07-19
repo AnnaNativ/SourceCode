@@ -1,81 +1,18 @@
 <navigation></navigation>
-<style>
-    div.ex1 {
-        direction: rtl;
-        unicode-bidi: bidi-override;
-    }
-</style>
+<div ng-include="'/student/tabs.view.html'"></div>
 
-<br>
-<div class="container" ng-cloak>
-    <div class="container text-right">
-        <div ng-if="vm.subjectVideoOn" class="row">
-            <div class="col-md-12">
-                <iframe id="ytplayer" type="text/html" width="1024" height="560" src="https://www.youtube.com/embed/znPCD7tUKX0" frameborder="0"></iframe>
-            </div>
-        </div>
-        <div ng-if="vm.solutionVideoOn" class="row">
-            <div class="col-md-12">
-                <iframe id="ytplayer" type="text/html" width="1024" height="560" src="https://www.youtube.com/embed/yT3jh2aZN68" frameborder="0"></iframe>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 pull-right">
-                <h1>:פתור תרגיל</h1>
-            </div>
-            <div class="col-md-6">
-                <button ng-if="!vm.subjectVideoOn && !vm.solutionVideoOn" class="btn btn-info" ng-click="vm.solutionVideoOn = true">וידאו פתרונות לדוגמה</button>
-                <button ng-if="!vm.subjectVideoOn && !vm.solutionVideoOn" class="btn btn-info" ng-click="vm.subjectVideoOn = true">וידאו על הנושא</button>
-                <button ng-if="!vm.subjectVideoOn && !vm.solutionVideoOn" class="btn btn-info" ng-click="vm.subjectVideoOn = true">Show me the solution</button>
-                
-                <button ng-if="vm.subjectVideoOn || vm.solutionVideoOn" class="btn btn-info" ng-click="vm.closeVideos()">סגוד וידאו</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 pull-right">
-                <div ng-repeat="obj in vm.exercise.exe.body">
-                    <div ng-if="obj.type == 'picture'">
-                        <img ng-src="{{obj.content}}">
-                    </div>
-                    <div class="ex1" ng-if="obj.type == 'text'">
-                        {{obj.content}}
-                    </div>
-                    <br>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 pull-right">
-                <h3>:בחר תשובה נכונה </h3>
-                <div ng-repeat="obj in vm.exercise.exe.solutions" id="{{obj.solution}}">
-                    <div class="ex1">
-                        <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"
-                        />&nbsp;&nbsp;
-                        <label>{{obj.solution}}</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-6 pull-right">
-                <button type="button" class="btn btn-default pull-right" ng-click="vm.checkAnswer()">סיים תרגיל</button>
-                <h1 ng-if="vm.finalSelection == false" class="pull-right">תשובה שגויה, נסה שנית</h1>
-            </div>
-        </div>
-        <div>
-            <div class="col-md-6">
-               <p ng-if="vm.finalSelection == true" > Correct!</p>
-                <button ng-if="vm.finalSelection == true" class="btn btn-info" ng-click="vm.LoadSimilarExe()">More of the same</button>
-                <button ng-if="vm.finalSelection == true" class="btn btn-info" ng-click="vm.LoadNextExe()">Ready for something more challenging</button>
-            </div>
-            <div class="col-md-6">
-                <button ng-if="vm.finalSelection == false" class="btn btn-info" ng-click="vm.LoadSimilarExe()">Want to try similar exe again</button>
-                <button ng-if="vm.finalSelection == false" class="btn btn-info" ng-click="vm.LoadPrereq()">Let's try something easier first</button>
-             </div>
-         
-        </div>
+<div class="container-fluid" ng-cloak>
+  <div class="row">
+    <div class="col-md-1 pull-right">
     </div>
+    <div ng-show="vm.currentTab == 'assignments'" class="col-md-10 pull-right">
+        <div ng-include="'/student/assignments.view.html'"></div>
+    </div>  
+    <div ng-show="vm.currentTab == 'current assignment'" class="col-md-10 pull-right">
+        <div ng-include="'/student/assignment.view.html'"></div>
+    </div>    
+  </div>
 </div>
+
 <div style="height:100px"></div>
-{{vm.exercise}}
+

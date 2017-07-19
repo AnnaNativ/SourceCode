@@ -1,0 +1,19 @@
+<div class="col-md-2 pull-right">
+    <div ng-show="vm.addingSubSubject" class="well well-lg">
+        <div class="form-group text-right">
+            <label>:שם התת נושא </label>
+            <input dir="rtl" type="text" class="form-control form-fixer" ng-model="vm.newSubSubject.name"><br>
+            <label>:קישור לוידאו הדרכה </label>
+            <input dir="rtl" type="text" class="form-control form-fixer" ng-model="vm.newSubSubject.tutorialVideo"><br>
+            <label>:קישור לוידאו דוגמה </label>
+            <input dir="rtl" type="text" class="form-control form-fixer" ng-model="vm.newSubSubject.sampleVideos"><br>
+            <button type="button" class="btn btn-info" ng-click="vm.cancelNewSubSubject()" data-toggle="tooltip" title="בטל הוספת תת נושא לימוד חדש">
+                <span class="glyphicon glyphicon-remove"></span></button>
+            <button type="button" class="btn btn-warning" ng-click="vm.addNewSubSubject()" data-toggle="tooltip" title="שמור תת נושא לימוד חדש">
+                <span class="glyphicon glyphicon-ok"></span></button>
+            <div ng-if="!vm.addSubSubjectFormValid">
+                <div class="text-danger">&nbsp;&nbsp;!שדה ראשון חובה&nbsp;&nbsp;</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -33,7 +33,7 @@
     }
 
     var getVideos = function(videos) {
-      console.log('In data.service getVideos');
+      console.log('In data.service getVideos with: ' + videos);
 
       var config = {
         params: {videos: videos},
@@ -41,6 +41,17 @@
       };
 
       return $http.get('/api/videos', config);
+    }
+
+    var getVideo = function(video) {
+      console.log('In data.service getVideo with: ' + video);
+
+      var config = {
+        params: {video: video},
+        headers : {Authorization: 'Bearer '+ authentication.getToken()}
+      };
+
+      return $http.get('/api/video', config);
     }
 
     var getSubSubjects = function(subject) {
@@ -54,11 +65,11 @@
       return $http.get('/api/subSubjects', config);
     }
 
-    var getExercises = function(subSubject) {
-      console.log('In data.service getExercises with subSubject: ' + subSubject);
+    var getExercises = function(subSubject, level) {
+      console.log('In data.service getExercises with subSubject: ' + subSubject + ' and level: ' + level);
 
       var config = {
-        params: {subSubject: subSubject},
+        params: {subSubject: subSubject, level: level},
         headers : {Authorization: 'Bearer '+ authentication.getToken()}
       };
 
@@ -68,6 +79,15 @@
     var getStudentsOfTeacher = function() {
       console.log('In data.service getStudentsOfTeacher');
       return $http.get('/api/studentsOfTeacher', {
+        headers: {
+          Authorization: 'Bearer '+ authentication.getToken()
+        }        
+      });
+    }
+
+    var getAssignmentsOfTeacher = function() {
+      console.log('In data.service getAssignmentsOfTeacher');
+      return $http.get('/api/assignmentsOfTeacher', {
         headers: {
           Authorization: 'Bearer '+ authentication.getToken()
         }        
@@ -89,9 +109,11 @@
       getExercise: getExercise,
       getSubjects: getSubjects,
       getSubSubjects: getSubSubjects,
+      getVideo: getVideo,
       getVideos: getVideos,
       getExercises: getExercises,
       getStudentsOfTeacher: getStudentsOfTeacher,
+      getAssignmentsOfTeacher: getAssignmentsOfTeacher,
       getTeachersList: getTeachersList,
       getSchoolsList: getSchoolsList
     };

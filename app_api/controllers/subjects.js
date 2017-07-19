@@ -53,6 +53,22 @@ module.exports.getVideos = function(req, res) {
   }
 };
 
+module.exports.getVideo = function(req, res) {
+  if (!req.payload._id) {
+    res.status(401).json({
+      "message" : "UnauthorizedError: private profile"
+    });
+  } 
+  else {
+    var video = new mongoose.mongo.ObjectId(req.query.video);
+    Video
+      .find({'_id': video})
+      .exec(function(err, data) {
+        res.status(200).json(data);
+      });
+  }
+};
+
 module.exports.newSubject = function(req, res) {
   console.log('in subject.controller newSubject');
   var subject = new Subject();

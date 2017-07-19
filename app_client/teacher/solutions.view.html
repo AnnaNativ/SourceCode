@@ -1,23 +1,51 @@
-<div class="well well-lg">
-    <div ng-if="vm.showAnswers">
-        <h3>:הכנס תשובות</h3>
-        <label class="btn btn btn-info" ng-click="vm.addAnswers()">לחץ להוספת תשובות</label>
+<div ng-if="vm.newExercise.body.length > 0" class="col-md-6 pull-right">
+    <div class="well well-lg">
+        <div class="row">
+            <div class="col-md-4 pull-right">
+                <div ng-repeat="obj in vm.newExercise.solutions">
+                    <div ng-if="$index == 0">
+                        <label>:תשובה נכונה</label>
+                            <input dir="rtl" type="text" name="{{$index}}" class="form-control form-fixer" ng-model="obj.solution" required><br>
+                    </div>
+                    <div ng-if="$index == 1">
+                        <div dir="rtl" class="ex1">
+                            <input type="radio" ng-model="vm.answerType" value="closed"/>&nbsp;&nbsp;
+                            <label>תשובות אחרות:</label>
+                        </div>
+                        <input dir="rtl" type="text" name="{{$index}}" class="form-control form-fixer" ng-model="obj.solution"  
+                            ng-disabled="vm.answerType == 'open'" required><br>
+                    </div>
+                    <div ng-if="$index > 1">
+                        <input dir="rtl" type="text" name="{{$index}}" class="form-control form-fixer" ng-model="obj.solution" 
+                            ng-disabled="vm.answerType == 'open'"><br>
+                    </div>
+                </div>
+                <div dir="rtl" class="ex1">
+                    <input type="radio" ng-model="vm.answerType" ng-click="vm.openAnswerClicked()" value="open"/>&nbsp;&nbsp;
+                    <label>תשובה פתוחה</label>
+                </div>
+            </div>
+        </div>
     </div>
-    <div ng-if="!vm.showAnswers" ng-repeat="obj in vm.newExercise.solutions">
-        <div ng-if="$index == 0">
-            <h3>:הכנס תשובה נכונה</h3>
-            <input dir="rtl" type="text" name="{{$index}}" class="form-control" ng-model="obj.solution" required><br>
+    <div class="well well-lg">
+        <div class="row">
+            <div class="col-md-2 pull-right">
+                <label>:עזרים</label>
+            </div><br>
+            <div class="col-md-8 center">
+                <label for="Solutionfile" ng-if="vm.solutionPicFile == undefined" class="btn btn btn-info">הוספת פיתרון בתמונה</label>
+                <input id="Solutionfile" type="file" style="visibility:hidden;" ngf-select="vm.addSolutionPicture()" ng-model="vm.solutionPicFile" name="file" accept="image/*"
+                ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                <img ng-if="vm.solutionPicFile != undefined" ngf-thumbnail="vm.newExercise.solutionPicture[0].content" class="thumb">
+                <br>
+            </div>
         </div>
-        <div ng-if="$index == 1">
-            <h3>:הכנס תשובות אחרות </h3>
-            <input dir="rtl" type="text" name="{{$index}}" class="form-control" ng-model="obj.solution" required><br>
+        <div class="row">
+            <div ng-if="vm.solutionPicFile != undefined" class="col-md-1 pull-right">
+                <button type="button" class="btn btn-info" ng-click="vm.removeSolutionPicture()" data-toggle="tooltip" title="מחק תמונה">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+            </div>
         </div>
-        <div ng-if="$index > 1">
-            <input dir="rtl" type="text" name="{{$index}}" class="form-control" ng-model="obj.solution"><br>
-        </div>
+
     </div>
-</div>
-<button ng-if="!vm.showAnswers" type="submit" class="btn btn btn-warning pull-right">שמור תרגיל</button>
-<div ng-if="!vm.formValid">
-    <div class="text-danger">&nbsp;&nbsp;!שני השדות הראשונים חובה&nbsp;&nbsp;</div>
 </div>
