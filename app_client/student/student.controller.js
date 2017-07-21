@@ -172,6 +172,12 @@
     vm.finalSelection = undefined;
     vm.correctAnswerNextStep = 'moreOfTheSame';
     vm.wrongAnswerNextStep = 'moreOfTheSame';
+//    vm.openSolutionRaw = "ax^4 + bx + c = 0$$ and they are $$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.";
+    vm.openSolutionRaw = "";
+//    vm.openSolutionRaw = "ax^4 + bx + c = 0";
+//    vm.openSolution =  "$$ax^4 + bx + c = 0$$ rr $$x^2$$ rr $$\sqrt{x}$$";
+    vm.openSolution = "$$" + vm.openSolutionRaw + "$$";
+
     
     Array.prototype.shuffle = function() {
         var input = this; 
@@ -265,11 +271,23 @@
       vm.assistant = undefined;
       vm.openSolution = undefined;
     }
-   
+
+    vm.updateOpenSolution = function(key) {
+      vm.openSolutionRaw += key;
+      vm.openSolution = "$$" + vm.openSolutionRaw + "$$";
+    }   
     //####################################################################################
     //########## Assistance ###########
     //####################################################################################    
     vm.assistant = undefined;
+
+    vm.open = function () {
+      console.log('opening pop up');
+      var modalInstance = $modal.open({
+        templateUrl: 'assistance.dialog.html',
+      });
+    }
+
     vm.closeAssistance = function() {
       vm.assistant = undefined;
     }

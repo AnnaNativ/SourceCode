@@ -1,0 +1,44 @@
+<!-- Modal -->
+<div class="modal fade" id="assistanceDialog" role="dialog">
+    <div class="modal-dialog"> 
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div ng-if="vm.assistant == 'tutorial'">
+                <div class="modal-body">
+                    <div class="centerBlock">
+                        <h2>וידאו הדרכה:</h2>
+                        <iframe id="ytplayer" type="text/html" width="512" height="280" ng-src="{{vm.tutorialVideoLink}}" frameborder="0"></iframe><br>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info" ng-click="vm.closeAssistance()" data-toggle="tooltip" title="סגור וידאו" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
+            <div ng-if="vm.assistant == 'sample_solution'">
+                <div class="modal-body">
+                    <div class="centerBlock">
+                        <h2>וידאו פתרון לדוגמה:</h2>
+                        <iframe id="ytplayer" type="text/html" width="512" height="280" src="{{vm.sampleSolutionVideoLink}}" frameborder="0"></iframe><br>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info" ng-click="vm.closeAssistance()" data-toggle="tooltip" title="סגור וידאו" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
+            <div ng-if="vm.assistant == 'picture_solution'">
+                <div class="modal-body">
+                    <div class="centerBlock">
+                        <h2>פתרון התרגיל:</h2>
+                        <img ng-src="{{vm.exercise.exe.solutionPicture}}"><br>
+                    </div>      
+                    <div class="modal-footer">
+                        <button class="btn btn-info" ng-click="vm.closeAssistance()" data-toggle="tooltip" title="סגור פתרון">
+                            <span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>

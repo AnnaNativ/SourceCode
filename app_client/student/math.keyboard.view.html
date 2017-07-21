@@ -1,0 +1,72 @@
+<style>
+    input{
+        border: none;
+    }
+    .button.custom-button {
+        height: 50px;
+        width: 50px;
+        margin: 10px 4px;
+        box-shadow: inset 1px 1px 50px  #0066FF;
+        border: none !important;
+    }
+    *:focus {
+        outline: 0 !important;
+    }
+    #allClear {
+    box-shadow: inset 1px 1px 50px  #990000;
+    border: none;
+    }
+    #clear {
+    box-shadow: inset 1px 1px 50px  #CC6600;
+    border: none;
+    }
+    #equals{
+    box-shadow: inset 1px 1px 50px #006633;
+    border: none;
+    }
+    /* Hidden button for formatting sake */
+    #blank {
+    visibility: hidden;
+    }
+    .calcBG {
+    background-color: #0000CC;
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    box-shadow: inset 1px 1px 50px #000;
+    }
+    small {
+    color: #fff;
+    font-weight: bold;
+    }
+</style>
+
+<div class="container text-center" id="calc">
+  <div class="calcBG col-md-4 col-md-offset-4 pull-right">
+    <div class="row">
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(1)">1</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(2)">2</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(3)">3</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(4)">4</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(5)">5</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution('(')">(</button>
+    </div>
+    <div class="row">
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(6)">6</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(7)">7</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(8)">8</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(9)">9</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(0)">0</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution(')')">)</button>
+    </div>
+    <div class="row">
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution('\\sqrt{x}')">$$\sqrt{x}$$</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution('x^2')">$$x^2$$</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution('\\over')">$$/$$</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution('\\pi')">$$\pi$$</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution('.')">$$.$$</button>
+      <button class="button custom-button btn-info" ng-click="vm.updateOpenSolution('\\times')">$$\\times$$</button>
+    </div>
+  </div>
+</div>

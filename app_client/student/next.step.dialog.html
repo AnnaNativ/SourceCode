@@ -1,0 +1,47 @@
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog"> 
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div ng-if="vm.finalSelection == undefined">
+                <div class="modal-header">
+                    <h2 class="modal-title">&nbsp;אופס!</h2>
+                </div>
+                <div class="modal-body">
+                    <h3 class="modal-title">אנא בחר אחת מהתשובות</h3><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">המשך</button>
+                </div>
+            </div>
+            <div ng-if="vm.finalSelection == true">
+                <div class="modal-header">
+                    <h2 class="modal-title">&nbsp;פתרון נכון!</h2>
+                </div>
+                <div class="modal-body">
+                    &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.correctAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
+                    <label>אני רוצה עוד תרגילים כאלו</label><br>
+                    &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.correctAnswerNextStep" value="readyForNextLevel"/>&nbsp;&nbsp;
+                    <label>מוכן לשלב הבא</label><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.correctAnswerNextStepClicked()">המשך</button>
+                </div>
+            </div>
+            <div ng-if="vm.finalSelection == false">
+                <div class="modal-header">
+                    <h2 class="modal-title">&nbsp;פתרון שגוי!</h2>
+                </div>
+                <div class="modal-body">
+                    &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
+                    <label>אני רוצה עוד תרגילים כאלו</label><br>
+                    &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="preReq"/>&nbsp;&nbsp;
+                    <label>אנסה שלב קל יותר</label><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.wrongAnswerNextStepClicked()">המשך</button>
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>
