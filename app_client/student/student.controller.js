@@ -172,8 +172,12 @@
     vm.finalSelection = undefined;
     vm.correctAnswerNextStep = 'moreOfTheSame';
     vm.wrongAnswerNextStep = 'moreOfTheSame';
-//    vm.openSolutionRaw = "ax^4 + bx + c = 0$$ and they are $$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.";
-    vm.openSolutionRaw = "";
+    vm.name = '';
+    vm.sqrtMode = false;
+    vm.sqrtValue = '';
+//    vm.openSolutionRaw = "ax^4 + bx + c = 0$$ and they are {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.";
+    vm.openSolutionRaw = "(n^2+n)\\over(2n+1)";
+//    vm.openSolutionRaw = '';
 //    vm.openSolutionRaw = "ax^4 + bx + c = 0";
 //    vm.openSolution =  "$$ax^4 + bx + c = 0$$ rr $$x^2$$ rr $$\sqrt{x}$$";
     vm.openSolution = "$$" + vm.openSolutionRaw + "$$";
@@ -273,9 +277,30 @@
     }
 
     vm.updateOpenSolution = function(key) {
-      vm.openSolutionRaw += key;
-      vm.openSolution = "$$" + vm.openSolutionRaw + "$$";
+      if(vm.sqrtMode) {
+        console.log('In sqrt with: ' + key + ' Got: ' + vm.sqrtValue);
+        vm.sqrtValue += key;
+      }
+      else if(key == '\\sqrt{x}') {
+        vm.sqrtMode = true;
+      }
+      else {
+        vm.openSolutionRaw += key;
+        vm.openSolution = "$$" + vm.openSolutionRaw + "$$";
+      }
     }   
+
+    vm.sqrtUpdate = function() {
+      vm.openSolutionRaw += '\\sqrt{' + vm.sqrtValue + '}';
+      vm.openSolution = "$$" + vm.openSolutionRaw + "$$";
+      vm.sqrtMode = false;
+      vm.sqrtValue = '';
+    }
+
+    vm.clearOpenSolution = function() {
+      vm.openSolutionRaw = "";
+      vm.openSolution = "";
+    }
     //####################################################################################
     //########## Assistance ###########
     //####################################################################################    

@@ -28,7 +28,11 @@
             </div>      
             <div ng-show="vm.exercise.exe.solutions.length == 1">
                 <p><h2>הכנס תשובה:</h2></p>
-                <span math-jax-bind="vm.openSolution"></span>
+                <div ng-if="vm.sqrtMode">
+                    <input type="text" dir="rtl" ng-model="vm.sqrtValue" class="form-control form-fixer"/><br>
+                    <button class="btn btn-info" ng-click="vm.sqrtUpdate()">Done</button>&nbsp;<br>
+                </div>
+                <span math-jax-bind="vm.openSolution" ng-model="vm.openSolutionRaw" watch-selection ng-cloak></span>
                 <div ng-include="'/student/math.keyboard.view.html'"></div>
             </div>
             <div class="centerBlock">
@@ -42,5 +46,6 @@
         </div>
     </div>
 </div>
+
 
 

@@ -67,7 +67,12 @@
             alert(err);
           })
           .then(function(){
-            $location.path('profile');
+              if(vm.credentials.role == "student") {
+                $location.path('/student').search({tab: 'assignments'});
+              }
+              else {
+                $location.path('/teacher').search({tab: 'assignments'});   
+              }
           });
       }
     };
