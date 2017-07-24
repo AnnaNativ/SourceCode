@@ -116,14 +116,17 @@ module.exports.getMyLastLocation = function (req, res) {
   var exeforLevel = new Array;
 
   PostGetExeForId = function (nextExe) {
-    console.log('I have the exe I need.');
-    //adding subsubject and level for the audit
-    var response = {};
-    response.level = lastLevel;
-    response.subsubject = lastSubSubject;
-    response.exe = nextExe[0];
-    //console.log('sending to client exe with level:' + JSON.stringify(response));
-    res.status(200).json(response);
+    if (exeforLevel.length > 0) {
+      console.log('I have the exe I need.');
+      //adding subsubject and level for the audit
+      var response = {};
+      response.level = lastLevel;
+      response.subsubject = lastSubSubject;
+      response.exe = nextExe[0];
+      res.status(200).json(response);
+      //console.log('sending to client exe with level:' + JSON.stringify(response));
+    }
+    res.status(200).end();
   };
 
   PostSeenExe = function (seenExe) {
@@ -135,7 +138,6 @@ module.exports.getMyLastLocation = function (req, res) {
   };
 
   progress
-    //.find()
     .aggregate(
     { $match: { 'assignmentId': myAssignmentId } },
     { $sort: { 'createdDate': -1 } },
@@ -146,7 +148,12 @@ module.exports.getMyLastLocation = function (req, res) {
       if (err) {
         console.log('Returned from getmyLastLocation with error ' + err);
       }
-      else {
+      else if (progress.length == 0 ){
+        console.log('Returned from getmyLastLocation with nothing in progress. ' + progress); 
+        //should not get here as we must save the first record when the assignmnet is first  created. 
+      }
+      else
+      {
         console.log('Returned from getmyLastLocation with  ' + progress);
         lastSubSubject = progress[0].subsubjectId;
         lastLevel = progress[0].level;

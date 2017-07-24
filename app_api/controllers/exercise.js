@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var audit = require('./audit');
+var assignment = require('./assignments');
 var Schema = mongoose.Schema;
 
 var Exercise = mongoose.model('Exercise');
@@ -59,9 +60,19 @@ module.exports.getSimilarExercise = function (req, res) {
   PostSeenExe = function (seenExe) {
     console.log(' I am in PostSeenExe callbackFunc with: ' + seenExe.length + ' seen exe and ' +exeforLevel.length +' available exe');
     //removing seenExe from the list of exe
+    
     exeforLevel = internalCleanUpExercisesFromSeen(exeforLevel,seenExe);
     console.log('after cleanup left with ' + exeforLevel.length);
-    internalgetRandom(exeforLevel);
+    if(exeforLevel.length == 0) // there are no exe left in this level, move to the next level
+    {
+      level = level+1;
+      console.log(' no unseen exe for this level are left, record it and go for a higher level ' + level);
+      //record it first
+      audit.updateProgressLevel(user,subsubject,level); 
+      getExercisesForSubsubjectAndLevel(subsubject, level, PostExesForSubsubjectAndLevel);
+    } 
+      else
+        internalgetRandom(exeforLevel);
     
   };
 
@@ -77,8 +88,27 @@ module.exports.getSimilarExercise = function (req, res) {
   };
 
   PostExesForSubsubjectAndLevel = function(result){
-      //need to filter out exe that have already been seen
       console.log('need to filter out exe that have already been seen');
+      if(result.length == 0){
+         if(level < 10){
+          level = level +1;
+          console.log("in PostExesForSubsubjectAndLevel.Done with this level. Going to the next level " + level);
+          audit.updateProgressLevel(user,subsubject,level);
+          getExercisesForSubsubjectAndLevel(subsubject, level, PostExesForSubsubjectAndLevel);
+         }
+         else{
+          console.log('!!!!!!! reached the highest level for this subsubject');
+          //mark subsubject as done in Progress
+
+          audit.MarkSubsubjectasDone(user,subsubject);
+          //check if this is the original subsubject for this assignment 
+          //audit.IsOriginal(user,subsubject,PostIsOriginal);
+          //if yes - mark assignment as done
+          //else go back to the original subsubject
+          //TBD  xxxx LEFT IT HERE
+
+        }
+      } else{
        exeforLevel = result;
        var param = {
           'userId': user,
@@ -86,7 +116,7 @@ module.exports.getSimilarExercise = function (req, res) {
           'level': level
         };
         audit.getSeenExercises(param, PostSeenExe);
-        
+      }  
   };
    getExercisesForSubsubjectAndLevel(subsubject, level, PostExesForSubsubjectAndLevel);
 
