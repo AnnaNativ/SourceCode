@@ -176,11 +176,11 @@
     vm.sqrtMode = false;
     vm.sqrtValue = '';
 //    vm.openSolutionRaw = "ax^4 + bx + c = 0$$ and they are {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.";
-    vm.openSolutionRaw = "(n^2+n)\\over(2n+1)";
+//    vm.openSolutionRaw = "(n^2+n)\\over(2n+1)";
 //    vm.openSolutionRaw = '';
 //    vm.openSolutionRaw = "ax^4 + bx + c = 0";
 //    vm.openSolution =  "$$ax^4 + bx + c = 0$$ rr $$x^2$$ rr $$\sqrt{x}$$";
-    vm.openSolution = "$$" + vm.openSolutionRaw + "$$";
+//    vm.openSolution = "$$" + vm.openSolutionRaw + "$$";
 
     
     Array.prototype.shuffle = function() {

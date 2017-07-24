@@ -55,26 +55,36 @@
     <div class="well well-lg">
         <div class="row">
             <p><h2>:משימות פעילות</h2></p><br>
-            <hr>
             <div ng-repeat="obj in vm.assignments">
                 <div class="form-group text-right">
-                    <div class="row">
-                        <div dir="rtl" class="col-md-2 pull-right">
-                            <label>נושא:</label><br>
+                    <div ng-if="$index == 0" dir="rtl" class="row">
+                        <div class="col-md-2 pull-right">
+                            <label>נושא:</label>
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <label>תת נושא:</label>
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <label>תלמידים:</label>
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <label>סטטוס משימה:</label>
+                        </div>
+                        <br><hr>
+                    </div>
+                    <div dir="rtl" class="row">
+                        <div class="col-md-2 pull-right">
                             {{obj._id.subject[0]}}<br>
                         </div>
-                        <div dir="rtl" class="col-md-2 pull-right">
-                            <label>תת נושא:</label><br>
+                        <div class="col-md-2 pull-right">
                             {{obj._id.subSubject[0]}}<br>
                         </div>
-                        <div dir="rtl" class="col-md-2 pull-right">
-                            <label>תלמידים:</label><br>
+                        <div class="col-md-2 pull-right">
                             <div ng-repeat="assignment in obj.assignments">
                                 {{assignment.student[0]}}<br>
                             </div>
                         </div>
-                        <div dir="rtl" class="col-md-2 pull-right">
-                            <label>סטטוס משימה:</label><br>
+                        <div class="col-md-2 pull-right">
                             <div ng-repeat="assignment in obj.assignments">
                                 <span ng-if="assignment.status == 'new'" class="label label-danger">חדש</span>
                                 <span ng-if="assignment.status == 'inprogress'" class="label label-info">בעבודה</span>

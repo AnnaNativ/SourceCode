@@ -27,22 +27,28 @@
                 </div>
             </div>      
             <div ng-show="vm.exercise.exe.solutions.length == 1">
-                <p><h2>הכנס תשובה:</h2></p>
+                <div class="row">
+                    <div class="col-md-4 pull-right">
+                        <p><h2>הכנס תשובה:</h2></p>
+                        <input type="text" dir="rtl" ng-model="vm.openSolution" class="form-control form-fixer"/>
+                    </div>
+                </div>
+                <!--
                 <div ng-if="vm.sqrtMode">
                     <input type="text" dir="rtl" ng-model="vm.sqrtValue" class="form-control form-fixer"/><br>
                     <button class="btn btn-info" ng-click="vm.sqrtUpdate()">Done</button>&nbsp;<br>
                 </div>
                 <span math-jax-bind="vm.openSolution" ng-model="vm.openSolutionRaw" watch-selection ng-cloak></span>
                 <div ng-include="'/student/math.keyboard.view.html'"></div>
+                -->
             </div>
-            <div class="centerBlock">
-                <button type="button" class="btn btn-warning pull-right" ng-click="vm.checkAnswer()" data-toggle="modal" data-target="#myModal">סיים תרגיל</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button class="btn btn-primary" ng-click="vm.assistant = 'picture_solution'" data-toggle="modal" data-target="#assistanceDialog">הצג פתרון</button>&nbsp;   
-                <button class="btn btn-info" ng-click="vm.getSampleSolutionVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו פתרונות לדוגמה</button>&nbsp;
-                <button class="btn btn-info" ng-click="vm.getTutorialVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו הדרכה</button>&nbsp;
-                <div ng-include="'/student/assistance.dialog.html'"></div>
-                <div ng-include="'/student/next.step.dialog.html'"></div>
-            </div>      
+            <br><br>
+            <button type="button" class="btn btn-warning pull-right" ng-click="vm.checkAnswer()" data-toggle="modal" data-target="#myModal">סיים תרגיל</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="btn btn-primary" ng-click="vm.assistant = 'picture_solution'" data-toggle="modal" data-target="#assistanceDialog">הצג פתרון</button>&nbsp;   
+            <button class="btn btn-info" ng-click="vm.getSampleSolutionVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו פתרונות לדוגמה</button>&nbsp;
+            <button class="btn btn-info" ng-click="vm.getTutorialVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו הדרכה</button>&nbsp;
+            <div ng-include="'/student/assistance.dialog.html'"></div>
+            <div ng-include="'/student/next.step.dialog.html'"></div>
         </div>
     </div>
 </div>
