@@ -54,24 +54,25 @@
     <br>
     <div class="well well-lg">
         <div class="row">
-            <p><h2>:משימות פעילות</h2></p><br>
+            <h2>:משימות פעילות</h2>
+            <div dir="rtl" class="row">
+                <div class="col-md-2 pull-right">
+                    <label>נושא:</label>
+                </div>
+                <div class="col-md-2 pull-right">
+                    <label>תת נושא:</label>
+                </div>
+                <div class="col-md-2 pull-right">
+                    <label>תלמידים:</label>
+                </div>
+                <div class="col-md-2 pull-right">
+                    <label>סטטוס משימה:</label>
+                </div>
+                <br>
+            </div>
+            <hr>
             <div ng-repeat="obj in vm.assignments">
                 <div class="form-group text-right">
-                    <div ng-if="$index == 0" dir="rtl" class="row">
-                        <div class="col-md-2 pull-right">
-                            <label>נושא:</label>
-                        </div>
-                        <div class="col-md-2 pull-right">
-                            <label>תת נושא:</label>
-                        </div>
-                        <div class="col-md-2 pull-right">
-                            <label>תלמידים:</label>
-                        </div>
-                        <div class="col-md-2 pull-right">
-                            <label>סטטוס משימה:</label>
-                        </div>
-                        <br><hr>
-                    </div>
                     <div dir="rtl" class="row">
                         <div class="col-md-2 pull-right">
                             {{obj._id.subject[0]}}<br>

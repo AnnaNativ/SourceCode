@@ -43,9 +43,8 @@
                 <button type="button" class="btn btn-info" ng-click="vm.editSubject()" ng-disabled="vm.addingSubject" data-toggle="tooltip"
                     title="עדכן נושא לימוד נבחר">
                 <span class="glyphicon glyphicon-edit"></span></button>
-                <button type="button" class="btn btn-info" ng-click="vm.removeSubject()" ng-disabled="vm.addingSubject" data-toggle="tooltip"
-                    title="מחק נושא לימוד נבחר">
-                <span class="glyphicon glyphicon-trash"></span></button>
+                <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'subject'" ng-disabled="vm.addingSubject" data-toggle="modal" data-target="#confirmationModal">
+                <span class="glyphicon glyphicon-trash"></span></button>     
                 <button type="button" class="btn btn-warning" ng-click="vm.addSubjectClicked()" ng-disabled="vm.addingSubject" data-toggle="tooltip"
                     title="הוסף נושא לימוד חדש">
                 <span class="glyphicon glyphicon-plus"></span></button>
@@ -59,10 +58,9 @@
                     <span class="glyphicon glyphicon-info-sign"></span></button>
                 <button type="button" class="btn btn-info" ng-click="vm.editSubSubject()" ng-disabled="vm.addingSubSubject" data-toggle="tooltip"
                     title="עדכן תת נושא לימוד נבחר">
-                <span class="glyphicon glyphicon-edit"></span></button>
-                <button type="button" class="btn btn-info" ng-click="vm.removeSubSubject()" ng-disabled="vm.addingSubSubject" data-toggle="tooltip"
-                    title="מחק תת נושא לימוד נבחר">
-                <span class="glyphicon glyphicon-trash"></span></button>
+                <span class="glyphicon glyphicon-edit"></span></button>                
+                <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'subSubject'" ng-disabled="vm.addingSubSubject" data-toggle="modal" data-target="#confirmationModal">
+                <span class="glyphicon glyphicon-trash"></span></button>     
                 <button type="button" class="btn btn-warning" ng-click="vm.addSubSubjectClicked()" ng-disabled="vm.addingSubSubject" data-toggle="tooltip"
                     title="הוסף תת נושא לימוד חדש">
                 <span class="glyphicon glyphicon-plus"></span></button>
@@ -84,13 +82,13 @@
                 <button type="button" class="btn btn-info" ng-click="vm.editExercise()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
                     title="עדכן תרגיל נבחר">
                 <span class="glyphicon glyphicon-edit"></span></button>
-                <button type="button" class="btn btn-info" ng-click="vm.removeExercise()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
-                    title="מחק תרגיל נבחר">
-                <span class="glyphicon glyphicon-trash"></span></button>
+                <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'exercise'" ng-disabled="vm.addingExercise" data-toggle="modal" data-target="#confirmationModal">
+                <span class="glyphicon glyphicon-trash"></span></button>         
                 <button type="button" class="btn btn-warning" ng-click="vm.addExerciseClicked()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
                     title="הוסף תרגיל חדש">
                 <span class="glyphicon glyphicon-plus"></span></button>
-            </div>
+                <div ng-include="'/teacher/confirmation.dialog.html'"></div>
+           </div>
             <br>
         </div>
     </div>

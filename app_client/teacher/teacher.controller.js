@@ -373,6 +373,18 @@
           });
       };
    }
+  
+   vm.removeExercise = function() {
+     console.log('In removeExercise');
+   }
+
+    vm.removeSubSubject = function() {
+     console.log('In removeSubSubject');
+   }
+
+    vm.removeSubject = function() {
+     console.log('In removeSubject');
+   }
 
     //####################################################################################
     //########## Answers ###########
