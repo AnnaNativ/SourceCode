@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var exercise = require('./exercise');
 var audit = require('./audit');
+var Cache = require('../cache/Students');
+
 
 var Assignment = mongoose.model('Assignment');
 var Progress = mongoose.model('userProgress');
@@ -35,11 +37,12 @@ module.exports.newAssignment = function (req, res) {
   // create a user progress entry in the userProgress collection
   createUserProgressRecord = function() {
     var itemsProcessed = 0;
-    assignments.forEach(function(assignment) {    
+    assignments.forEach(function(assignment) { 
       progress = new Progress();
       progress.userId = assignment.assignee;
       progress.subsubjectId = assignment.subsubjectId;
       progress.assignmentId = assignment._id;
+      updateCache();   
       // save the user progress record
       progress.save(function (err) {
         itemsProcessed++;
@@ -52,6 +55,16 @@ module.exports.newAssignment = function (req, res) {
           }
         }
        });
+
+      function updateCache(userProgress) {
+        activeStudent = Cache.students.get(assignment.assignee);
+        if(activeStudent) {
+          newAssignment = new Cache.Assignment(assignment);
+          newAssignment.addUserProgress(progress);
+          activeStudent.addAssignment(newAssignment);
+        }
+      }
+
     });
   }
 }

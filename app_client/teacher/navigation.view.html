@@ -26,8 +26,8 @@
         </div>
         <div ng-if="vm.level >= 0" class="col-md-3 pull-right">
             <label>:בחר תרגיל</label>
-            <select dir="rtl" class="form-control form-fixer" >
-                <option ng-model="vm.exercise" ng-repeat="exercise in vm.exercises">תרגיל - {{$index+1}}</option>
+            <select ng-model="vm.exercise" dir="rtl" class="form-control form-fixer" >
+                <option  ng-repeat="exercise in vm.exercises">תרגיל - {{$index+1}}</option>
             </select>
         </div>
     </div>
@@ -87,10 +87,10 @@
                 <button type="button" class="btn btn-warning" ng-click="vm.addExerciseClicked()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
                     title="הוסף תרגיל חדש">
                 <span class="glyphicon glyphicon-plus"></span></button>
-                <div ng-include="'/teacher/confirmation.dialog.html'"></div>
            </div>
             <br>
         </div>
+        <div ng-include="'/teacher/confirmation.dialog.html'"></div>
     </div>
     <div class="row">
         <div class="col-md-1 pull-right">
@@ -110,3 +110,6 @@
 </div>
 </div>
 <br>
+vm.exercise - {{vm.exercise}}<br>
+vm.exercises - {{vm.exercises}}<br>
+vm.exercises[exercise].Id - {{vm.exercises[exercise].Id}}<br>

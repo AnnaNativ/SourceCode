@@ -1,9 +1,9 @@
 <br>
-<div class="row">
+<div ng-if="!vm.selectedAssignmentDone" class="row">
     <div class="col-md-6 pull-right">
         <div dir="rtl" class="well well-lg">
             <h2>פתור תרגיל:</h2>
-            <div ng-repeat="obj in vm.exercise.exe.body">
+            <div ng-repeat="obj in vm.exercise.body">
                 <div ng-if="obj.type == 'picture'">
                     <img ng-src="{{obj.content}}">
                 </div>
@@ -16,9 +16,9 @@
     </div>
     <div class="col-md-6 pull-right">
         <div dir="rtl" class="well well-lg">
-            <div ng-if="vm.exercise.exe.solutions.length > 1">
+            <div ng-if="vm.exercise.solutions.length > 1">
                 <p><h2>בחר תשובה נכונה:</h2></p>
-                <div ng-repeat="obj in vm.exercise.exe.solutions" id="{{obj.solution}}">
+                <div ng-repeat="obj in vm.exercise.solutions" id="{{obj.solution}}">
                     <div class="ex1">
                         <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"
                         />&nbsp;&nbsp;
@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>      
-            <div ng-show="vm.exercise.exe.solutions.length == 1">
+            <div ng-show="vm.exercise.solutions.length == 1">
                 <div class="row">
                     <div class="col-md-4 pull-right">
                         <p><h2>הכנס תשובה:</h2></p>
@@ -52,6 +52,14 @@
         </div>
     </div>
 </div>
+<div ng-if="vm.selectedAssignmentDone" class="row">
+    <div class="col-md-6 pull-right">
+        <div dir="rtl" class="well well-lg">
+            <h2>המשימה הסתיימה</h2>
+        </div>
+    </div>
+</div>
+
 
 
 

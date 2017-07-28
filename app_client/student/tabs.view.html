@@ -27,10 +27,10 @@
             </li>
             
             <li ng-if="vm.currentTab == 'assignments'" class="active">
-              <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'assignments'" href="">ניהול משימות</a>                                                    
+              <a class="nav-link btn-xlarge" ng-click="vm.assignmentsTabSelected()" href="">ניהול משימות</a>                                                    
             </li>
             <li ng-if="vm.currentTab != 'assignments'">
-              <a class="nav-link btn-xlarge" ng-click="vm.currentTab = 'assignments'" href="">ניהול משימות</a>                                                    
+              <a class="nav-link btn-xlarge" ng-click="vm.assignmentsTabSelected()" href="">ניהול משימות</a>                                                    
             </li>
           </ul>
         </div>

@@ -15,12 +15,15 @@
       });
     };
 
-    var getExercise = function() {
-      return $http.get('/api/exercise', {
-        headers: {
-          Authorization: 'Bearer '+ authentication.getToken()
-        }
-      });
+    var getNextExercise = function(assignmentId, currentExerciseId, currentExerciseOutcome, levelChange) {
+      var config = {
+        params: {assignmentId: assignmentId, 
+                 currentExerciseId: currentExerciseId, 
+                 currentExerciseOutcome: currentExerciseOutcome,
+                 levelChange: levelChange},
+        headers : {Authorization: 'Bearer '+ authentication.getToken()}
+      };
+      return $http.get('/api/nextExercise', config);
     };
 
     var getSubjects = function() {
@@ -106,7 +109,7 @@
     
     return {
       getProfile : getProfile,
-      getExercise: getExercise,
+      getNextExercise: getNextExercise,
       getSubjects: getSubjects,
       getSubSubjects: getSubSubjects,
       getVideo: getVideo,

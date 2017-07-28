@@ -43,6 +43,7 @@
     vm.user = {};
     vm.selectedAssignment = undefined;
     vm.selectedAssignmentIndex = undefined;
+    vm.selectedAssignmentDone = false;
 
     meanData.getProfile()
       .success(function (data) {
@@ -52,32 +53,37 @@
         $window.sessionStorage['userId'] = vm.user._id;
         console.log('In studentCtrl getProfile - Got user profile ' + JSON.stringify(vm.user._id));
         console.log(' $window.sessionStorage["userId"] ' +  $window.sessionStorage['userId']);
-        assignment.myAssignments(vm.user)
-          .success(function (data) {
-            console.log('got back with ' + data.length + ' assignments to do');
-            vm.myAssignments = data;
-          })
-          .error(function (e) {
-            console.log(e);
-          });
+        vm.loadAssignments();
       })
       .error(function (e) {
         console.log(e);
       });
+    
+    vm.assignmentsTabSelected = function() {
+      vm.currentTab = 'assignments';
+      vm.loadAssignments();
+    }  
+
+    vm.loadAssignments = function() {
+      assignment.myAssignments(vm.user)
+        .success(function (data) {
+          console.log('got back with ' + data.length + ' assignments to do');
+          vm.myAssignments = data;
+        })
+        .error(function (e) {
+          console.log(e);
+        });
+    }
 
     vm.assignmentClicked = function($index) {
       console.log('in assignmentClicked with index:' + $index);
       vm.selectedAssignment = vm.myAssignments[$index];
       vm.selectedAssignmentIndex = $index;
+      vm.selectedAssignmentDone = false;
       vm.currentTab = 'current assignment';
-      assignment.myLastLocation(vm.selectedAssignment)
-        .success(function (data) {
-          vm.exercise = data;
-          $window.sessionStorage['selectedAssignment'] = vm.selectedAssignment;
-        })
-        .error(function (e) {
-          console.log(e);
-        })
+      vm.exercise = {};
+      vm.levelChange = 0;
+      vm.getNextExercise();
     }
 
     vm.addNewAssignment = function() {
@@ -112,59 +118,28 @@
     //####################################################################################
     //########## Exercise ###########
     //####################################################################################
-    vm.exercise = {
-      exe:{},
-      level:'',
-      subsubject:''
-    };
 
-   vm.LoadPrereq = function(){
-      console.log("let's review prerequisites for this exe");
-      vm.LoadSimilarExe(); // TBD, this needs to be changed to the final implementation
-   };
-   vm.LoadNextExe = function(){
-      console.log('update progress with going up a level');
-      var param = {};
-      param.userId = $window.sessionStorage['userId'];
-      param.subsubject = vm.exercise.subsubject;
-      param.level = vm.exercise.level;
-      param.assignmentId = $window.sessionStorage['selectedAssignment']
-      
-      audit.saveProgress(param);
+  vm.exercise = {};
+    vm.getNextExercise = function() {
+      meanData.getNextExercise(vm.selectedAssignment._id, vm.exercise._id, vm.finalSelection, vm.levelChange)
+      .success(function(data){
+        console.log('In getNextExercise.success');
+        if(data.status == 'NoMoreExercises') {
+          console.log('In getNextExercise.success.if');
+          vm.selectedAssignmentDone = true;
+          vm.selectedAssignment = undefined;
+          vm.selectedAssignmentIndex = undefined;
+        }
+        else {
+          console.log('In getNextExercise.success.else');
+          vm.exercise = data;
+        }
+      })
+      .error(function(e){
+        console.log(e);
+      })
+    }
 
-      console.log('get next exe for the higher level');
-      vm.exercise.level = vm.exercise.level+1;
-      vm.LoadSimilarExe();
-    };
-
-    vm.LoadSimilarExe = function(){
-       var param = {};
-      param.userId = $window.sessionStorage['userId'];
-      param.subsubject = vm.exercise.subsubject;
-      param.level = vm.exercise.level;
-     
-      var config = {
-        params: param,
-      };
-      console.log('calling similarExercise for level: ' + param.level);  
-      exercise.similarExercise(config)
-      .success(function (data) {
-         console.log('---- Your next similarExercise is - : '+ JSON.stringify(data));
-         // $location.path('student').search({param: data});
-          if(data.exe == 'undefined'){
-            console.log('NO MORE EXERCISES IN THIS LEVEL');
-            vm.exercise.exe.body.type = "text";
-            vm.exercise.exe.body.content = 'NOTHING TO SHOW';
-          }else{
-           vm.exercise.exe =data.exe;
-          vm.exercise.level = data.level;
-          vm.exercise.subsubject = data.subsubject;}
-     })
-     .error(function (e) {
-          console.log(e);
-        })
-    };
-    
     //####################################################################################
     //########## Solutions ###########
     //####################################################################################
@@ -175,6 +150,8 @@
     vm.name = '';
     vm.sqrtMode = false;
     vm.sqrtValue = '';
+    vm.levelChange = 0;
+
 //    vm.openSolutionRaw = "ax^4 + bx + c = 0$$ and they are {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.";
 //    vm.openSolutionRaw = "(n^2+n)\\over(2n+1)";
 //    vm.openSolutionRaw = '';
@@ -194,38 +171,23 @@
         return input;
     }
     
-    $scope.$watch('vm.exercise.exe', function() {
-        if(vm.exercise.exe.solutions != undefined) {
-          vm.exercise.exe.solutions.shuffle();
+    $scope.$watch('vm.exercise', function() {
+        if(vm.exercise.solutions != undefined) {
+          vm.exercise.solutions.shuffle();
         }
     });
 
     vm.checkAnswer = function () {
       vm.finalSelection = undefined;
-
-      if(vm.currentSelection != undefined || vm.exercise.exe.solutions.length == 1) {
-        // is this an open ended question?
-        if(vm.exercise.exe.solutions.length == 1) {
-            vm.finalSelection = (vm.openSolution == vm.exercise.exe.solutions[0].solution);
-        }
-        else {
-          vm.finalSelection = vm.exercise.exe.solutions[vm.currentSelection].isCorrect;
-        }
-        console.log('vm.exercise ' + vm.exercise);
-        
-        // update audit with the results
-        var param = {};
-        param.userId = $window.sessionStorage['userId'];
-        param.exeId = vm.exercise.exe._id;
-        param.subsubject = vm.exercise.subsubject;
-        param.level = vm.exercise.level;
-        if(vm.finalSelection)
-          param.outcome = 'success';
-        else
-          param.outcome = 'failure';
-        console.log('calling auditExercise ' + JSON.stringify(param ));
-        audit.auditExercise(param);
-      }   
+      // is this an open ended question?
+      if(vm.exercise.solutions.length == 1) {
+        console.log('In checkAnswer for open ended question');
+        vm.finalSelection = (vm.openSolution == vm.exercise.solutions[0].solution);
+      }
+      else if(vm.currentSelection != undefined) {
+        console.log('In checkAnswer for closed question');
+        vm.finalSelection = vm.exercise.solutions[vm.currentSelection].isCorrect;
+      }  
       else {
         console.log('No answer selected. Will ignore');
       }
@@ -233,46 +195,22 @@
     }
 
     vm.handleRadioClick = function ($index) {
-      console.log(vm.exercise.exe.solutions[$index].isCorrect);
+      console.log(vm.exercise.solutions[$index].isCorrect);
       vm.finalSelection = undefined;
       vm.currentSelection = $index;
     };
 
-    vm.correctAnswerNextStepClicked = function() {
-      if(vm.correctAnswerNextStep == 'moreOfTheSame') {
-        console.log('In studentCtrl.correctAnswerNextStep.if')
-        vm.LoadSimilarExe();
+    vm.nextStepClicked = function() {
+      vm.levelChange = 0;
+      if(vm.correctAnswerNextStep == 'readyForNextLevel') {
+        vm.levelChange = 1;
       }
-      else {
-        if(vm.correctAnswerNextStep == 'readyForNextLevel') {
-          console.log('In studentCtrl.correctAnswerNextStep.else.if')
-          vm.LoadNextExe();
-        }
-        else {
-          console.log('In studentCtrl.correctAnswerNextStep.else.else - Error state');          
-        }
+      else if(vm.wrongAnswerNextStep == 'preReq') {
+        vm.levelChange = -1;        
       }
+      vm.getNextExercise();
       vm.correctAnswerNextStep = 'moreOfTheSame';
       vm.assistant = undefined;      
-      vm.openSolution = undefined;
-    }
-
-    vm.wrongAnswerNextStepClicked = function() {
-      if(vm.wrongAnswerNextStep == 'moreOfTheSame') {
-        console.log('In studentCtrl.wrongAnswerNextStep.if')
-        vm.LoadSimilarExe();
-      }
-      else {
-        if(vm.wrongAnswerNextStep == 'preReq') {
-          console.log('In studentCtrl.wrongAnswerNextStep.else.if')
-          vm.LoadPrereq();
-        }
-        else {
-          console.log('In studentCtrl.wrongAnswerNextStep.else.else - Error state');          
-        }
-      }
-      vm.wrongAnswerNextStep = 'moreOfTheSame';
-      vm.assistant = undefined;
       vm.openSolution = undefined;
     }
 

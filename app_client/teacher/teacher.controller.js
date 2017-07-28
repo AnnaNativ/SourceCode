@@ -374,17 +374,30 @@
       };
    }
   
-   vm.removeExercise = function() {
-     console.log('In removeExercise');
-   }
+  vm.removeExercise = function() {
+    console.log('In removeExercise');
+    
+    if(vm.exercise.length > 0) {
+      var exercise = vm.exercise.split('-')[1] - 1;
+      console.log('In removeExercise with: ' + vm.exercises[exercise].Id);
+      exercise
+        .removeExercise({_id: vm.exercises[exercise].Id})
+        .error(function(err){
+          alert("There was an error : " + err);
+        })
+        .success(function(data){
+          console.log('in subjects.controller addNewSubSubject.success');
+        })
+    }
+  }
 
-    vm.removeSubSubject = function() {
+  vm.removeSubSubject = function() {
      console.log('In removeSubSubject');
-   }
+  }
 
-    vm.removeSubject = function() {
+  vm.removeSubject = function() {
      console.log('In removeSubject');
-   }
+  }
 
     //####################################################################################
     //########## Answers ###########

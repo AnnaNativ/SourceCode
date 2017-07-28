@@ -25,7 +25,7 @@
                     <label>מוכן לשלב הבא</label><br>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.correctAnswerNextStepClicked()">המשך</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.nextStepClicked()">המשך</button>
                 </div>
             </div>
             <div ng-if="vm.finalSelection == false">
@@ -39,7 +39,7 @@
                     <label>אנסה שלב קל יותר</label><br>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.wrongAnswerNextStepClicked()">המשך</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.nextStepClicked()">המשך</button>
                 </div>
             </div>
         </div>       
