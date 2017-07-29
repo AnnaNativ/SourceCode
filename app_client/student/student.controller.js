@@ -121,7 +121,12 @@
 
   vm.exercise = {};
     vm.getNextExercise = function() {
-      meanData.getNextExercise(vm.selectedAssignment._id, vm.exercise._id, vm.finalSelection, vm.levelChange)
+      // this is for the case when the user looked at the solution but didn't click the dialog exit button
+      if(vm.assistant == 'picture_solution') {
+        console.log('In getNextExercise.if');
+        vm.finalSelection = false;
+      }
+      meanData.getNextExercise(vm.selectedAssignment._id, vm.exercise._id, vm.finalSelection, vm.levelChange, vm.assistant)
       .success(function(data){
         console.log('In getNextExercise.success');
         if(data.status == 'NoMoreExercises') {
@@ -194,6 +199,10 @@
       vm.currentSelection = undefined;
     }
 
+    vm.showSolution = function() {
+      vm.assistant = 'picture_solution';
+    }
+
     vm.handleRadioClick = function ($index) {
       console.log(vm.exercise.solutions[$index].isCorrect);
       vm.finalSelection = undefined;
@@ -252,6 +261,12 @@
     }
 
     vm.closeAssistance = function() {
+      if(vm.assistant == 'picture_solution') {
+        console.log('In closeAssistance.if');
+        vm.finalSelection = false;
+        vm.levelChange = 0;
+        vm.getNextExercise();    
+      }
       vm.assistant = undefined;
     }
 

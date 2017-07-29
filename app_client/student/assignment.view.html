@@ -44,7 +44,7 @@
             </div>
             <br><br>
             <button type="button" class="btn btn-warning pull-right" ng-click="vm.checkAnswer()" data-toggle="modal" data-target="#myModal">סיים תרגיל</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="btn btn-primary" ng-click="vm.assistant = 'picture_solution'" data-toggle="modal" data-target="#assistanceDialog">הצג פתרון</button>&nbsp;   
+            <button class="btn btn-primary" ng-click="vm.showSolution()" data-toggle="modal" data-target="#assistanceDialog">הצג פתרון</button>&nbsp;   
             <button class="btn btn-info" ng-click="vm.getSampleSolutionVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו פתרונות לדוגמה</button>&nbsp;
             <button class="btn btn-info" ng-click="vm.getTutorialVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו הדרכה</button>&nbsp;
             <div ng-include="'/student/assistance.dialog.html'"></div>
@@ -53,9 +53,12 @@
     </div>
 </div>
 <div ng-if="vm.selectedAssignmentDone" class="row">
-    <div class="col-md-6 pull-right">
+    <div class="col-md-12 pull-right">
         <div dir="rtl" class="well well-lg">
-            <h2>המשימה הסתיימה</h2>
+            <div class="text-center">
+                <h2>המשימה הסתיימה</h2>
+                <img ng-src="http://localhost:3000/images/assignment-done.jpg">
+            </div>
         </div>
     </div>
 </div>

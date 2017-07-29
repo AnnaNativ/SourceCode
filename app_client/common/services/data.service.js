@@ -15,12 +15,13 @@
       });
     };
 
-    var getNextExercise = function(assignmentId, currentExerciseId, currentExerciseOutcome, levelChange) {
+    var getNextExercise = function(assignmentId, currentExerciseId, currentExerciseOutcome, levelChange, assistant) {
       var config = {
         params: {assignmentId: assignmentId, 
                  currentExerciseId: currentExerciseId, 
                  currentExerciseOutcome: currentExerciseOutcome,
-                 levelChange: levelChange},
+                 levelChange: levelChange,
+                 assistant: assistant},
         headers : {Authorization: 'Bearer '+ authentication.getToken()}
       };
       return $http.get('/api/nextExercise', config);
