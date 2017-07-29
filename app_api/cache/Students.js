@@ -54,6 +54,7 @@ module.exports.Student = function(id) {
 module.exports.Assignment = function(assignment) {
     this.assignment = assignment;
     this.userProgressHistory = [];
+    this.sequencialHits = 0;
 
     this.addUserProgress = function(userProgress) {
         this.userProgressHistory.push(userProgress);
@@ -80,6 +81,18 @@ module.exports.Assignment = function(assignment) {
 
     this.setInProgress = function() {
         this.assignment.status = 'inprogress';
+    }
+
+    this.incrementSequencialHits = function() {
+        this.sequencialHits++;
+    }
+
+    this.getSequencialHits = function() {
+        return this.sequencialHits;
+    }
+
+    this.resetSequencialHits = function() {
+        this.sequencialHits = 0;
     }
 };
 

@@ -18,7 +18,7 @@
                 <div class="modal-header">
                     <h2 class="modal-title">&nbsp;פתרון נכון!</h2>
                 </div>
-                <div class="modal-body">
+                <div ng-if="vm.allowNextLevel()" class="modal-body">
                     &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.correctAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
                     <label>אני רוצה עוד תרגילים כאלו</label><br>
                     &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.correctAnswerNextStep" value="readyForNextLevel"/>&nbsp;&nbsp;

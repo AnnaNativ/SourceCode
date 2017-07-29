@@ -148,6 +148,7 @@
     //####################################################################################
     //########## Solutions ###########
     //####################################################################################
+    vm.ALLOW_NEXT_LEVEL_THRESHOLD = 3;
     vm.currentSelection = undefined;
     vm.finalSelection = undefined;
     vm.correctAnswerNextStep = 'moreOfTheSame';
@@ -156,6 +157,7 @@
     vm.sqrtMode = false;
     vm.sqrtValue = '';
     vm.levelChange = 0;
+    
 
 //    vm.openSolutionRaw = "ax^4 + bx + c = 0$$ and they are {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.";
 //    vm.openSolutionRaw = "(n^2+n)\\over(2n+1)";
@@ -247,6 +249,10 @@
     vm.clearOpenSolution = function() {
       vm.openSolutionRaw = "";
       vm.openSolution = "";
+    }
+
+    vm.allowNextLevel = function() {
+      return (vm.exercise.successes >= vm.ALLOW_NEXT_LEVEL_THRESHOLD);
     }
     //####################################################################################
     //########## Assistance ###########
