@@ -8,19 +8,22 @@ var DBAssignments = mongoose.model('Assignment');
 var DBUserProgress = mongoose.model('userProgress');
 var DBUserAudit = mongoose.model('UserAudit');
 
+var student = undefined;
+var assignments = undefined;
+
 var sendJSONresponse = function(res, status, content) {
   res.status(status);
   res.json(content);
 };
 
 module.exports.register = function(req, res) {
-
-  // if(!req.body.name || !req.body.email || !req.body.password) {
-  //   sendJSONresponse(res, 400, {
-  //     "message": "All fields required"
-  //   });
-  //   return;
-  // }
+  sendRespose = function(user) {
+      token = user.generateJwt();
+      res.status(200);
+      res.json({
+        "token" : token
+      });
+  }
   console.log("In authentication register with: " + user);
   var user = new User();
 
@@ -38,12 +41,12 @@ module.exports.register = function(req, res) {
   user.setPassword(req.body.password);
 
   user.save(function(err) {
-    var token;
-    token = user.generateJwt();
-    res.status(200);
-    res.json({
-      "token" : token
-    });
+    if(user.role === "student") {
+      loadStudentActivity(user, sendRespose);
+    }
+    else {
+      sendRespose(user);
+    }
   });
 
 };
@@ -86,8 +89,6 @@ module.exports.logout = function(req, res) {
 
 };
 
-var student = undefined;
-var assignments = undefined;
 
 loadStudentActivity = function(user, sendRespose) {
   student = new Cache.Student(user._id);
