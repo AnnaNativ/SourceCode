@@ -25,6 +25,8 @@ var MAX_EXERCISE_LEVEL = 6;
  * 2.2 If this is the first exercise then it means that the assignment just started and we need to change its status to 'inprogress'
  * 2.3. Add this exercise to the cache and mark it as done.
  * 2.4. before getting a new exercise we need to adjust the status based on student request
+ * 2.5 Call update exercise statistics function
+ * 2.6 Update exercise statistics based on the exercise outcome. Don't wait for callback, assume success
  * 3. If this request is the first one after the user logged in then there is no current excersie, so go ahead and get an exercise
  * 4. Get the next exercise for a defined sub subject and level
  * 5. Call back to the main flow with all the exercises for that subsubject and level
@@ -41,6 +43,32 @@ module.exports.getNextExercise = function (req, res) {
   var subSubject;
   var levelChange;
   
+  // 2.6 Update exercise statistics based on the exercise outcome. Don't wait for callback, assume success
+  var updateExerciseStatistics = function() {
+    var exerciseId = mongoose.Types.ObjectId(req.query.currentExerciseId);
+    if(req.query.assistant == 'picture_solution') {
+      Exercise.update({_id: exerciseId}, { $inc: { gaveups: 1 } }, { upsert: true }, function (err) {
+        if (err) {
+          console.log('update failed');
+        }
+      })
+    }
+    else if(req.query.currentExerciseOutcome == 'true') {
+      Exercise.update({_id: exerciseId}, { $inc: { successes: 1 } }, { upsert: true }, function (err) {
+        if (err) {
+          console.log('update failed');
+        }
+      })
+    }
+    else if(req.query.currentExerciseOutcome == 'false') {
+      Exercise.update({_id: exerciseId}, { $inc: { failures: 1 } }, { upsert: true }, function (err) {
+        if (err) {
+          console.log('update failed');
+        }
+      })
+    }
+  }
+
   var adjustStatus = function() {
     if(levelChange == 0) {
       getExercisesForSubsubjectAndLevel(subSubject, currentExerciseLevel, chooseOneExercise);
@@ -109,8 +137,10 @@ module.exports.getNextExercise = function (req, res) {
           adjustStatus();
       }
     })
-
+    // 2.5 Call update exercise statistics function
+    updateExerciseStatistics();
   };
+
   // 6. Choose one exercise for the result set. Filter out the ones that the user already saw and choose the first one that he didnt see yet
   var chooseOneExercise = function(exercises) {
     var isFound = false;
@@ -172,7 +202,7 @@ module.exports.getNextExercise = function (req, res) {
     // 3. If this request is the first one after the user logged in then there is no current excersie, so go ahead and get an exercise 
     else {
       getExercisesForSubsubjectAndLevel(subSubject, currentExerciseLevel, chooseOneExercise);
-    }
+    }    
   }
 
 };
