@@ -55,6 +55,7 @@ module.exports.Assignment = function(assignment) {
     this.assignment = assignment;
     this.userProgressHistory = [];
     this.sequencialHits = 0;
+    this.maxSequencialHits = 0;
 
     this.addUserProgress = function(userProgress) {
         this.userProgressHistory.push(userProgress);
@@ -85,14 +86,22 @@ module.exports.Assignment = function(assignment) {
 
     this.incrementSequencialHits = function() {
         this.sequencialHits++;
+        if(this.maxSequencialHits < this.sequencialHits) {
+            this.maxSequencialHits = this.sequencialHits;
+        }
     }
 
-    this.getSequencialHits = function() {
-        return this.sequencialHits;
+    this.getMaxSequencialHits = function() {
+        return this.maxSequencialHits;
     }
 
     this.resetSequencialHits = function() {
         this.sequencialHits = 0;
+    }
+
+    this.resetMaxSequencialHits = function() {
+        this.sequencialHits = 0;
+        this.maxSequencialHits = 0;
     }
 };
 

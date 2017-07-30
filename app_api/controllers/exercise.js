@@ -75,7 +75,7 @@ module.exports.getNextExercise = function (req, res) {
     }
     else if(levelChange == 1) {
       currentExerciseLevel++;
-      assignment.resetSequencialHits();
+      assignment.resetMaxSequencialHits();
       addUserProgressRecord();
     }
     else if(levelChange == -1) {
@@ -155,7 +155,7 @@ module.exports.getNextExercise = function (req, res) {
           .exec(function(err, exercise) {
             // 7. An exercise was found, so just return it. The flow is now done.
             if(exercise.length > 0) {
-              exercise[0].successes = assignment.getSequencialHits();
+              exercise[0].successes = assignment.getMaxSequencialHits();
               res.status(200).json(exercise[0]);
               return;
             }
@@ -171,7 +171,7 @@ module.exports.getNextExercise = function (req, res) {
       // 8. If no exercise was found for this level go to the next level and repeat the process.
       if(currentExerciseLevel <= MAX_EXERCISE_LEVEL) {
         currentExerciseLevel++;
-        assignment.resetSequencialHits();
+        assignment.resetMaxSequencialHits();
         addUserProgressRecord();
       }
       // 9. We are done with all levels, so just update the assignment status and send a message back to the student.
