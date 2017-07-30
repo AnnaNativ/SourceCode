@@ -25,12 +25,21 @@ module.exports.getSubSubjects = function(req, res) {
     });
   } 
   else {
-    var subject = new mongoose.mongo.ObjectId(req.query.subject);
-    SubSubject
-      .find({'subjectId': subject})
-      .exec(function(err, subSubjects) {
-        res.status(200).json(subSubjects);
-      });
+    if(req.query.subject != undefined) {
+      var subject = new mongoose.mongo.ObjectId(req.query.subject);
+      SubSubject
+        .find({'subjectId': subject})
+        .exec(function(err, subSubjects) {
+          res.status(200).json(subSubjects);
+        });
+    }
+    else {
+      SubSubject
+        .find()
+        .exec(function(err, subSubjects) {
+          res.status(200).json(subSubjects);
+        });      
+    }
   }
 };
 
@@ -95,6 +104,11 @@ module.exports.newSubSubject = function(req, res) {
     subSubject.sample_videos = [sampleVideos._id];
 
     subSubject.exercises = [];
+    subSubject.dependencies = [];
+    for(var i=0; i<req.body.dependencies.length; i++) {
+      var dependency = new mongoose.mongo.ObjectId(req.body.dependencies[i].id);
+      subSubject.dependencies.push(dependency);
+    }
     subSubject.subjectId = new mongoose.mongo.ObjectId(req.body.subjectId);
     subSubject.save(function (err) {
       if(err) {

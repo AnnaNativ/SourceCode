@@ -106,24 +106,37 @@
       vm.addSubjectFormValid = true;
     }
 
-     vm.subjectSelected = function() {
-      vm.newSubjectAdded = false; 
-      vm.newSubSubjectAdded = false; 
-      vm.newExerciseAdded = false; 
-      vm.subSubject = undefined;
-      vm.exercise = undefined;
-      // clrear the add subject successful message
-      vm.newSubjectAdded = false; 
-      meanData.getSubSubjects(vm.subjects[vm.subject]._id)
-      .success(function(data){
-        vm.subSubjects = data;
-        vm.level = undefined;
-        vm.exercises = [];
-      })
-      .error(function(e){
-        console.log(e);
-      })
+    vm.populateSubSubjectObject = function(allSubSubjects) {
+      var selectedSubjectID = vm.subjects[vm.subject]._id;
+      console.log('In populateSubSubjectObject with1 ' + selectedSubjectID);
+      allSubSubjects.forEach(function(subSubject) {
+        console.log('In populateSubSubjectObject.forEach with ' + subSubject);
+        if(subSubject.subjectId == selectedSubjectID) {
+          vm.subSubjects.push(subSubject);
+        }
+        vm.addAsDependency(subSubject);
+      });
     }
+
+    vm.subjectSelected = function() {
+    vm.newSubjectAdded = false; 
+    vm.newSubSubjectAdded = false; 
+    vm.newExerciseAdded = false; 
+    vm.subSubject = undefined;
+    vm.exercise = undefined;
+    // clrear the add subject successful message
+    vm.newSubjectAdded = false; 
+    meanData.getSubSubjects()
+    .success(function(data){
+      console.log('In subjectSelected with ' + data);
+      vm.populateSubSubjectObject(data);
+      vm.level = undefined;
+      vm.exercises = [];
+    })
+    .error(function(e){
+      console.log(e);
+    })
+  }
 
     //####################################################################################
     //########## Sub Subjects ###########
@@ -140,6 +153,7 @@
       }
       else {
         vm.newSubSubject.subjectId = vm.subjects[vm.subject]._id;
+        vm.newSubSubject.dependencies = vm.selectedDependencies;
         subject
           .newSubSubject(vm.newSubSubject)
           .error(function(err){
@@ -492,6 +506,45 @@
       .error(function(e){
         console.log(e);
       })      
+    }
+
+    //####################################################################################
+    //########## Dependencies ###########
+    //####################################################################################
+    vm.selectedDependencies = [];
+    vm.dependencies = [];
+		vm.dependenciesSelectionTexts = {
+				checkAll: 'בחר הכל',
+				uncheckAll: 'בטל הכל',
+				selectionCount: '- תלויות למשימה',
+				selectionOf: '/',
+				searchPlaceholder: 'Search...',
+				buttonDefaultText: 'בחר תלויות להוסיף למשימה',
+				dynamicButtonTextSuffix: '- תלויות שנבחרו למשימה',
+				disableSearch: 'Disable search',
+				enableSearch: 'Enable search',
+				selectGroup: 'Select all:',
+				allSelectedText: 'All'
+    };    
+     
+    vm.dependenciesSettings = { 
+      groupByTextProvider: function(groupValue) { 
+        if (groupValue === '596a1636ae118f4768b194d2') { 
+          return 'Male'; 
+        } 
+        else { 
+          return 'Female'; 
+        } 
+      }, groupBy: 'subject', };
+
+    
+    vm.addAsDependency = function(subSubject) {
+      for(var i=0; i<vm.subjects.length; i++) {
+        if(vm.subjects[i]._id == subSubject.subjectId) {
+          var lable = vm.subjects[i].name + ' - ' + subSubject.name;
+          vm.dependencies.push({id: subSubject._id, label: lable});
+        }
+      }
     }
   }
 })();

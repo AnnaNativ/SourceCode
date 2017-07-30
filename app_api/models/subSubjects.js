@@ -10,9 +10,12 @@ var subSubjectSchema = new mongoose.Schema({
   name: String,
   tutorial_video: {type: Schema.Types.ObjectId, ref: 'Video'},
   sample_videos:[
-      {type: Schema.Types.ObjectId, ref: 'Video'}
+    {type: Schema.Types.ObjectId, ref: 'Video'}
   ],
   exercises: [assignedExercises],
+  dependencies: [
+    {type: Schema.Types.ObjectId, ref: 'SubSubject'}
+  ],
   subjectId: {type: Schema.Types.ObjectId, ref: 'Subject'}
 });
 
