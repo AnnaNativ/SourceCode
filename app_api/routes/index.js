@@ -33,6 +33,7 @@ router.post('/removeExercise', ctrlExercise.removeExercise);
 // subjects
 router.get('/subjects', auth, ctrlSubjects.getSubjects);
 router.get('/subSubjects', auth, ctrlSubjects.getSubSubjects);
+router.get('/dependencies', auth, ctrlSubjects.getDependencies);
 router.get('/videos', auth, ctrlSubjects.getVideos);
 router.get('/video', auth, ctrlSubjects.getVideo);
 

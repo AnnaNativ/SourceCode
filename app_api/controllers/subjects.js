@@ -2,6 +2,46 @@ var mongoose = require('mongoose');
 var Subject = mongoose.model('Subject');
 var SubSubject = mongoose.model('SubSubject');
 var Video = mongoose.model('Video');
+var Cache = require('../cache/Students');
+
+module.exports.getDependencies = function(req, res) {
+  if (!req.payload._id) {
+    res.status(401).json({
+      "message" : "UnauthorizedError: private profile"
+    });
+  } 
+  else {
+    var student = Cache.students.get(req.payload._id);
+    var assignment = student.getAssignment(req.query.assignmentId);
+    var subSubject = assignment.getCurrentSubSubjectId();
+    var dependencies = [];
+
+    SubSubject
+      .find({_id: new mongoose.mongo.ObjectId(subSubject)})
+      .exec(function(err, subSubject) {
+        subSubject[0].dependencies.forEach(function(dependency){
+          SubSubject
+            .find({_id: dependency})
+            .exec(function(err, dependentSubSubject) {
+              dependencies.push({id: dependentSubSubject[0]._id, name: dependentSubSubject[0].name, subject: dependentSubSubject[0].subjectId});
+              if(dependencies.length == subSubject[0].dependencies.length) {
+                dependenciesWithSubject = [];
+                dependencies.forEach(function(dependencyObj) {
+                  Subject
+                  .find({_id: dependencyObj.subject})
+                  .exec(function(err, subject) {
+                    dependenciesWithSubject.push({id: dependencyObj.id, name: dependencyObj.name, subject: subject[0].name});
+                    if(subSubject[0].dependencies.length == dependenciesWithSubject.length) {
+                        res.status(200).json(dependenciesWithSubject);
+                    }
+                  });
+                })
+              }
+            });
+        })
+      });
+  }
+};
 
 module.exports.getSubjects = function(req, res) {
   if (!req.payload._id) {

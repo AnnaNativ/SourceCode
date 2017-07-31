@@ -32,11 +32,18 @@
                 <div class="modal-header">
                     <h2 class="modal-title">&nbsp;פתרון שגוי!</h2>
                 </div>
-                <div class="modal-body">
+                <div ng-if="vm.dependencies.length > 0" class="modal-body">
                     &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
-                    <label>אני רוצה עוד תרגילים כאלו</label><br>
-                    &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="preReq"/>&nbsp;&nbsp;
-                    <label>אנסה שלב קל יותר</label><br>
+                    <label>אני רוצה עוד תרגילים כאלו</label><br><br><br>
+                    &nbsp&nbsp&nbsp&nbsp<label>אנסה שלב קל יותר:</label><br>
+                    <div ng-repeat="obj in vm.dependencies" id="{{obj.id}}">
+                        &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="{{obj.id}}"
+                        />&nbsp;&nbsp;
+                        <label>{{obj.subject}} - {{obj.name}}</label>
+                    </div>
+                </div>
+                <div ng-if="vm.dependencies.length == 0" class="modal-body">
+                    <label>נסה תרגיל נוסף</label><br><br><br>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.nextStepClicked()">המשך</button>

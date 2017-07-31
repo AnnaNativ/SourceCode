@@ -72,6 +72,10 @@ module.exports.Assignment = function(assignment) {
         return this.userProgressHistory[this.userProgressHistory.length - 1].level;
     }
 
+    this.getCurrentSubSubjectId = function() {
+        return this.userProgressHistory[this.userProgressHistory.length - 1].subsubjectId;
+    }
+
     this.getSubSubject = function() {
         return assignment.subsubjectId;
     }

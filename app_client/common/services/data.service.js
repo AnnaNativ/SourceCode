@@ -15,16 +15,25 @@
       });
     };
 
-    var getNextExercise = function(assignmentId, currentExerciseId, currentExerciseOutcome, levelChange, assistant) {
+    var getNextExercise = function(assignmentId, currentExerciseId, currentExerciseOutcome, levelChange, assistant, subSubjectChange) {
       var config = {
         params: {assignmentId: assignmentId, 
                  currentExerciseId: currentExerciseId, 
                  currentExerciseOutcome: currentExerciseOutcome,
                  levelChange: levelChange,
-                 assistant: assistant},
+                 assistant: assistant,
+                 subSubjectChange: subSubjectChange},
         headers : {Authorization: 'Bearer '+ authentication.getToken()}
       };
       return $http.get('/api/nextExercise', config);
+    };
+
+    var getDependencies = function(assignmentId) {
+      var config = {
+        params: {assignmentId: assignmentId},
+        headers : {Authorization: 'Bearer '+ authentication.getToken()}
+      };
+      return $http.get('/api/dependencies', config);
     };
 
     var getSubjects = function() {
@@ -116,6 +125,7 @@
       getVideo: getVideo,
       getVideos: getVideos,
       getExercises: getExercises,
+      getDependencies: getDependencies,
       getStudentsOfTeacher: getStudentsOfTeacher,
       getAssignmentsOfTeacher: getAssignmentsOfTeacher,
       getTeachersList: getTeachersList,

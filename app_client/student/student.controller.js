@@ -13,7 +13,7 @@
     vm.currentTab = 'assignments';
 
     //####################################################################################
-    //########## Subjects ###########
+    //########## Subjects SubSubjects ###########
     //####################################################################################    
     vm.subjects = {};
     meanData.getSubjects()
@@ -119,14 +119,15 @@
     //########## Exercise ###########
     //####################################################################################
 
-  vm.exercise = {};
+    vm.exercise = {};
+    vm.dependencies = [];
     vm.getNextExercise = function() {
       // this is for the case when the user looked at the solution but didn't click the dialog exit button
       if(vm.assistant == 'picture_solution') {
         console.log('In getNextExercise.if');
         vm.finalSelection = false;
       }
-      meanData.getNextExercise(vm.selectedAssignment._id, vm.exercise._id, vm.finalSelection, vm.levelChange, vm.assistant)
+      meanData.getNextExercise(vm.selectedAssignment._id, vm.exercise._id, vm.finalSelection, vm.levelChange, vm.assistant, vm.subSubjectChange)
       .success(function(data){
         console.log('In getNextExercise.success');
         if(data.status == 'NoMoreExercises') {
@@ -138,6 +139,7 @@
         else {
           console.log('In getNextExercise.success.else');
           vm.exercise = data;
+          vm.getDependencies();
         }
       })
       .error(function(e){
@@ -145,6 +147,18 @@
       })
     }
 
+    vm.getDependencies = function() {
+      meanData.getDependencies(vm.selectedAssignment._id)
+      .success(function(data){
+        vm.dependencies = data;
+        console.log('In getDependencies.success with: ' + data);
+      })
+      .error(function(e){
+        console.log(e);
+      })
+    }
+
+    
     //####################################################################################
     //########## Solutions ###########
     //####################################################################################
@@ -213,11 +227,12 @@
 
     vm.nextStepClicked = function() {
       vm.levelChange = 0;
+      vm.subSubjectChange = undefined;
       if(vm.correctAnswerNextStep == 'readyForNextLevel') {
         vm.levelChange = 1;
       }
-      else if(vm.wrongAnswerNextStep == 'preReq') {
-        vm.levelChange = -1;        
+      else if(vm.wrongAnswerNextStep != 'moreOfTheSame') {
+        vm.subSubjectChange = vm.wrongAnswerNextStep;       
       }
       vm.getNextExercise();
       vm.correctAnswerNextStep = 'moreOfTheSame';
