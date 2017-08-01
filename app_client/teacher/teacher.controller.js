@@ -108,6 +108,9 @@
 
     vm.populateSubSubjectObject = function(allSubSubjects) {
       var selectedSubjectID = vm.subjects[vm.subject]._id;
+      vm.subSubjects = [];
+      vm.selectedDependencies = [];
+      vm.dependencies = [];
       console.log('In populateSubSubjectObject with1 ' + selectedSubjectID);
       allSubSubjects.forEach(function(subSubject) {
         console.log('In populateSubSubjectObject.forEach with ' + subSubject);
@@ -167,6 +170,15 @@
             // set the add sub subject successful message
             vm.newSubSubjectAdded = true; 
             vm.cancelNewSubSubject();
+            // get all the subsubject so the dependencies will be updated.
+            meanData.getSubSubjects()
+            .success(function(data){
+              console.log('In addNewSubSubject with ' + data);
+              vm.populateSubSubjectObject(data);
+            })
+            .error(function(e){
+              console.log(e);
+            })            
           })
           .then(function(){
             console.log('in subjects.controller addNewSubject.then');

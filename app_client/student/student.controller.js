@@ -158,6 +158,10 @@
       })
     }
 
+    vm.backToOriginalSubSubject = function() {
+      console.log('In backToOriginalSubSubject');
+      return vm.exercise.successes == -1;
+    } 
     
     //####################################################################################
     //########## Solutions ###########

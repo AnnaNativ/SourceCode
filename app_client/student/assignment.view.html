@@ -1,5 +1,15 @@
 <br>
-<div ng-if="!vm.selectedAssignmentDone" class="row">
+<div ng-if="!vm.selectedAssignmentDone && vm.backToOriginalSubSubject()">
+    <div class="col-md-12 pull-right">
+        <div dir="rtl" class="well well-lg">
+            <div class="text-center">
+                <h2>חזרת למשימה המקורית</h2>
+                <img ng-src="http://localhost:3000/images/back-to-original-subsubject.jpg">
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-if="!vm.selectedAssignmentDone && !vm.backToOriginalSubSubject()" class="row">
     <div class="col-md-6 pull-right">
         <div dir="rtl" class="well well-lg">
             <h2>פתור תרגיל:</h2>

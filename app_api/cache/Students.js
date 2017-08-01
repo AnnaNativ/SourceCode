@@ -75,9 +75,24 @@ module.exports.Assignment = function(assignment) {
     this.getCurrentSubSubjectId = function() {
         return this.userProgressHistory[this.userProgressHistory.length - 1].subsubjectId;
     }
+    
+    this.getOriginalSubSubjectId = function() {
+        return this.assignment.subsubjectId;
+    }
 
-    this.getSubSubject = function() {
-        return assignment.subsubjectId;
+    this.getOriginalSubSubjectLastLevel = function() {
+        var originalSubSubject = this.getOriginalSubSubjectId().toString();
+        var currentSubSubject;
+        for(var i=this.userProgressHistory.length - 1; i>=0; i--) {
+            currentSubSubject = this.userProgressHistory[i].subsubjectId.toString();
+            if(currentSubSubject == originalSubSubject) {
+                return this.userProgressHistory[i].level;
+            }
+        }
+    }
+
+    this.inOriginalSubSubject = function() {
+        return this.getCurrentSubSubjectId() == this.getOriginalSubSubjectId();
     }
 
     this.isNew = function() {

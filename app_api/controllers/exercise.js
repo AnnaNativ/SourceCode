@@ -33,8 +33,9 @@ var MAX_EXERCISE_LEVEL = 6;
  * 6. Choose one exercise for the result set. Filter out the ones that the user already saw and choose the first one that he didnt see yet
  * 7. An exercise was found, so just return it. The flow is now done.
  * 8. If no exercise was found for this level go to the next level and repeat the process.
- * 8.1 - Add a record to the user progress collection, update the chace and recursively get an exercise from the new level
- * 9. We are done with all levels, so just update the assignment status and send a message back to the student.
+ * 8.1 Add a record to the user progress collection, update the chace and recursively get an exercise from the new level
+ * 9. We are done with all levels for the assignment state
+ * 9.1 If we are in the original sub subject then update the assignment status and send a message back to the student. 
  */ 
 module.exports.getNextExercise = function (req, res) {
   var student;
@@ -42,7 +43,8 @@ module.exports.getNextExercise = function (req, res) {
   var currentExerciseLevel;
   var subSubject;
   var levelChange;
-  
+  var subSubjectChange;
+  var shouldGoBackToOriginalAssignment = false;
   // 2.6 Update exercise statistics based on the exercise outcome. Don't wait for callback, assume success
   var updateExerciseStatistics = function() {
     var exerciseId = mongoose.Types.ObjectId(req.query.currentExerciseId);
@@ -70,16 +72,18 @@ module.exports.getNextExercise = function (req, res) {
   }
 
   var adjustStatus = function() {
-    if(levelChange == 0) {
+    if(subSubjectChange != undefined) {
+      subSubject = subSubjectChange;
+      currentExerciseLevel = 0;
+      addUserProgressRecord();
+    }
+    else if(levelChange == 0) {
       getExercisesForSubsubjectAndLevel(subSubject, currentExerciseLevel, chooseOneExercise);
     }
     else if(levelChange == 1) {
       currentExerciseLevel++;
       assignment.resetMaxSequencialHits();
       addUserProgressRecord();
-    }
-    else if(levelChange == -1) {
-      //TBD
     }
     else {
       console.log('Error - unknown levelChange value: ' + levelChange);
@@ -155,7 +159,13 @@ module.exports.getNextExercise = function (req, res) {
           .exec(function(err, exercise) {
             // 7. An exercise was found, so just return it. The flow is now done.
             if(exercise.length > 0) {
-              exercise[0].successes = assignment.getMaxSequencialHits();
+              if(shouldGoBackToOriginalAssignment == true) {
+                exercise[0].successes = -1;
+                shouldGoBackToOriginalAssignment = false;
+              }
+              else {
+                exercise[0].successes = assignment.getMaxSequencialHits();
+              }
               res.status(200).json(exercise[0]);
               return;
             }
@@ -174,16 +184,27 @@ module.exports.getNextExercise = function (req, res) {
         assignment.resetMaxSequencialHits();
         addUserProgressRecord();
       }
-      // 9. We are done with all levels, so just update the assignment status and send a message back to the student.
+      // 9. We are done with all levels for the assignment state
       else {
+        // 9.1 If we are in the original sub subject then update the assignment status and send a message back to the student.
+        if(assignment.inOriginalSubSubject()) {  
           Assignment.
-          update({_id: assignment.getId()}, {$set: {'status': 'done'}}, 
-            function(err, result) {
-              if (err) {
-                console.log('Failed to update the assignment with the new status ' + err);
-              }
-              res.status(200).json({status: 'NoMoreExercises'});
-            });
+            update({_id: assignment.getId()}, {$set: {'status': 'done'}}, 
+              function(err, result) {
+                if (err) {
+                  console.log('Failed to update the assignment with the new status ' + err);
+                }
+                res.status(200).json({status: 'NoMoreExercises'});
+              });
+        }
+        // If this is not the original sub subject then we need to go back to the same level there
+        else {
+          assignment.resetMaxSequencialHits();
+          subSubject = assignment.getOriginalSubSubjectId();
+          currentExerciseLevel = assignment.getOriginalSubSubjectLastLevel();
+          shouldGoBackToOriginalAssignment = true;
+          addUserProgressRecord();
+        }
       }
     }
   }
@@ -198,8 +219,10 @@ module.exports.getNextExercise = function (req, res) {
     student = Cache.students.get(req.payload._id);
     assignment = student.getAssignment(req.query.assignmentId);
     currentExerciseLevel = assignment.getCurrentExerciseLevel();
-    subSubject = assignment.getSubSubject();
+    subSubject = assignment.getCurrentSubSubjectId();
     levelChange = req.query.levelChange;
+    subSubjectChange = req.query.subSubjectChange;
+
     // 2. If this request comes after the user solved an exercise, then audit this exercise
     if(req.query.currentExerciseId != undefined) {
       auditExercise();
@@ -229,9 +252,14 @@ getExercisesForSubsubjectAndLevel = function (subsubject, level, callBackFunctio
     }
     )
     .exec(function (err, result) {
-      console.log('exe for this subsubject and level:' + result[0].exercises.length);
-      // 5. Call back to the main flow with all the exercises for that subsubject and level
-      callBackFunction(result[0].exercises);
+      if(result.length == 0) {
+        callBackFunction([]);
+      }
+      else {
+        console.log('exe for this subsubject and level:' + result[0].exercises.length);
+        // 5. Call back to the main flow with all the exercises for that subsubject and level
+        callBackFunction(result[0].exercises);
+      }
     });
 };
 
