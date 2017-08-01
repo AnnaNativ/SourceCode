@@ -3,7 +3,7 @@
     <div class="col-md-12 pull-right">
         <div dir="rtl" class="well well-lg">
             <div class="text-center">
-                <h2>חזרת למשימה המקורית</h2>
+                <h3>חזרת למשימה המקורית</h3>
                 <img ng-src="http://localhost:3000/images/back-to-original-subsubject.jpg">
             </div>
         </div>
@@ -12,7 +12,9 @@
 <div ng-if="!vm.selectedAssignmentDone && !vm.backToOriginalSubSubject()" class="row">
     <div class="col-md-6 pull-right">
         <div dir="rtl" class="well well-lg">
-            <h2>פתור תרגיל:</h2>
+            <h3 ng-if="vm.atOriginalSubSubject()" >שם המשימה: {{vm.selectedAssignment.subSubject[0].name}}</h3>
+            <h3 ng-if="!vm.atOriginalSubSubject()" >שם המשימה: {{vm.selectedAssignment.subSubject[0].name}} (תירגול: {{vm.exercise.properties.subSubjectName}})</h3>
+            <h3>פתור תרגיל:</h3>
             <div ng-repeat="obj in vm.exercise.body">
                 <div ng-if="obj.type == 'picture'">
                     <img ng-src="{{obj.content}}">
@@ -27,7 +29,7 @@
     <div class="col-md-6 pull-right">
         <div dir="rtl" class="well well-lg">
             <div ng-if="vm.exercise.solutions.length > 1">
-                <p><h2>בחר תשובה נכונה:</h2></p>
+                <p><h3>בחר תשובה נכונה:</h3></p>
                 <div ng-repeat="obj in vm.exercise.solutions" id="{{obj.solution}}">
                     <div class="ex1">
                         <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"
@@ -39,7 +41,7 @@
             <div ng-show="vm.exercise.solutions.length == 1">
                 <div class="row">
                     <div class="col-md-4 pull-right">
-                        <p><h2>הכנס תשובה:</h2></p>
+                        <p><h3>הכנס תשובה:</h3></p>
                         <input type="text" dir="rtl" ng-model="vm.openSolution" class="form-control form-fixer"/>
                     </div>
                 </div>
@@ -66,7 +68,7 @@
     <div class="col-md-12 pull-right">
         <div dir="rtl" class="well well-lg">
             <div class="text-center">
-                <h2>המשימה הסתיימה</h2>
+                <h3>המשימה הסתיימה</h3>
                 <img ng-src="http://localhost:3000/images/assignment-done.jpg">
             </div>
         </div>

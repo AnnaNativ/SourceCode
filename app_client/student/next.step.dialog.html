@@ -35,7 +35,7 @@
                 <div ng-if="vm.dependencies.length > 0" class="modal-body">
                     &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
                     <label>אני רוצה עוד תרגילים כאלו</label><br><br><br>
-                    &nbsp&nbsp&nbsp&nbsp<label>אנסה שלב קל יותר:</label><br>
+                    &nbsp&nbsp&nbsp&nbsp<label>אני מתקשה, אנסה לעבור על אחד הנושאים הבאים:</label><br>
                     <div ng-repeat="obj in vm.dependencies" id="{{obj.id}}">
                         &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="{{obj.id}}"
                         />&nbsp;&nbsp;

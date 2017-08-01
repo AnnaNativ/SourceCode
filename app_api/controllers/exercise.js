@@ -73,7 +73,7 @@ module.exports.getNextExercise = function (req, res) {
 
   var adjustStatus = function() {
     if(subSubjectChange != undefined) {
-      subSubject = subSubjectChange;
+      subSubject = mongoose.Types.ObjectId(subSubjectChange);
       currentExerciseLevel = 0;
       addUserProgressRecord();
     }
@@ -149,7 +149,7 @@ module.exports.getNextExercise = function (req, res) {
   };
 
   // 6. Choose one exercise for the result set. Filter out the ones that the user already saw and choose the first one that he didnt see yet
-  var chooseOneExercise = function(exercises) {
+  var chooseOneExercise = function(exercises, subSubjectName) {
     var isFound = false;
     for(var i=0; i<exercises.length; i++) {
       if(!isFound && !student.isExerciseDone(exercises[i].Id)) {
@@ -166,6 +166,7 @@ module.exports.getNextExercise = function (req, res) {
               else {
                 exercise[0].successes = assignment.getMaxSequencialHits();
               }
+              exercise[0].properties = {subSubjectName: subSubjectName, subSubjectId: subSubject};
               res.status(200).json(exercise[0]);
               return;
             }
@@ -247,7 +248,8 @@ getExercisesForSubsubjectAndLevel = function (subsubject, level, callBackFunctio
             as: 'exer',
             cond: { $eq: ["$$exer.level", level] }
           }
-        }
+        },
+        name:1
       }
     }
     )
@@ -258,7 +260,7 @@ getExercisesForSubsubjectAndLevel = function (subsubject, level, callBackFunctio
       else {
         console.log('exe for this subsubject and level:' + result[0].exercises.length);
         // 5. Call back to the main flow with all the exercises for that subsubject and level
-        callBackFunction(result[0].exercises);
+        callBackFunction(result[0].exercises, result[0].name);
       }
     });
 };

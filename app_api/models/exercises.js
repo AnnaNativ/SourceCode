@@ -11,6 +11,11 @@ var solutionSchema = new Schema({
   isCorrect: Boolean
 },{ _id : false });
 
+var propertiesSchema = new Schema({
+  subSubjectId: String,
+  subSubjectName: String
+},{ _id : false });
+
 var exerciseSchema = new Schema({
   body: [bodyPartSchema],
   solutions: [solutionSchema],
@@ -20,9 +25,12 @@ var exerciseSchema = new Schema({
   successes: {type: Number, default: 0},
   failures: {type: Number, default: 0},
   gaveups: {type: Number, default: 0},
-  createdDate: {type: Date, default: Date.now}
+  createdDate: {type: Date, default: Date.now},
+  properties: propertiesSchema,
+  
 });
 
+mongoose.model('Properties', propertiesSchema);
 mongoose.model('BodyPart', bodyPartSchema);
 mongoose.model('Solution', solutionSchema);
 mongoose.model('Exercise', exerciseSchema);
