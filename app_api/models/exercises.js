@@ -13,7 +13,10 @@ var solutionSchema = new Schema({
 
 var propertiesSchema = new Schema({
   subSubjectId: String,
-  subSubjectName: String
+  subSubjectName: String,
+  level: Number,
+  maxSequencialHits: Number,
+  resumeOriginalAssignment: Boolean
 },{ _id : false });
 
 var exerciseSchema = new Schema({

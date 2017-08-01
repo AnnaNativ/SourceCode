@@ -141,6 +141,7 @@
           vm.exercise = data;
           vm.getDependencies();
         }
+        vm.subSubjectChange = undefined;
       })
       .error(function(e){
         console.log(e);
@@ -158,11 +159,27 @@
       })
     }
 
-    vm.backToOriginalSubSubject = function() {
-      console.log('In backToOriginalSubSubject');
-      return vm.exercise.successes == -1;
+    vm.cameBackToOriginalSubSubject = function() {
+      if(vm.exercise.properties != undefined) {
+//        console.log('In backToOriginalSubSubject');
+        return vm.exercise.properties.resumeOriginalAssignment;
+      }
     } 
     
+    vm.atOriginalSubSubject = function() {
+//      console.log('In atOriginalSubSubject.Before');
+      if(vm.selectedAssignment != undefined && vm.exercise.properties != undefined) {
+        return vm.selectedAssignment.subSubject[0]._id == vm.exercise.properties.subSubjectId;
+      }
+      return true;
+    }
+
+    vm.goBackToOriginalSubSubject = function() {
+      vm.finalSelection = false;
+      vm.levelChange = -1;
+      vm.getNextExercise();
+    }
+
     //####################################################################################
     //########## Solutions ###########
     //####################################################################################
@@ -231,7 +248,6 @@
 
     vm.nextStepClicked = function() {
       vm.levelChange = 0;
-      vm.subSubjectChange = undefined;
       if(vm.correctAnswerNextStep == 'readyForNextLevel') {
         vm.levelChange = 1;
       }
@@ -240,6 +256,8 @@
       }
       vm.getNextExercise();
       vm.correctAnswerNextStep = 'moreOfTheSame';
+      vm.wrongAnswerNextStep = 'moreOfTheSame';
+
       vm.assistant = undefined;      
       vm.openSolution = undefined;
     }
@@ -271,7 +289,7 @@
     }
 
     vm.allowNextLevel = function() {
-      return (vm.exercise.successes >= vm.ALLOW_NEXT_LEVEL_THRESHOLD);
+      return (vm.exercise.properties.maxSequencialHits >= vm.ALLOW_NEXT_LEVEL_THRESHOLD);
     }
     //####################################################################################
     //########## Assistance ###########

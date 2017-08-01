@@ -25,6 +25,11 @@ var MAX_EXERCISE_LEVEL = 6;
  * 2.2 If this is the first exercise then it means that the assignment just started and we need to change its status to 'inprogress'
  * 2.3. Add this exercise to the cache and mark it as done.
  * 2.4. before getting a new exercise we need to adjust the status based on student request
+ * 2.4.1 Adjust the status based on student request
+ * 2.4.2 The user requested a change in sub subjec (choose on of the dependencies), so update the sub subject and add user progress record
+ * 2.4.3 There is no change in sub subject or level, so just get the next exercise
+ * 2.4.4 The user requested to skip a level, so update the level and add the user progress record
+ * 2.4.5 The user requested to go back to the original sub subject, so update the sub subject and last level there and add the user progress record
  * 2.5 Call update exercise statistics function
  * 2.6 Update exercise statistics based on the exercise outcome. Don't wait for callback, assume success
  * 3. If this request is the first one after the user logged in then there is no current excersie, so go ahead and get an exercise
@@ -70,19 +75,30 @@ module.exports.getNextExercise = function (req, res) {
       })
     }
   }
-
+  // 2.4.1 Adjust the status based on student request
   var adjustStatus = function() {
+    // 2.4.2 The user requested a change in sub subjec (choose on of the dependencies), so update the sub subject and add user progress record
     if(subSubjectChange != undefined) {
       subSubject = mongoose.Types.ObjectId(subSubjectChange);
       currentExerciseLevel = 0;
       addUserProgressRecord();
     }
+    // 2.4.3 There is no change in sub subject or level, so just get the next exercise
     else if(levelChange == 0) {
       getExercisesForSubsubjectAndLevel(subSubject, currentExerciseLevel, chooseOneExercise);
     }
+    // 2.4.4 The user requested to skip a level, so update the level and add the user progress record
     else if(levelChange == 1) {
       currentExerciseLevel++;
       assignment.resetMaxSequencialHits();
+      addUserProgressRecord();
+    }
+    // 2.4.5 The user requested to go back to the original sub subject, so update the sub subject and last level there and add the user progress record
+    else if(levelChange == -1) {
+      assignment.resetMaxSequencialHits();
+      subSubject = assignment.getOriginalSubSubjectId();
+      currentExerciseLevel = assignment.getOriginalSubSubjectLastLevel();
+      shouldGoBackToOriginalAssignment = true;
       addUserProgressRecord();
     }
     else {
@@ -159,14 +175,17 @@ module.exports.getNextExercise = function (req, res) {
           .exec(function(err, exercise) {
             // 7. An exercise was found, so just return it. The flow is now done.
             if(exercise.length > 0) {
+              exercise[0].properties = {
+                            subSubjectName: subSubjectName, 
+                            subSubjectId: subSubject,
+                            level: currentExerciseLevel,
+                            maxSequencialHits: assignment.getMaxSequencialHits(),
+                            resumeOriginalAssignment: false
+              };
               if(shouldGoBackToOriginalAssignment == true) {
-                exercise[0].successes = -1;
                 shouldGoBackToOriginalAssignment = false;
+                exercise[0].properties.resumeOriginalAssignment = true;
               }
-              else {
-                exercise[0].successes = assignment.getMaxSequencialHits();
-              }
-              exercise[0].properties = {subSubjectName: subSubjectName, subSubjectId: subSubject};
               res.status(200).json(exercise[0]);
               return;
             }

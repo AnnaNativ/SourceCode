@@ -1,19 +1,22 @@
 <br>
-<div ng-if="!vm.selectedAssignmentDone && vm.backToOriginalSubSubject()">
+<div ng-if="!vm.selectedAssignmentDone && vm.exercise.properties.resumeOriginalAssignment == true">
     <div class="col-md-12 pull-right">
         <div dir="rtl" class="well well-lg">
             <div class="text-center">
-                <h3>חזרת למשימה המקורית</h3>
+                <h3>חזרת למשימה המקורית&nbsp;&nbsp;&nbsp;&nbsp;<span><button class="btn btn-primary" ng-click="vm.exercise.properties.resumeOriginalAssignment = 'false'">המשך</button></span></h3>
                 <img ng-src="http://localhost:3000/images/back-to-original-subsubject.jpg">
             </div>
         </div>
     </div>
 </div>
-<div ng-if="!vm.selectedAssignmentDone && !vm.backToOriginalSubSubject()" class="row">
+<div ng-if="!vm.selectedAssignmentDone && vm.exercise.properties.resumeOriginalAssignment != true" class="row">
     <div class="col-md-6 pull-right">
         <div dir="rtl" class="well well-lg">
             <h3 ng-if="vm.atOriginalSubSubject()" >שם המשימה: {{vm.selectedAssignment.subSubject[0].name}}</h3>
-            <h3 ng-if="!vm.atOriginalSubSubject()" >שם המשימה: {{vm.selectedAssignment.subSubject[0].name}} (תירגול: {{vm.exercise.properties.subSubjectName}})</h3>
+            <div ng-if="!vm.atOriginalSubSubject()">
+                <h3>שם המשימה: {{vm.selectedAssignment.subSubject[0].name}} (תירגול: {{vm.exercise.properties.subSubjectName}})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span><button class="btn btn-primary" ng-click="vm.goBackToOriginalSubSubject()">חזור למשימה המקורית</button>&nbsp;</span></h3> 
+            </div>
             <h3>פתור תרגיל:</h3>
             <div ng-repeat="obj in vm.exercise.body">
                 <div ng-if="obj.type == 'picture'">
