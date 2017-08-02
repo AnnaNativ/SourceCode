@@ -76,7 +76,7 @@
     }
 
     vm.assignmentClicked = function($index) {
-      console.log('in assignmentClicked with index:' + $index);
+//      console.log('in assignmentClicked with index:' + $index);
       vm.selectedAssignment = vm.myAssignments[$index];
       vm.selectedAssignmentIndex = $index;
       vm.selectedAssignmentDone = false;
@@ -122,24 +122,24 @@
     vm.exercise = {};
     vm.dependencies = [];
     vm.getNextExercise = function() {
+      console.log('In getNextExercise');
       // this is for the case when the user looked at the solution but didn't click the dialog exit button
       if(vm.assistant == 'picture_solution') {
-        console.log('In getNextExercise.if');
+//        console.log('In getNextExercise.if');
         vm.finalSelection = false;
       }
       meanData.getNextExercise(vm.selectedAssignment._id, vm.exercise._id, vm.finalSelection, vm.levelChange, vm.assistant, vm.subSubjectChange)
       .success(function(data){
-        console.log('In getNextExercise.success');
+//        console.log('In getNextExercise.success');
         if(data.status == 'NoMoreExercises') {
-          console.log('In getNextExercise.success.if');
+//          console.log('In getNextExercise.success.if');
           vm.selectedAssignmentDone = true;
           vm.selectedAssignment = undefined;
           vm.selectedAssignmentIndex = undefined;
         }
         else {
-          console.log('In getNextExercise.success.else');
-          vm.exercise = data;
-          vm.getDependencies();
+//          console.log('In getNextExercise.success.else');
+          vm.getDependencies(data);
         }
         vm.subSubjectChange = undefined;
       })
@@ -148,11 +148,13 @@
       })
     }
 
-    vm.getDependencies = function() {
+    vm.getDependencies = function(exercise) {
+      console.log('In getDependencies');
       meanData.getDependencies(vm.selectedAssignment._id)
       .success(function(data){
         vm.dependencies = data;
-        console.log('In getDependencies.success with: ' + data);
+        vm.exercise = exercise;
+//        console.log('In getDependencies.success with: ' + data);
       })
       .error(function(e){
         console.log(e);
@@ -223,15 +225,15 @@
       vm.finalSelection = undefined;
       // is this an open ended question?
       if(vm.exercise.solutions.length == 1) {
-        console.log('In checkAnswer for open ended question');
+//        console.log('In checkAnswer for open ended question');
         vm.finalSelection = (vm.openSolution == vm.exercise.solutions[0].solution);
       }
       else if(vm.currentSelection != undefined) {
-        console.log('In checkAnswer for closed question');
+//        console.log('In checkAnswer for closed question');
         vm.finalSelection = vm.exercise.solutions[vm.currentSelection].isCorrect;
       }  
       else {
-        console.log('No answer selected. Will ignore');
+//        console.log('No answer selected. Will ignore');
       }
       vm.currentSelection = undefined;
     }

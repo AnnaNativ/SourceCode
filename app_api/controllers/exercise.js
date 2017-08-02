@@ -215,6 +215,7 @@ module.exports.getNextExercise = function (req, res) {
                   console.log('Failed to update the assignment with the new status ' + err);
                 }
                 res.status(200).json({status: 'NoMoreExercises'});
+                return;
               });
         }
         // If this is not the original sub subject then we need to go back to the same level there
