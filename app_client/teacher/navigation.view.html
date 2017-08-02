@@ -76,14 +76,14 @@
         </div>
         <div class="col-md-2 pull-right" ng-show="vm.level >= 0">
             <div class="btn-toolbar pull-right">
-                <button type="button" class="btn btn-info" ng-click="vm.viewSelectedExercise()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
-                    title="פרטים על התרגיל הנבחר">
-                    <span class="glyphicon glyphicon-info-sign"></span></button>
                 <button type="button" class="btn btn-info" ng-click="vm.editExercise()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
                     title="עדכן תרגיל נבחר">
                 <span class="glyphicon glyphicon-edit"></span></button>
                 <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'exercise'" ng-disabled="vm.addingExercise" data-toggle="modal" data-target="#confirmationModal">
                 <span class="glyphicon glyphicon-trash"></span></button>         
+                <button type="button" class="btn btn-warning" ng-click="vm.addMultiStageExerciseClicked()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
+                    title="הוסף תרגיל רב שלבי חדש">
+                    <span class="glyphicon glyphicon-plus-sign"></span></button>
                 <button type="button" class="btn btn-warning" ng-click="vm.addExerciseClicked()" ng-disabled="vm.addingExercise" data-toggle="tooltip"
                     title="הוסף תרגיל חדש">
                 <span class="glyphicon glyphicon-plus"></span></button>
@@ -110,6 +110,3 @@
 </div>
 </div>
 <br>
-vm.exercise - {{vm.exercise}}<br>
-vm.exercises - {{vm.exercises}}<br>
-vm.exercises[exercise].Id - {{vm.exercises[exercise].Id}}<br>

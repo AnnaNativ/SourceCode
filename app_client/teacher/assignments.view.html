@@ -82,7 +82,7 @@
                         </div>
                         <div class="col-md-2 pull-right">
                             <div ng-repeat="assignment in obj.assignments">
-                                {{assignment.student[0]}}<br>
+                                {{assignment.student[0]}}<br><br>
                             </div>
                         </div>
                         <div class="col-md-2 pull-right">
@@ -90,6 +90,7 @@
                                 <span ng-if="assignment.status == 'new'" class="label label-danger">חדש</span>
                                 <span ng-if="assignment.status == 'inprogress'" class="label label-info">בעבודה</span>
                                 <span ng-if="assignment.status == 'done'" class="label label-success">גמור</span>
+                                <br><br>
                             </div>
                         </div>
                     </div>
