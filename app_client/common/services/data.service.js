@@ -29,6 +29,7 @@
     };
 
     var getDependencies = function(assignmentId) {
+      console.log('In data.service.getDependencies');
       var config = {
         params: {assignmentId: assignmentId},
         headers : {Authorization: 'Bearer '+ authentication.getToken()}

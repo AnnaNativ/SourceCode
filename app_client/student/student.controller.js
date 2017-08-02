@@ -312,7 +312,10 @@
         vm.levelChange = 0;
         vm.getNextExercise();    
       }
+      vm.correctAnswerNextStep = 'moreOfTheSame';
+      vm.wrongAnswerNextStep = 'moreOfTheSame';
       vm.assistant = undefined;
+      vm.openSolution = undefined;
     }
 
     vm.getTutorialVideo = function() {
