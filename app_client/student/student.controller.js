@@ -241,6 +241,7 @@
 
     vm.showSolution = function() {
       vm.assistant = 'picture_solution';
+      vm.showAssistanceWarning = true;
     }
 
     vm.handleRadioClick = function ($index) {
@@ -307,7 +308,7 @@
     }
 
     vm.closeAssistance = function() {
-      if(vm.assistant == 'picture_solution') {
+      if(vm.assistant == 'picture_solution' && vm.showAssistanceWarning != true) {
         console.log('In closeAssistance.if');
         vm.finalSelection = false;
         vm.levelChange = 0;

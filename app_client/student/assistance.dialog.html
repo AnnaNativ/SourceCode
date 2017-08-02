@@ -28,7 +28,13 @@
                 </div>
             </div>
             <div ng-if="vm.assistant == 'picture_solution'">
-                <div class="modal-body">
+                <div ng-if="vm.showAssistanceWarning" class="modal-body">
+                    <div class="centerBlock">
+                        <br><br><br>&nbsp&nbsp&nbsp&nbsp<input type="checkbox" ng-click="vm.showAssistanceWarning = false"/>&nbsp;&nbsp;
+                        <label>אני מבין שהתרגיל יחשב לי כתשובה שגויה</label><br>
+                    </div>      
+                </div>
+                <div ng-if="!vm.showAssistanceWarning" class="modal-body">
                     <div class="centerBlock">
                         <h2>פתרון התרגיל:</h2>
                         <img ng-src="{{vm.exercise.solutionPicture}}"><br>
