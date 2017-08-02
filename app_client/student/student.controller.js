@@ -222,6 +222,7 @@
     });
 
     vm.checkAnswer = function () {
+      console.log('In checkAnswer');
       vm.finalSelection = undefined;
       // is this an open ended question?
       if(vm.exercise.solutions.length == 1) {
@@ -314,7 +315,6 @@
       }
       vm.correctAnswerNextStep = 'moreOfTheSame';
       vm.wrongAnswerNextStep = 'moreOfTheSame';
-      vm.assistant = undefined;
       vm.openSolution = undefined;
     }
 

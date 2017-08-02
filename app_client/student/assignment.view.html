@@ -59,9 +59,9 @@
             </div>
             <br><br>
             <button type="button" class="btn btn-warning pull-right" ng-click="vm.checkAnswer()" data-toggle="modal" data-target="#myModal">סיים תרגיל</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="btn btn-primary" ng-click="vm.showSolution()" data-toggle="modal" data-target="#assistanceDialog">הצג פתרון</button>&nbsp;   
-            <button class="btn btn-info" ng-click="vm.getSampleSolutionVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו פתרונות לדוגמה</button>&nbsp;
-            <button class="btn btn-info" ng-click="vm.getTutorialVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו הדרכה</button>&nbsp;
+            <button type="button" class="btn btn-primary" ng-click="vm.showSolution()" data-toggle="modal" data-target="#assistanceDialog">הצג פתרון</button>&nbsp;   
+            <button type="button" class="btn btn-info" ng-click="vm.getSampleSolutionVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו פתרונות לדוגמה</button>&nbsp;
+            <button type="button" class="btn btn-info" ng-click="vm.getTutorialVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו הדרכה</button>&nbsp;
             <div ng-include="'/student/assistance.dialog.html'"></div>
             <div ng-include="'/student/next.step.dialog.html'"></div>
         </div>
