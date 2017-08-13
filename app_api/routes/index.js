@@ -26,6 +26,7 @@ router.get('/schoolsList', ctrlProfile.getSchoolsList);
 
 // exercises
 router.get('/nextExercise', auth, ctrlExercise.getNextExercise);
+router.get('/exercise', auth, ctrlExercise.getExercise);
 router.get('/exercises', auth, ctrlExercise.getExercises);
 router.get('/similarExercise', ctrlExercise.getSimilarExercise);
 router.post('/removeExercise', ctrlExercise.removeExercise);

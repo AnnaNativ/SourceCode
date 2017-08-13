@@ -4,8 +4,8 @@
     .module('meanApp')
     .controller('teacherCtrl', teacherCtrl);
 
-  teacherCtrl.$inject = ['$location', '$routeParams', 'exercise', 'meanData', 'Upload', '$timeout', 'subject', 'assignment'];
-  function teacherCtrl($location, $routeParams, exercise, meanData, Upload, $timeout, subject, assignment) {
+  teacherCtrl.$inject = ['$scope', '$location', '$routeParams', 'exercise', 'meanData', 'Upload', '$timeout', 'subject', 'assignment'];
+  function teacherCtrl($scope, $location, $routeParams, exercise, meanData, Upload, $timeout, subject, assignment) {
     //####################################################################################
     //########## Teacher ###########
     //####################################################################################
@@ -243,6 +243,7 @@
     //####################################################################################
 
     vm.newExerciseAdded = false;
+    vm.exerciseGroupId = undefined;
 
     vm.newExercise = {
       level: undefined,
@@ -264,6 +265,21 @@
       vm.multiStageExercise = false;
       // clrer the add subject successful message
     }
+    
+    vm.addExerciseStepClicked = function() {
+      console.log('in subjects.controller addExerciseStepClicked');
+      vm.addingExerciseStep = true;
+      vm.newExerciseStepAdded = false;
+      vm.multiStageExercise = false;
+      meanData.getExercisesForGroup(vm.exerciseGroupId)
+      .success(function(data){
+        vm.groupExercises = data;
+      })
+      .error(function(e){
+        console.log(e);
+      })
+
+    }
 
     vm.cancelNewExercise = function() {
       vm.newExercise.body = [];
@@ -276,6 +292,7 @@
       vm.updateShowAnswersStatus();
       vm.formValid = true;
       vm.addingExercise = false;
+      vm.addingExerciseStep = false;
     }
 
     vm.getExercises = function() {
@@ -437,12 +454,45 @@
     if(vm.exercise != undefined) {
       var parts = vm.exercise.split(" ");
       var loc = parts[parts.length - 1];
-      if(vm.exercises[loc - 1].groupId != undefined) {
-        return true;
+      if(loc > 0) {
+        vm.exerciseGroupId = vm.exercises[loc - 1].groupId;
+        if(vm.exerciseGroupId != undefined) {
+          return true;
+        }
       }
     }
     return false;
   }
+
+  vm.populateGroupExercise = function(groupId) {
+    console.log('in populateGroupExercise with ' + groupId);
+    vm.exerciseStages = [];
+    for(var i=0; i<vm.exercises.length; i++) {
+      if(vm.exercises[i].groupId == groupId) {
+        vm.exerciseStages.push(vm.exercises[i]);
+      }
+    }
+  }
+
+
+  $scope.$watch('vm.exercise', function() {
+    if(vm.exercise != undefined) {
+      var parts = vm.exercise.split(" ");
+      var loc = parts[parts.length - 1];
+      console.log('in watch vm.exercise with loc ' + loc);
+      if(vm.exercises[loc - 1].groupId != undefined) {
+        meanData.getExercise(vm.exercises[loc - 1].groupId)
+        .success(function(data){
+          vm.groupBaseExercise = data[0];
+          vm.populateGroupExercise(vm.groupBaseExercise._id);
+        })
+        .error(function(e){
+          console.log(e);
+        })
+      }
+    }
+  })
+
     //####################################################################################
     //########## Answers ###########
     //####################################################################################

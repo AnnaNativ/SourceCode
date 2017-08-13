@@ -16,6 +16,23 @@ var Assignment = mongoose.model('Assignment');
 
 var MAX_EXERCISE_LEVEL = 6;
 
+module.exports.getExercise = function(req, res) {
+  if (!req.payload._id) {
+    res.status(401).json({
+      "message" : "UnauthorizedError: private profile"
+    });
+  } 
+  else {
+    var exerciseId = mongoose.Types.ObjectId(req.query.exerciseId);
+    Exercise
+      .find({'_id': exerciseId})
+      .exec(function(err, exercise) {
+        res.status(200).json(exercise);
+      });
+  }
+};
+
+
 /**
  * In this function we will get the next exercise for the user based on his current status and history. The flow is as follows:
  * 

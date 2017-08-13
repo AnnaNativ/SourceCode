@@ -79,6 +79,16 @@
       return $http.get('/api/subSubjects', config);
     }
 
+    var getExercise = function(exerciseId) {
+      console.log('In data.service getExercise with: ' + exerciseId);
+      var config = {
+        params: {exerciseId: exerciseId},
+        headers : {Authorization: 'Bearer '+ authentication.getToken()}
+      };
+
+      return $http.get('/api/exercise', config);
+    }
+
     var getExercises = function(subSubject, level) {
       console.log('In data.service getExercises with subSubject: ' + subSubject + ' and level: ' + level);
 
@@ -125,6 +135,7 @@
       getSubSubjects: getSubSubjects,
       getVideo: getVideo,
       getVideos: getVideos,
+      getExercise: getExercise,
       getExercises: getExercises,
       getDependencies: getDependencies,
       getStudentsOfTeacher: getStudentsOfTeacher,
