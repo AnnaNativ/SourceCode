@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var assignedExercises = new mongoose.Schema({
   Id: {type: Schema.Types.ObjectId, ref: 'Exercise'},
+  groupId: {type: Schema.Types.ObjectId, ref: 'Exercise'},
   level: {type: Number, min: 0, max: 9 }
 },{ _id : false });
 

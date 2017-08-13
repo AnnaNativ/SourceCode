@@ -463,13 +463,19 @@ module.exports.newExercise = function (req, res) {
       exercise.body.push(part);
     }
   });
-  // create all the solutions from all solution parts
-  req.body.solutions.forEach(function (solution) {
-    var sol = new Solution();
-    sol.solution = solution.solution;
-    sol.isCorrect = solution.isCorrect;
-    exercise.solutions.push(sol);
-  });
+  // if this is a multi step exercise then update the groupId
+  if(req.body.solutions.length == 0) {
+    exercise.groupId = exercise._id;
+  }
+  // this is not a group exercise, so just create all the solutions from all solution parts
+  else {
+    req.body.solutions.forEach(function (solution) {
+      var sol = new Solution();
+      sol.solution = solution.solution;
+      sol.isCorrect = solution.isCorrect;
+      exercise.solutions.push(sol);
+    });
+  }
   // save the exercise
   exercise.save(function (err) {
     if (err) {
@@ -479,6 +485,10 @@ module.exports.newExercise = function (req, res) {
       var newExercise = new AssignedExercises();
       newExercise.Id = exercise._id;
       newExercise.level = exercise.level;
+      // if this is a multi step exercise then update the groupId
+      if(exercise.groupId != undefined) {
+        newExercise.groupId = exercise._id;
+      }
       // update the subSubject with the new exercise
       SubSubject
         .update({ "_id": req.body.subSubject }, { $push: { exercises: newExercise } })

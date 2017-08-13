@@ -29,6 +29,7 @@ var exerciseSchema = new Schema({
   failures: {type: Number, default: 0},
   gaveups: {type: Number, default: 0},
   createdDate: {type: Date, default: Date.now},
+  groupId: {type: Schema.Types.ObjectId, ref: 'Exercise'},
   properties: propertiesSchema,
   
 });

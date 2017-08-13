@@ -261,6 +261,7 @@
       console.log('in subjects.controller addExerciseClicked');
       vm.addingExercise = true;
       vm.newExerciseAdded = false;
+      vm.multiStageExercise = false;
       // clrer the add subject successful message
     }
 
@@ -313,8 +314,8 @@
     vm.addNewExercise = function() {
       console.log('in teacher.controller onSubmit');
       if (vm.newExercise.body.length == 0 || 
-          vm.newExercise.solutions[0].solution.length == 0 || 
-          (vm.answerType == 'closed') && (vm.newExercise.solutions[1].solution.length == 0)) {
+          (!vm.multiStageExercise && vm.newExercise.solutions[0].solution.length == 0) || 
+          (vm.answerType == 'closed' && !vm.multiStageExercise) && (vm.newExercise.solutions[1].solution.length == 0)) {
         vm.formValid = false;
       }
       else {
@@ -425,6 +426,23 @@
      console.log('In removeSubject');
   }
 
+  vm.getExerciseName = function(index) {
+      if(vm.exercises[index] && vm.exercises[index].groupId != undefined) {
+         return 'תרגיל רב שלבי';
+      }
+      return 'תרגיל';
+  }
+
+  vm.isMultiStepExercise = function() {
+    if(vm.exercise != undefined) {
+      var parts = vm.exercise.split(" ");
+      var loc = parts[parts.length - 1];
+      if(vm.exercises[loc - 1].groupId != undefined) {
+        return true;
+      }
+    }
+    return false;
+  }
     //####################################################################################
     //########## Answers ###########
     //####################################################################################
