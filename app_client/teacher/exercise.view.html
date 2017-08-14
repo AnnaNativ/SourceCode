@@ -17,17 +17,17 @@
             <div ng-repeat="obj in vm.newExercise.body">
                 <div ng-if="obj.type == 'text'" class="row">
                 <div class="col-md-1 pull-right">
-                    <button type="button" class="btn btn-info" ng-click="vm.removeTextArea($index)" data-toggle="tooltip" title="מחק טקסט">
+                    <button ng-hide="vm.addingExerciseStep && vm.isBaseStep($index)" type="button" class="btn btn-info" ng-click="vm.removeTextArea($index)" data-toggle="tooltip" title="מחק טקסט">
                             <span class="glyphicon glyphicon-remove"></span></button>
                 </div>
                 <div class="col-md-10 pull-right">
-                    <textarea dir="rtl" class="form-control" rows="5" placeholder="Add Message" ng-model="obj.content" focus-me>{{obj.content}}</textarea>
+                    <textarea dir="rtl" class="form-control" rows="5" placeholder="Add Message" ng-model="obj.content" ng-disabled="vm.addingExerciseStep && vm.isBaseStep($index)" focus-me>{{obj.content}}</textarea>
                 </div>
                 <br>
                 </div>
                 <div ng-if="obj.type == 'picture'" class="row">
                 <div class="col-md-1 pull-right">
-                    <button type="button" class="btn btn-info" ng-click="vm.removePicture($index)" data-toggle="tooltip" title="מחק תמונה">
+                    <button ng-hide="vm.addingExerciseStep && vm.isBaseStep($index)" type="button" class="btn btn-info" ng-click="vm.removePicture($index)" data-toggle="tooltip" title="מחק תמונה">
                             <span class="glyphicon glyphicon-remove"></span></button>
                 </div>
                 <div class="col-md-10 pull-right">

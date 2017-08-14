@@ -266,6 +266,7 @@
     vm.addExerciseClicked = function() {
       console.log('in subjects.controller addExerciseClicked');
       vm.addingExercise = true;
+      vm.addingExerciseStep = false;
       vm.newExerciseAdded = false;
       vm.newExerciseStepAdded = false;
       vm.multiStageExercise = false;
@@ -274,6 +275,7 @@
     
     vm.addExerciseStepClicked = function() {
       console.log('in subjects.controller addExerciseStepClicked');
+      vm.addingExercise = false;
       vm.addingExerciseStep = true;
       vm.newExerciseStageAdded = false;
       vm.multiStageExercise = false;
@@ -291,6 +293,7 @@
                                   {solution: "", isCorrect: false}, 
                                   {solution: "", isCorrect: false}, 
                                   {solution: "", isCorrect: false}];
+      vm.newExercise.groupId = undefined;
       vm.updateShowAnswersStatus();
       vm.formValid = true;
       vm.addingExercise = false;
@@ -526,6 +529,10 @@
       vm.newExerciseAdded = false;
       vm.newExerciseStepAdded = false;
     })
+
+    vm.isBaseStep = function(index) {
+      return index < vm.groupBaseExercise.body.length
+    }
 
     //####################################################################################
     //########## Answers ###########
