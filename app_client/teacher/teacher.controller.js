@@ -364,9 +364,13 @@
         else {
           vm.newExercise.level = vm.defaultLevel;
         }
+        // if this is a group exercise step then remove the base body and update the groupId
         if(vm.addingExerciseStep) {
           console.log('in addNewExercise.addingExerciseStep');
           vm.newExercise.groupId = vm.groupBaseExercise._id;
+          vm.groupBaseExercise.body.forEach(function(part) {
+            vm.newExercise.body.shift();
+          })
         }
         // now remove the empty answers from the exercise
         var solutions = [];
