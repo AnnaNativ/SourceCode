@@ -98,6 +98,7 @@
       vm.newSubjectAdded = false; 
       vm.newSubSubjectAdded = false; 
       vm.newExerciseAdded = false; 
+      vm.newExerciseStepAdded = false; 
     }
 
     vm.cancelNewSubject = function() {
@@ -125,6 +126,7 @@
     vm.newSubjectAdded = false; 
     vm.newSubSubjectAdded = false; 
     vm.newExerciseAdded = false; 
+    vm.newExerciseStepAdded = false; 
     vm.subSubject = undefined;
     vm.exercise = undefined;
     // clrear the add subject successful message
@@ -192,6 +194,7 @@
       vm.newSubjectAdded = false; 
       vm.newSubSubjectAdded = false; 
       vm.newExerciseAdded = false; 
+      vm.newExerciseStepAdded = false; 
     }
 
     vm.cancelNewSubSubject = function() {
@@ -205,6 +208,7 @@
         vm.newSubjectAdded = false; 
         vm.newSubSubjectAdded = false; 
         vm.newExerciseAdded = false; 
+        vm.newExerciseStepAdded = false; 
         vm.exercise = undefined;
         vm.level = undefined;
       }
@@ -243,6 +247,7 @@
     //####################################################################################
 
     vm.newExerciseAdded = false;
+    vm.newExerciseStepAdded = false;
     vm.exerciseGroupId = undefined;
 
     vm.newExercise = {
@@ -262,6 +267,7 @@
       console.log('in subjects.controller addExerciseClicked');
       vm.addingExercise = true;
       vm.newExerciseAdded = false;
+      vm.newExerciseStepAdded = false;
       vm.multiStageExercise = false;
       // clrer the add subject successful message
     }
@@ -269,16 +275,12 @@
     vm.addExerciseStepClicked = function() {
       console.log('in subjects.controller addExerciseStepClicked');
       vm.addingExerciseStep = true;
-      vm.newExerciseStepAdded = false;
+      vm.newExerciseStageAdded = false;
       vm.multiStageExercise = false;
-      meanData.getExercisesForGroup(vm.exerciseGroupId)
-      .success(function(data){
-        vm.groupExercises = data;
-      })
-      .error(function(e){
-        console.log(e);
-      })
-
+      vm.groupBaseExercise.body.forEach(function(part) {
+        var item = {type: part.type, content: part.content};
+        vm.newExercise.body.push(item);
+      })      
     }
 
     vm.cancelNewExercise = function() {
@@ -298,7 +300,19 @@
     vm.getExercises = function() {
       meanData.getExercises(vm.subSubjects[vm.subSubject]._id, vm.level)
       .success(function(data){
-        vm.exercises = data;
+        vm.exercises = [];
+        vm.exercisesStages = [];
+        // go over all the exercises and take out the group exercises, leaving only the base in the list
+        for(var i=0; i<data.length; i++) {
+          if(data[i].groupId == undefined || data[i].groupId == data[i].Id) {
+            vm.exercises.push(data[i]);
+          }
+          else {
+            console.log('in getExercises.for.else - new stage was added');
+            vm.exercisesStages.push(data[i]);
+          }
+        }
+        vm.populateGroupExercise(vm.groupBaseExercise._id);
       })
       .error(function(e){
         console.log(e);
@@ -307,6 +321,7 @@
 
     vm.addTextArea = function(){
       vm.newExerciseAdded = false;
+      vm.newExerciseStepAdded = false;
       vm.answerType = "closed";
       vm.newExercise.body.push({type: 'text', content: '' });
     }
@@ -314,6 +329,7 @@
     vm.addPicture = function(){
       console.log('in teacher.controller addPicture:' + vm.picFile.content);
       vm.newExerciseAdded = false;
+      vm.newExerciseStepAdded = false;
       vm.answerType = "closed";
       vm.newExercise.body.push({type: 'picture', content: vm.picFile});
     }
@@ -345,6 +361,10 @@
         else {
           vm.newExercise.level = vm.defaultLevel;
         }
+        if(vm.addingExerciseStep) {
+          console.log('in addNewExercise.addingExerciseStep');
+          vm.newExercise.groupId = vm.groupBaseExercise._id;
+        }
         // now remove the empty answers from the exercise
         var solutions = [];
         for(var i=0; i<vm.newExercise.solutions.length; i++) {
@@ -363,11 +383,15 @@
               .then(function(){
                 // forth, reset the page for the new exerciese
                 console.log('in teacher.controller onSubmit.exercise.then.forEach.end');
-
-                vm.cancelNewExercise();
                 vm.exercises = {};
                 vm.levelSelected();
-                vm.newExerciseAdded = true;
+                if(vm.addingExerciseStep) {
+                  vm.newExerciseStepAdded = true;
+                }
+                else {
+                  vm.newExerciseAdded = true;
+                }
+                vm.cancelNewExercise();
                 vm.solutionPicFile = undefined;
               });
           }
@@ -454,7 +478,7 @@
     if(vm.exercise != undefined) {
       var parts = vm.exercise.split(" ");
       var loc = parts[parts.length - 1];
-      if(loc > 0) {
+      if(vm.exercises[loc - 1] != undefined) {
         vm.exerciseGroupId = vm.exercises[loc - 1].groupId;
         if(vm.exerciseGroupId != undefined) {
           return true;
@@ -467,9 +491,9 @@
   vm.populateGroupExercise = function(groupId) {
     console.log('in populateGroupExercise with ' + groupId);
     vm.exerciseStages = [];
-    for(var i=0; i<vm.exercises.length; i++) {
-      if(vm.exercises[i].groupId == groupId) {
-        vm.exerciseStages.push(vm.exercises[i]);
+    for(var i=0; i<vm.exercisesStages.length; i++) {
+      if(vm.exercisesStages[i].groupId == groupId) {
+        vm.exerciseStages.push(vm.exercisesStages[i]);
       }
     }
   }
@@ -477,6 +501,8 @@
 
   $scope.$watch('vm.exercise', function() {
     if(vm.exercise != undefined) {
+      vm.newExerciseAdded = false;
+      vm.newExerciseStepAdded = false;
       var parts = vm.exercise.split(" ");
       var loc = parts[parts.length - 1];
       console.log('in watch vm.exercise with loc ' + loc);
@@ -490,8 +516,16 @@
           console.log(e);
         })
       }
+      else {
+          vm.addingExerciseStep = false;
+      }
     }
-  })
+    })
+
+    $scope.$watch('vm.stage', function() {
+      vm.newExerciseAdded = false;
+      vm.newExerciseStepAdded = false;
+    })
 
     //####################################################################################
     //########## Answers ###########

@@ -480,9 +480,13 @@ module.exports.newExercise = function (req, res) {
       exercise.body.push(part);
     }
   });
-  // if this is a multi step exercise then update the groupId
+  // if this is a base in a multi step exercise then update the groupId
   if(req.body.solutions.length == 0) {
     exercise.groupId = exercise._id;
+  }
+  // if this is a step in a multi step exercise then update the groupId 
+  if(req.body.groupId != undefined) {
+    exercise.groupId = req.body.groupId;
   }
   // this is not a group exercise, so just create all the solutions from all solution parts
   else {
@@ -504,7 +508,7 @@ module.exports.newExercise = function (req, res) {
       newExercise.level = exercise.level;
       // if this is a multi step exercise then update the groupId
       if(exercise.groupId != undefined) {
-        newExercise.groupId = exercise._id;
+        newExercise.groupId = exercise.groupId;
       }
       // update the subSubject with the new exercise
       SubSubject

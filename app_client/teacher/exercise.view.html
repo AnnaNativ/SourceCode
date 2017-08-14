@@ -8,7 +8,7 @@
                 <input id="files" type="file" style="visibility:hidden;" ngf-select="vm.addPicture()" ng-model="vm.picFile" name="file" accept="image/*"
                 ngf-max-size="2MB" ngf-model-invalid="errorFile">
                 <img ngf-thumbnail="vm.newExercise.body[0].content" class="thumb">
-                <div dir="rtl">
+                <div ng-if="!vm.addingExerciseStep" dir="rtl">
                     <input type="checkbox" ng-model="vm.multiStageExercise"/>
                     <label>תרגיל רב שלבי</label><br>
                 </div>
