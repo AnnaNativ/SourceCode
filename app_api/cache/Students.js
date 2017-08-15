@@ -56,6 +56,9 @@ module.exports.Assignment = function(assignment) {
     this.userProgressHistory = [];
     this.sequencialHits = 0;
     this.maxSequencialHits = 0;
+    this.groupId = null;
+    this.groupBody = [];
+    this.nextExercise = null;
 
     this.addUserProgress = function(userProgress) {
         this.userProgressHistory.push(userProgress);
@@ -121,6 +124,33 @@ module.exports.Assignment = function(assignment) {
     this.resetMaxSequencialHits = function() {
         this.sequencialHits = 0;
         this.maxSequencialHits = 0;
+    }
+
+    this.getGroupId = function() {
+        return this.groupId;
+    }
+
+    this.setGroupId = function(groupId) {
+        this.groupId = groupId;
+    }
+
+    this.setGroupBody = function(body) {
+        this.groupBody = [];
+        for(var i=0; i<body.length; i++) {
+            this.groupBody.push({type: body[i].type, content: body[i].content});
+        }
+    }
+
+    this.getGroupBody = function() {
+        return this.groupBody;
+    }
+
+    this.getNextExercise = function() {
+        return this.nextExercise;
+    }
+
+    this.setNextExercise = function(nextExercise) {
+        this.nextExercise = nextExercise;
     }
 };
 

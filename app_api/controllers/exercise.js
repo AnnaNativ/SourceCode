@@ -53,7 +53,21 @@ module.exports.getExercise = function(req, res) {
  * 4. Get the next exercise for a defined sub subject and level
  * 5. Call back to the main flow with all the exercises for that subsubject and level
  * 6. Choose one exercise for the result set. Filter out the ones that the user already saw and choose the first one that he didnt see yet
- * 7. An exercise was found, so just return it. The flow is now done.
+ * 6.1 If this is a group exercise (base or part) then use a group flow
+ * 6.2 If this is a base group exercise then update the cache and continue
+ * 6.3 This is a "step" exercise of the current groupId, so return this exercise
+ * 6.4 This is a "step" exercise of a differnt groupId, so just skip it
+ * 6.5 this is a regular execise in the middle of a group exercise process. ignore it for now.
+ * 6.6 this is a regular execise, so just return it
+ * 7. If we found an exercise lets get some more details and send it to the student
+ * 7.1 This is a regular exercise, just send it to the student
+ * 7.1.1 An exercise was found, so just return it. The flow is now done.
+ * 7.2 This is a group exercise, so send the next step to the student
+ * 7.2.1 Get the base exercise first
+ * 7.2.2 Return the group exercise to the student
+ * 7.3 This is a group exercise flow and we have no exercise to return, so mark the group as done and loop again over the available exercises
+ * 7.4 Add the base exercise to the cache and mark it as done.
+ * 7.5 We are done with the group exercise, so run the whole process again to see if we have more exercises for this level
  * 8. If no exercise was found for this level go to the next level and repeat the process.
  * 8.1 Add a record to the user progress collection, update the chace and recursively get an exercise from the new level
  * 9. We are done with all levels for the assignment state
@@ -94,7 +108,7 @@ module.exports.getNextExercise = function (req, res) {
   }
   // 2.4.1 Adjust the status based on student request
   var adjustStatus = function() {
-    // 2.4.2 The user requested a change in sub subjec (choose on of the dependencies), so update the sub subject and add user progress record
+    // 2.4.2 The user requested a change in sub subject (choose one of the dependencies), so update the sub subject and add user progress record
     if(subSubjectChange != undefined) {
       subSubject = mongoose.Types.ObjectId(subSubjectChange);
       currentExerciseLevel = 0;
@@ -180,42 +194,113 @@ module.exports.getNextExercise = function (req, res) {
     // 2.5 Call update exercise statistics function
     updateExerciseStatistics();
   };
-
   // 6. Choose one exercise for the result set. Filter out the ones that the user already saw and choose the first one that he didnt see yet
   var chooseOneExercise = function(exercises, subSubjectName) {
-    var isFound = false;
-    for(var i=0; i<exercises.length; i++) {
-      if(!isFound && !student.isExerciseDone(exercises[i].Id)) {
-        isFound = true;
-        Exercise
-          .find({'_id': mongoose.Types.ObjectId(exercises[i].Id)})
-          .exec(function(err, exercise) {
-            // 7. An exercise was found, so just return it. The flow is now done.
-            if(exercise.length > 0) {
-              exercise[0].properties = {
-                            subSubjectName: subSubjectName, 
-                            subSubjectId: subSubject,
-                            level: currentExerciseLevel,
-                            maxSequencialHits: assignment.getMaxSequencialHits(),
-                            resumeOriginalAssignment: false
-              };
-              if(shouldGoBackToOriginalAssignment == true) {
-                shouldGoBackToOriginalAssignment = false;
-                exercise[0].properties.resumeOriginalAssignment = true;
-              }
-              res.status(200).json(exercise[0]);
-              return;
+    assignment.setGroupId(null);
+    assignment.setGroupBody([]);
+    assignment.setNextExercise(null);
+    
+    // 7.1 This is a regular exercise, just send it to the student
+    var returnRegularExercise = function(isFromGroup) {
+      Exercise
+        .find({'_id': mongoose.Types.ObjectId(assignment.getNextExercise().Id)})
+        .exec(function(err, exercise) {
+          // 7.1.1 An exercise was found, so just return it. The flow is now done.
+          if(exercise.length > 0) {
+            if(isFromGroup) {
+              exercise[0].body = assignment.getGroupBody().concat(exercise[0].body);
             }
-            else {
-              console.log('Error - cant find exercise by ID');
-              res.status(200).json(null);
-              return;
-            }            
-          });
+            exercise[0].properties = {
+                          subSubjectName: subSubjectName, 
+                          subSubjectId: subSubject,
+                          level: currentExerciseLevel,
+                          maxSequencialHits: assignment.getMaxSequencialHits(),
+                          resumeOriginalAssignment: false
+            };
+            if(shouldGoBackToOriginalAssignment == true) {
+              shouldGoBackToOriginalAssignment = false;
+              exercise[0].properties.resumeOriginalAssignment = true;
+            }
+            res.status(200).json(exercise[0]);
+            return;
+          }
+          else {
+            console.log('Error - cant find exercise by ID');
+            res.status(200).json(null);
+            return;
+          }            
+        });
+    }
+
+    // 7.2 This is a group exercise, so send the next step to the student
+    var returnGroupBaseExercise = function() {
+      Exercise
+        // 7.2.1 Get the base exercise first
+        .find({'_id': mongoose.Types.ObjectId(assignment.getGroupId())})
+        .exec(function(err, exercise) {
+          if(exercise.length > 0) {
+            assignment.setGroupBody(exercise[0].body);
+            // 7.2.2 Return the group exercise to the student
+            returnRegularExercise(true);
+          }
+          else {
+            console.log('Error - cant find exercise by ID');
+            res.status(200).json(null);
+            return;
+          }            
+      });        
+    }
+    
+    for(var i=0; i<exercises.length; i++) {
+      if(!student.isExerciseDone(exercises[i].Id)) {
+        // 6.1 If this is a group exercise (base or step) then use a group flow
+        if(exercises[i].groupId != undefined) { 
+          // 6.2 If this is a base group exercise then update the cache and continue
+          if(exercises[i].groupId.toString() == exercises[i].Id.toString()) {
+              assignment.setGroupId(exercises[i].groupId);
+              continue;
+          }
+          // 6.3 This is a "step" exercise of the current groupId, so return this exercise
+          else if(exercises[i].groupId.toString() == assignment.getGroupId().toString()) {
+            assignment.setNextExercise(exercises[i]);
+            break;
+          }
+          // 6.4 This is a "step" exercise of a differnt groupId, so just skip it
+          else if(exercises[i].groupId.toString() != assignment.getGroupId().toString()) {
+            continue;
+          }
+        }
+        // 6.5 this is a regular execise in the middle of a group exercise process. ignore it for now.
+        else if(assignment.getGroupId() != null) {
+            continue;
+        }
+        // 6.6 this is a regular execise, so just return it
+        else {
+          assignment.setNextExercise(exercises[i]);
+          break;
+        }
       }
     }
-    if(!isFound) {
-      // 8. If no exercise was found for this level go to the next level and repeat the process.
+    // 7. If we found an exercise lets get some more details and send it to the student
+    if(assignment.getNextExercise() != null) {
+      // 7.1 This is a regular exercise, just send it to the student
+      if(assignment.getGroupId() == null) {
+        returnRegularExercise(false);
+      }
+      // 7.2 This is a group exercise, so send the next step to the student
+      else {
+        returnGroupBaseExercise();
+      }
+    }
+    // 7.3 This is a group exercise flow and we have no exercise to return, so mark the group as done and loop again over the available exercises
+    else if(assignment.getGroupId() != null) {
+      // 7.4 Add the base exercise to the cache and mark it as done.
+      student.addDoneExercise(assignment.getGroupId());
+      // 7.5 We are done with the group exercise, so run the whole process again to see if we have more exercises for this level
+      chooseOneExercise(exercises, subSubjectName);
+    }
+    // 8. If no exercise was found for this level go to the next level and repeat the process.
+    else {
       if(currentExerciseLevel <= MAX_EXERCISE_LEVEL) {
         currentExerciseLevel++;
         assignment.resetMaxSequencialHits();
@@ -484,11 +569,7 @@ module.exports.newExercise = function (req, res) {
   if(req.body.solutions.length == 0) {
     exercise.groupId = exercise._id;
   }
-  // if this is a step in a multi step exercise then update the groupId 
-  if(req.body.groupId != undefined) {
-    exercise.groupId = req.body.groupId;
-  }
-  // this is not a group exercise, so just create all the solutions from all solution parts
+  // this is not a base group exercise, so create all the solutions from all solution parts
   else {
     req.body.solutions.forEach(function (solution) {
       var sol = new Solution();
@@ -496,6 +577,10 @@ module.exports.newExercise = function (req, res) {
       sol.isCorrect = solution.isCorrect;
       exercise.solutions.push(sol);
     });
+  }
+  // if this is a step in a multi step exercise then update the groupId 
+  if(req.body.groupId != undefined) {
+    exercise.groupId = req.body.groupId;
   }
   // save the exercise
   exercise.save(function (err) {
