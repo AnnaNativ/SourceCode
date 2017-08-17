@@ -59,6 +59,7 @@ module.exports.Assignment = function(assignment) {
     this.groupId = null;
     this.groupBody = [];
     this.nextExercise = null;
+    this.updatedDate = null;
 
     this.addUserProgress = function(userProgress) {
         this.userProgressHistory.push(userProgress);
@@ -151,6 +152,10 @@ module.exports.Assignment = function(assignment) {
 
     this.setNextExercise = function(nextExercise) {
         this.nextExercise = nextExercise;
+    }
+
+    this.updateDateStatus = function(date) {
+        this.updatedDate = date;
     }
 };
 

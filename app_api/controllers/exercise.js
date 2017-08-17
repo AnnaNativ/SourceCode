@@ -39,6 +39,7 @@ module.exports.getExercise = function(req, res) {
  * 1. First we will pupulate our objects from the Cache.
  * 2. If this request comes after the user solved an exercise, then audit this exercise
  * 2.1. Add a record to the Audit table for this exercise
+ * 2.1.1 Update the updatedDate of the assignment
  * 2.2 If this is the first exercise then it means that the assignment just started and we need to change its status to 'inprogress'
  * 2.3. Add this exercise to the cache and mark it as done.
  * 2.4. before getting a new exercise we need to adjust the status based on student request
@@ -154,6 +155,30 @@ module.exports.getNextExercise = function (req, res) {
 
   // 2.1. Add a record to the Audit table for this exercise
   var auditExercise = function () {
+    var updateAssignmentStatus = function() {
+      console.log('came back from progressRecord.save with ' + JSON.stringify(auditRecord));
+      // 2.1.1 Update the updatedDate of the assignment
+      var currDate = new Date();
+      assignment.updateDateStatus(currDate);
+      Assignment.
+      update({_id: assignment.getId()}, {$set: {'updatedDate': currDate}}, 
+        function(err, result) {
+          if (err) {
+            console.log('Failed to update the assignment with the new updated date ' + err);
+          }                
+        });
+      // 2.2 If this is the first exercise then it means that the assignment just started and we need to change its status to 'inprogress'
+      if(assignment.isNew()) {
+        assignment.setInProgress();
+        Assignment.
+        update({_id: assignment.getId()}, {$set: {'status': 'inprogress'}}, 
+          function(err, result) {
+            if (err) {
+              console.log('Failed to update the assignment with the new status ' + err);
+            }                
+          });
+      }
+    }
     var auditRecord = new Audit();
     auditRecord.type = 'exercise';
     auditRecord.userId = req.payload._id;
@@ -173,22 +198,11 @@ module.exports.getNextExercise = function (req, res) {
         console.log(err);
       }
       else {
-          console.log('came back from progressRecord.save with ' + JSON.stringify(auditRecord));
-          // 2.2 If this is the first exercise then it means that the assignment just started and we need to change its status to 'inprogress'
-          if(assignment.isNew()) {
-            assignment.setInProgress();
-            Assignment.
-            update({_id: assignment.getId()}, {$set: {'status': 'inprogress'}}, 
-              function(err, result) {
-                if (err) {
-                  console.log('Failed to update the assignment with the new status ' + err);
-                }                
-              });
-          }
-          // 2.3. Add this exercise to the cache and mark it as done.
-          student.addDoneExercise(req.query.currentExerciseId);
-          // 2.4. before getting a new exercise we need to adjust the status based on student request
-          adjustStatus();
+        updateAssignmentStatus();
+        // 2.3. Add this exercise to the cache and mark it as done.
+        student.addDoneExercise(req.query.currentExerciseId);          
+        // 2.4. before getting a new exercise we need to adjust the status based on student request
+        adjustStatus();
       }
     })
     // 2.5 Call update exercise statistics function

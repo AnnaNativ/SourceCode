@@ -118,10 +118,11 @@
     vm.formatAssignmentDate = function(dateIn) {
       if(dateIn != undefined) {
         var date = new Date(dateIn);
+        var monthNormalized = date.getMonth() + 1;
         return date.getHours() + ':' + date.getMinutes() + '  ' +
-               date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();  
+               date.getDate()  + '/' + monthNormalized + '/' + date.getFullYear();  
       }
-      return 'N/A';
+      return '--';
     }
     //####################################################################################
     //########## Exercise ###########
@@ -301,7 +302,10 @@
     }
 
     vm.allowNextLevel = function() {
-      return (vm.exercise.properties.maxSequencialHits >= vm.ALLOW_NEXT_LEVEL_THRESHOLD);
+      if(vm.exercise.properties != undefined) {
+        return (vm.exercise.properties.maxSequencialHits >= vm.ALLOW_NEXT_LEVEL_THRESHOLD);
+      }
+      return false;
     }
     //####################################################################################
     //########## Assistance ###########
