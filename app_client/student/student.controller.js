@@ -115,6 +115,14 @@
       vm.subSubject = undefined;
     } 
 
+    vm.formatAssignmentDate = function(dateIn) {
+      if(dateIn != undefined) {
+        var date = new Date(dateIn);
+        return date.getHours() + ':' + date.getMinutes() + '  ' +
+               date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();  
+      }
+      return 'N/A';
+    }
     //####################################################################################
     //########## Exercise ###########
     //####################################################################################

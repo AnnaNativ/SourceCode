@@ -47,33 +47,17 @@
             <p><h2><u>:משימות פעילות</u></h2></p>
             <hr>
             <p><h3><u>:משימות של מורים</u></h3></p>
-            <div class="row">
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label >בחירה:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>ניתן על ידי:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>נושא:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>תת נושא:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>סטטוס משימה:</label><br>
-                </div>
-            </div>
+            <div ng-include="'/student/assignment.header.html'"></div>
             <div ng-repeat="assignment in vm.myAssignments">
                 <div ng-if="assignment.status != 'done' && assignment.assigner[0]._id != assignment.assignee" class="form-group text-right">
                     <div class="row">
-                        <div dir="rtl" class="col-md-2 pull-right">
+                        <div dir="rtl" class="col-md-1 pull-right">
                             <div ng-if="vm.selectedAssignmentIndex != $index">
-                                <a ng-if="assignment.status == 'new'" ng-click="vm.assignmentClicked($index)" href="">התחל משימה</a>
-                                <a ng-if="assignment.status == 'inprogress'" ng-click="vm.assignmentClicked($index)" href="">המשך משימה</a>
+                                <a ng-if="assignment.status == 'new'" ng-click="vm.assignmentClicked($index)" href="">התחל</a>
+                                <a ng-if="assignment.status == 'inprogress'" ng-click="vm.assignmentClicked($index)" href="">המשך</a>
                             </div>
                             <div ng-if="vm.selectedAssignmentIndex == $index">
-                                <a ng-click="vm.assignmentClicked($index)" href=""><u><em><b>משימה פעילה</em></b><u></a>
+                                <a ng-click="vm.assignmentClicked($index)" href=""><u><em><b>פעילה</em></b><u></a>
                             </div>
                         </div>
                         <div dir="rtl" class="col-md-2 pull-right">
@@ -87,46 +71,36 @@
                         <div dir="rtl" class="col-md-2 pull-right">
                             {{assignment.subSubject[0].name}}
                         </div>
-                        <div dir="rtl" class="col-md-2 pull-right">
+                        <div dir="rtl" class="col-md-1 pull-right">
                             <span ng-if="assignment.status == 'new'" class="label label-danger">חדש</span>
                             <span ng-if="assignment.status == 'inprogress'" class="label label-info">בעבודה</span>
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            {{vm.formatAssignmentDate(assignment.createdDate)}}
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            {{vm.formatAssignmentDate(assignment.updatedDate)}}
                         </div>
                     </div>                    
                 </div>
             </div>
             <p><h3><u>:משימות עצמיות</u></h3></p>
-            <div class="row">
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label >בחירה:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>ניתן על ידי:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>נושא:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>תת נושא:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>סטטוס משימה:</label><br>
-                </div>
-            </div>
+            <div ng-include="'/student/assignment.header.html'"></div>
             <div ng-repeat="assignment in vm.myAssignments">
                 <div ng-if="assignment.status != 'done' && assignment.assigner[0]._id == assignment.assignee" class="form-group text-right">
                     <div class="row">
-                        <div dir="rtl" class="col-md-2 pull-right">
+                        <div dir="rtl" class="col-md-1 pull-right">
                             <div ng-if="vm.selectedAssignmentIndex != $index">
-                                <a ng-if="assignment.status == 'new'" ng-click="vm.assignmentClicked($index)" href="">התחל משימה</a>
-                                <a ng-if="assignment.status == 'inprogress'" ng-click="vm.assignmentClicked($index)" href="">המשך משימה</a>
+                                <a ng-if="assignment.status == 'new'" ng-click="vm.assignmentClicked($index)" href="">התחל</a>
+                                <a ng-if="assignment.status == 'inprogress'" ng-click="vm.assignmentClicked($index)" href="">המשך</a>
                             </div>
                             <div ng-if="vm.selectedAssignmentIndex == $index">
-                                <a ng-click="vm.assignmentClicked($index)" href=""><u><em><b>משימה פעילה</em></b><u></a>
+                                <a ng-click="vm.assignmentClicked($index)" href=""><u><em><b>פעילה</em></b><u></a>
                             </div>
                         </div>
                         <div dir="rtl" class="col-md-2 pull-right">
                             <div ng-if="assignment.assigner[0]._id == assignment.assignee">
-                                אני
+                                עצמי
                             </div>
                         </div>
                         <div dir="rtl" class="col-md-2 pull-right">
@@ -135,9 +109,15 @@
                         <div dir="rtl" class="col-md-2 pull-right">
                             {{assignment.subSubject[0].name}}
                         </div>
-                        <div dir="rtl" class="col-md-2 pull-right">
+                        <div dir="rtl" class="col-md-1 pull-right">
                             <span ng-if="assignment.status == 'new'" class="label label-danger">חדש</span>
                             <span ng-if="assignment.status == 'inprogress'" class="label label-info">בעבודה</span>
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            {{vm.formatAssignmentDate(assignment.createdDate)}}
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            {{vm.formatAssignmentDate(assignment.updatedDate)}}
                         </div>
                     </div>                    
                 </div>
@@ -149,29 +129,13 @@
             <p><h2>:משימות גמורות</h2></p>
             <hr>
             <p><h3><u>:משימות של מורים</u></h3></p>
-            <div class="row">
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label >בחירה:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>ניתן על ידי:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>נושא:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>תת נושא:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>סטטוס משימה:</label><br>
-                </div>
-            </div>
+            <div ng-include="'/student/assignment.header.html'"></div>
             <div ng-repeat="assignment in vm.myAssignments">
                 <div ng-if="assignment.status == 'done' && assignment.assigner[0]._id != assignment.assignee" class="form-group text-right">
                     <div class="row">
-                        <div dir="rtl" class="col-md-2 pull-right">
+                        <div dir="rtl" class="col-md-1 pull-right">
                             <div ng-if="vm.selectedAssignmentIndex != $index">
-                                <span ng-if="assignment.status == 'done'">משימה גמורה</span>
+                                <span ng-if="assignment.status == 'done'">גמורה</span>
                             </div>
                         </div>
                         <div dir="rtl" class="col-md-2 pull-right">
@@ -185,41 +149,31 @@
                         <div dir="rtl" class="col-md-2 pull-right">
                             {{assignment.subSubject[0].name}}
                         </div>
-                        <div dir="rtl" class="col-md-2 pull-right">
+                        <div dir="rtl" class="col-md-1 pull-right">
                             <span ng-if="assignment.status == 'done'" class="label label-success">גמור</span>
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            {{vm.formatAssignmentDate(assignment.createdDate)}}
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            {{vm.formatAssignmentDate(assignment.updatedDate)}}
                         </div>
                     </div>                    
                 </div>
             </div>
             <p><h3><u>:משימות עצמיות</u></h3></p>
-            <div class="row">
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label >בחירה:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>ניתן על ידי:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>נושא:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>תת נושא:</label><br>
-                </div>
-                <div dir="rtl" class="col-md-2 pull-right">
-                    <label>סטטוס משימה:</label><br>
-                </div>
-            </div>
+            <div ng-include="'/student/assignment.header.html'"></div>
             <div ng-repeat="assignment in vm.myAssignments">
                 <div ng-if="assignment.status == 'done' && assignment.assigner[0]._id == assignment.assignee" class="form-group text-right">
                     <div class="row">
-                        <div dir="rtl" class="col-md-2 pull-right">
+                        <div dir="rtl" class="col-md-1 pull-right">
                             <div ng-if="vm.selectedAssignmentIndex != $index">
-                                <span ng-if="assignment.status == 'done'">משימה גמורה</span>
+                                <span ng-if="assignment.status == 'done'">גמורה</span>
                             </div>
                         </div>
                         <div dir="rtl" class="col-md-2 pull-right">
                             <div ng-if="assignment.assigner[0]._id == assignment.assignee">
-                                אני
+                                עצמי
                             </div>
                         </div>
                         <div dir="rtl" class="col-md-2 pull-right">
@@ -228,8 +182,14 @@
                         <div dir="rtl" class="col-md-2 pull-right">
                             {{assignment.subSubject[0].name}}
                         </div>
-                        <div dir="rtl" class="col-md-2 pull-right">
+                        <div dir="rtl" class="col-md-1 pull-right">
                             <span ng-if="assignment.status == 'done'" class="label label-success">גמור</span>
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            {{vm.formatAssignmentDate(assignment.createdDate)}}
+                        </div>
+                        <div dir="rtl" class="col-md-2 pull-right">
+                            {{vm.formatAssignmentDate(assignment.updatedDate)}}
                         </div>
                     </div>                    
                 </div>

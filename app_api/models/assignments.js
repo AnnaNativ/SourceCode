@@ -7,6 +7,7 @@ var assignmentSchema = new mongoose.Schema({
     status: {type: String, enum: ['new', 'inprogress', 'done'], default: 'new'},
     subjectId: {type: Schema.Types.ObjectId, ref:'Subject'},
     subsubjectId: {type: Schema.Types.ObjectId, ref:'SubSubject'},
+    createdDate: {type: Date, default: Date.now}
 });    
 
 mongoose.model('Assignment', assignmentSchema);
