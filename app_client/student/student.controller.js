@@ -44,6 +44,7 @@
     vm.selectedAssignment = undefined;
     vm.selectedAssignmentIndex = undefined;
     vm.selectedAssignmentDone = false;
+    vm.selectedAssignmentFailed = false;
 
     meanData.getProfile()
       .success(function (data) {
@@ -80,6 +81,7 @@
       vm.selectedAssignment = vm.myAssignments[$index];
       vm.selectedAssignmentIndex = $index;
       vm.selectedAssignmentDone = false;
+      vm.selectedAssignmentFailed = false;
       vm.currentTab = 'current assignment';
       vm.exercise = {};
       vm.levelChange = 0;
@@ -140,9 +142,14 @@
       meanData.getNextExercise(vm.selectedAssignment._id, vm.exercise._id, vm.finalSelection, vm.levelChange, vm.assistant, vm.subSubjectChange)
       .success(function(data){
 //        console.log('In getNextExercise.success');
-        if(data.status == 'NoMoreExercises') {
-//          console.log('In getNextExercise.success.if');
+        if(data.status == 'NO_MORE_EXERCISES') {
           vm.selectedAssignmentDone = true;
+          vm.selectedAssignment = undefined;
+          vm.selectedAssignmentIndex = undefined;
+        }
+        else if(data.status == 'FAILED_ASSIGNMENT') {
+          console.log('In getNextExercise.failed_assignment');
+          vm.selectedAssignmentFailed = true;
           vm.selectedAssignment = undefined;
           vm.selectedAssignmentIndex = undefined;
         }

@@ -3,13 +3,23 @@
     <div class="col-md-12 pull-right">
         <div dir="rtl" class="well well-lg">
             <div class="text-center">
-                <h3>המשימה הסתיימה</h3>
+                <h3>המשימה הסתיימה בהצלחה</h3>
                 <img ng-src="http://localhost:3000/images/assignment-done.jpg">
             </div>
         </div>
     </div>
 </div>
-<div ng-if="!vm.selectedAssignmentDone && vm.exercise.properties.resumeOriginalAssignment == true">
+<div ng-if="vm.selectedAssignmentFailed" class="row">
+    <div class="col-md-12 pull-right">
+        <div dir="rtl" class="well well-lg">
+            <div class="text-center">
+                <h3>המשימה הסתיימה בכשלון</h3>
+                <img ng-src="http://localhost:3000/images/assignment-failed.jpg">
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment == true">
     <div class="col-md-12 pull-right">
         <div dir="rtl" class="well well-lg">
             <div class="text-center">
@@ -19,7 +29,7 @@
         </div>
     </div>
 </div>
-<div ng-if="!vm.selectedAssignmentDone && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel == true">
+<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel == true">
     <div class="col-md-12 pull-right">
         <div dir="rtl" class="well well-lg">
             <div class="text-center">
@@ -29,7 +39,7 @@
         </div>
     </div>
 </div>
-<div ng-if="!vm.selectedAssignmentDone && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel != true" class="row">
+<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel != true" class="row">
     <div class="col-md-6 pull-right">
         <div dir="rtl" class="well well-lg">
             <h3 ng-if="vm.atOriginalSubSubject()" >שם המשימה: {{vm.selectedAssignment.subSubject[0].name}}</h3>

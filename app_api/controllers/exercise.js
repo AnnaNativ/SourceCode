@@ -70,7 +70,8 @@ module.exports.getExercise = function(req, res) {
  * 7.4 Add the base exercise to the cache and mark it as done.
  * 7.5 We are done with the group exercise, so run the whole process again to see if we have more exercises for this level
  * 8. If no exercise was found for this level go to the next level and repeat the process.
- * 8.1 Add a record to the user progress collection, update the chace and recursively get an exercise from the new level
+ * 8.1 The student didnt pass the currenet level then fail the assignemnt and send student a message back
+ * 8.2 Add a record to the user progress collection, update the chace and recursively get an exercise from the new level
  * 9. We are done with all levels for the assignment state
  * 9.1 If we are in the original sub subject then update the assignment status and send a message back to the student. 
  */ 
@@ -83,6 +84,38 @@ module.exports.getNextExercise = function (req, res) {
   var levelChange;
   var subSubjectChange;
   var shouldGoBackToOriginalAssignment = false;
+
+    // 4. Get the next exercise for a defined sub subject and level
+  getExercisesForSubsubjectAndLevel = function (subsubject, level, callBackFunction) {
+    SubSubject
+      .aggregate(
+      { $match: { '_id': subsubject } },
+      {
+        $project: {
+          exercises: {
+            $filter: {
+              input: '$exercises',
+              as: 'exer',
+              cond: { $eq: ["$$exer.level", level] }
+            }
+          },
+          name:1
+        }
+      }
+      )
+      .exec(function (err, result) {
+        assignment.setExerciseCount(result[0].exercises);
+        if(result.length == 0) {
+          callBackFunction([]);
+        }
+        else {
+          console.log('exe for this subsubject and level:' + result[0].exercises.length);
+          // 5. Call back to the main flow with all the exercises for that subsubject and level
+          callBackFunction(result[0].exercises, result[0].name);
+        }
+      });
+  };
+
   // 2.6 Update exercise statistics based on the exercise outcome. Don't wait for callback, assume success
   var updateExerciseStatistics = function() {
     var exerciseId = mongoose.Types.ObjectId(req.query.currentExerciseId);
@@ -108,6 +141,7 @@ module.exports.getNextExercise = function (req, res) {
       })
     }
   }
+
   // 2.4.1 Adjust the status based on student request
   var adjustStatus = function() {
     // 2.4.2 The user requested a change in sub subject (choose one of the dependencies), so update the sub subject and add user progress record
@@ -140,7 +174,7 @@ module.exports.getNextExercise = function (req, res) {
     }
   }
 
-  // 8.1 - Add a record to the user progress collection, update the chace and recursively get an exercise from the new level 
+  // 8.2 - Add a record to the user progress collection, update the chace and recursively get an exercise from the new level 
   var addUserProgressRecord = function() {
     var userProgress = new UserProgress();
   
@@ -210,12 +244,26 @@ module.exports.getNextExercise = function (req, res) {
     // 2.5 Call update exercise statistics function
     updateExerciseStatistics();
   };
+    
   // 6. Choose one exercise for the result set. Filter out the ones that the user already saw and choose the first one that he didnt see yet
   var chooseOneExercise = function(exercises, subSubjectName) {
     assignment.setGroupId(null);
     assignment.setGroupBody([]);
     assignment.setNextExercise(null);
     
+    // 8.1 The student didnt pass the currenet level then fail the assignemnt and send student a message back
+    var failAssignment = function() {
+      Assignment.
+        update({_id: assignment.getId()}, {$set: {'status': 'failed'}}, 
+          function(err, result) {
+            if (err) {
+              console.log('Failed to update the assignment with the new status ' + err);
+            }
+            res.status(200).json({status: 'FAILED_ASSIGNMENT'});
+            return;
+          });
+    }
+
     // 7.1 This is a regular exercise, just send it to the student
     var returnRegularExercise = function(isFromGroup) {
       Exercise
@@ -318,7 +366,11 @@ module.exports.getNextExercise = function (req, res) {
     }
     // 8. If no exercise was found for this level go to the next level and repeat the process.
     else {
-      if(currentExerciseLevel <= MAX_EXERCISE_LEVEL) {
+      // 8.1 The student didnt pass the currenet level then fail the assignemnt and send student a message back
+      if(!assignment.canGoToNextLevel()) {
+        failAssignment();
+      }
+      else if(currentExerciseLevel <= MAX_EXERCISE_LEVEL) {
         currentExerciseLevel++;
         levelIncreaced = true;
         assignment.resetMaxSequencialHits();
@@ -334,7 +386,7 @@ module.exports.getNextExercise = function (req, res) {
                 if (err) {
                   console.log('Failed to update the assignment with the new status ' + err);
                 }
-                res.status(200).json({status: 'NoMoreExercises'});
+                res.status(200).json({status: 'NO_MORE_EXERCISES'});
                 return;
               });
         }
@@ -373,36 +425,6 @@ module.exports.getNextExercise = function (req, res) {
       getExercisesForSubsubjectAndLevel(subSubject, currentExerciseLevel, chooseOneExercise);
     }    
   }
-
-};
-// 4. Get the next exercise for a defined sub subject and level
-getExercisesForSubsubjectAndLevel = function (subsubject, level, callBackFunction) {
-  SubSubject
-    .aggregate(
-    { $match: { '_id': subsubject } },
-    {
-      $project: {
-        exercises: {
-          $filter: {
-            input: '$exercises',
-            as: 'exer',
-            cond: { $eq: ["$$exer.level", level] }
-          }
-        },
-        name:1
-      }
-    }
-    )
-    .exec(function (err, result) {
-      if(result.length == 0) {
-        callBackFunction([]);
-      }
-      else {
-        console.log('exe for this subsubject and level:' + result[0].exercises.length);
-        // 5. Call back to the main flow with all the exercises for that subsubject and level
-        callBackFunction(result[0].exercises, result[0].name);
-      }
-    });
 };
 
 module.exports.getExercises = function (req, res) {

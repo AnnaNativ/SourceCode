@@ -52,6 +52,8 @@ module.exports.Student = function(id) {
 };
 
 module.exports.Assignment = function(assignment) {
+    this.REQUIRED_SEQUENTIAL_HITS = 4;
+    this.MIN_SUCCESSFUL_EXERCISES_PERCENTAGE = 0.6;
     this.assignment = assignment;
     this.userProgressHistory = [];
     this.sequencialHits = 0;
@@ -61,6 +63,8 @@ module.exports.Assignment = function(assignment) {
     this.nextExercise = null;
     this.updatedDate = null;
     this.levelsSuccessCounter = new HashMap();
+    this.exerciseCount = 0;
+    this.successfulExerciseCount = 0;
 
     this.addUserProgress = function(userProgress) {
         this.userProgressHistory.push(userProgress);
@@ -110,6 +114,7 @@ module.exports.Assignment = function(assignment) {
 
     this.updateSuccsessfulExercise = function(level) {
         this.incrementSequencialHits();
+        this.successfulExerciseCount++;
         var counter = this.levelsSuccessCounter.get(level);
         if(counter == undefined) {
             counter = 0;
@@ -171,6 +176,24 @@ module.exports.Assignment = function(assignment) {
 
     this.updateDateStatus = function(date) {
         this.updatedDate = date;
+    }
+
+    this.setExerciseCount = function(exercises) {
+        this.exerciseCount = 0;
+        for(var i=0; i<exercises.length; i++) {
+            if(exercises[i].groupId == undefined || exercises[i].groupId.toString() != exercises[i].Id.toString()) {
+                this.exerciseCount++;
+            }
+        }
+    }
+
+    this.getExerciseCount = function() {
+        return this.exerciseCount;
+    }
+
+    this.canGoToNextLevel = function() {
+        var successRate = this.successfulExerciseCount / this.exerciseCount;
+        return this.maxSequencialHits >= this.REQUIRED_SEQUENTIAL_HITS || successRate >= this.MIN_SUCCESSFUL_EXERCISES_PERCENTAGE;
     }
 };
 
