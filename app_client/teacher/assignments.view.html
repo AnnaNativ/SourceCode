@@ -87,9 +87,10 @@
                         </div>
                         <div class="col-md-2 pull-right">
                             <div ng-repeat="assignment in obj.assignments">
-                                <span ng-if="assignment.status == 'new'" class="label label-danger">חדש</span>
+                                <span ng-if="assignment.status == 'new'" class="label label-warning">חדש</span>
                                 <span ng-if="assignment.status == 'inprogress'" class="label label-info">בעבודה</span>
-                                <span ng-if="assignment.status == 'done'" class="label label-success">גמור</span>
+                                <span ng-if="assignment.status == 'done'" class="label label-success">הצלחה</span>
+                                <span ng-if="assignment.status == 'failed'" class="label label-danger">כשלון</span>
                                 <br><br>
                             </div>
                         </div>
