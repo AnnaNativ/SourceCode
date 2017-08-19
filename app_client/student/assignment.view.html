@@ -1,4 +1,14 @@
 <br>
+<div ng-if="vm.selectedAssignmentDone" class="row">
+    <div class="col-md-12 pull-right">
+        <div dir="rtl" class="well well-lg">
+            <div class="text-center">
+                <h3>המשימה הסתיימה</h3>
+                <img ng-src="http://localhost:3000/images/assignment-done.jpg">
+            </div>
+        </div>
+    </div>
+</div>
 <div ng-if="!vm.selectedAssignmentDone && vm.exercise.properties.resumeOriginalAssignment == true">
     <div class="col-md-12 pull-right">
         <div dir="rtl" class="well well-lg">
@@ -9,7 +19,17 @@
         </div>
     </div>
 </div>
-<div ng-if="!vm.selectedAssignmentDone && vm.exercise.properties.resumeOriginalAssignment != true" class="row">
+<div ng-if="!vm.selectedAssignmentDone && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel == true">
+    <div class="col-md-12 pull-right">
+        <div dir="rtl" class="well well-lg">
+            <div class="text-center">
+                <h3>כל הכבוד, עברת לשלב {{vm.exercise.properties.level + 1}}&nbsp;&nbsp;&nbsp;&nbsp;<span><button class="btn btn-primary" ng-click="vm.exercise.properties.newLevel = 'false'">המשך</button></span></h3>
+                <img ng-src="{{vm.getPictureForCurrentLevel()}}">
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-if="!vm.selectedAssignmentDone && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel != true" class="row">
     <div class="col-md-6 pull-right">
         <div dir="rtl" class="well well-lg">
             <h3 ng-if="vm.atOriginalSubSubject()" >שם המשימה: {{vm.selectedAssignment.subSubject[0].name}}</h3>
@@ -64,16 +84,6 @@
             <button type="button" class="btn btn-info" ng-click="vm.getTutorialVideo()" data-toggle="modal" data-target="#assistanceDialog">וידאו הדרכה</button>&nbsp;
             <div ng-include="'/student/assistance.dialog.html'"></div>
             <div ng-include="'/student/next.step.dialog.html'"></div>
-        </div>
-    </div>
-</div>
-<div ng-if="vm.selectedAssignmentDone" class="row">
-    <div class="col-md-12 pull-right">
-        <div dir="rtl" class="well well-lg">
-            <div class="text-center">
-                <h3>המשימה הסתיימה</h3>
-                <img ng-src="http://localhost:3000/images/assignment-done.jpg">
-            </div>
         </div>
     </div>
 </div>

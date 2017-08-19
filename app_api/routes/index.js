@@ -28,7 +28,6 @@ router.get('/schoolsList', ctrlProfile.getSchoolsList);
 router.get('/nextExercise', auth, ctrlExercise.getNextExercise);
 router.get('/exercise', auth, ctrlExercise.getExercise);
 router.get('/exercises', auth, ctrlExercise.getExercises);
-router.get('/similarExercise', ctrlExercise.getSimilarExercise);
 router.post('/removeExercise', ctrlExercise.removeExercise);
 
 // subjects
@@ -52,7 +51,6 @@ router.post('/upload', multipartyMiddleware, ctrlUploads.uploadPic);
 
 //assignment
 router.get('/myAssignments', ctrlAssignment.getMyAssignments);
-router.get('/myLastLocation', ctrlAssignment.getMyLastLocation);
 router.get('/assignmentsOfTeacher', auth, ctrlAssignment.getAssignmentsOfTeacher);
 router.post('/assignment', ctrlAssignment.newAssignment);
 

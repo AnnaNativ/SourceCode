@@ -78,6 +78,7 @@ module.exports.getNextExercise = function (req, res) {
   var student;
   var assignment;
   var currentExerciseLevel;
+  var levelIncreaced = false;
   var subSubject;
   var levelChange;
   var subSubjectChange;
@@ -122,6 +123,7 @@ module.exports.getNextExercise = function (req, res) {
     // 2.4.4 The user requested to skip a level, so update the level and add the user progress record
     else if(levelChange == 1) {
       currentExerciseLevel++;
+      levelIncreaced = true;
       assignment.resetMaxSequencialHits();
       addUserProgressRecord();
     }
@@ -187,11 +189,11 @@ module.exports.getNextExercise = function (req, res) {
     auditRecord.exerciseId = req.query.currentExerciseId;
     if(req.query.currentExerciseOutcome == 'true') {
       auditRecord.outcome = 'success';
-      assignment.incrementSequencialHits();
+      assignment.updateSuccsessfulExercise(auditRecord.level);
     }
     else {
       auditRecord.outcome = 'failure';
-      assignment.resetSequencialHits();
+      assignment.updateUnsuccsessfulExercise(auditRecord.level);
     }
     auditRecord.save(function (err) {
       if (err) {
@@ -229,7 +231,8 @@ module.exports.getNextExercise = function (req, res) {
                           subSubjectId: subSubject,
                           level: currentExerciseLevel,
                           maxSequencialHits: assignment.getMaxSequencialHits(),
-                          resumeOriginalAssignment: false
+                          resumeOriginalAssignment: false,
+                          newLevel: levelIncreaced
             };
             if(shouldGoBackToOriginalAssignment == true) {
               shouldGoBackToOriginalAssignment = false;
@@ -317,6 +320,7 @@ module.exports.getNextExercise = function (req, res) {
     else {
       if(currentExerciseLevel <= MAX_EXERCISE_LEVEL) {
         currentExerciseLevel++;
+        levelIncreaced = true;
         assignment.resetMaxSequencialHits();
         addUserProgressRecord();
       }
@@ -401,97 +405,6 @@ getExercisesForSubsubjectAndLevel = function (subsubject, level, callBackFunctio
     });
 };
 
-module.exports.getSimilarExercise = function (req, res) {
-
-  var subsubject = mongoose.Types.ObjectId(req.query.subsubject);
-  var level = Number(req.query.level);
-  var user = req.query.userId;
-  var exeforLevel = [];
-  
-  console.log('looking  for the same exe for subsubject ' + subsubject + ' for level ' + level );
-  
-  PostSeenExe = function (seenExe) {
-    console.log(' I am in PostSeenExe callbackFunc with: ' + seenExe.length + ' seen exe and ' +exeforLevel.length +' available exe');
-    //removing seenExe from the list of exe
-    
-    exeforLevel = internalCleanUpExercisesFromSeen(exeforLevel,seenExe);
-    console.log('after cleanup left with ' + exeforLevel.length);
-    if(exeforLevel.length == 0) // there are no exe left in this level, move to the next level
-    {
-      level = level+1;
-      console.log(' no unseen exe for this level are left, record it and go for a higher level ' + level);
-      //record it first
-      audit.updateProgressLevel(user,subsubject,level); 
-      getExercisesForSubsubjectAndLevel(subsubject, level, PostExesForSubsubjectAndLevel);
-    } 
-      else
-        internalgetRandom(exeforLevel);
-    
-  };
-
-  PostGetExeForId = function (nextExe) {
-    console.log('prepping params for the next exe');
-    //adding subsubject and level for the audit
-    var response = {};
-    response.level = level;
-    response.subsubject = subsubject;
-    response.exe = nextExe[0];
-    //console.log('sending to client exe with level:' + JSON.stringify(response));
-    res.status(200).json(response);
-  };
-
-  PostExesForSubsubjectAndLevel = function(result){
-      console.log('need to filter out exe that have already been seen');
-      if(result.length == 0){
-         if(level < 10){
-          level = level +1;
-          console.log("in PostExesForSubsubjectAndLevel.Done with this level. Going to the next level " + level);
-          audit.updateProgressLevel(user,subsubject,level);
-          getExercisesForSubsubjectAndLevel(subsubject, level, PostExesForSubsubjectAndLevel);
-         }
-         else{
-          console.log('!!!!!!! reached the highest level for this subsubject');
-          //mark subsubject as done in Progress
-
-          audit.MarkSubsubjectasDone(user,subsubject);
-          //check if this is the original subsubject for this assignment 
-          //audit.IsOriginal(user,subsubject,PostIsOriginal);
-          //if yes - mark assignment as done
-          //else go back to the original subsubject
-          //TBD  xxxx LEFT IT HERE
-
-        }
-      } else{
-       exeforLevel = result;
-       var param = {
-          'userId': user,
-          'subsubjectId': subsubject,
-          'level': level
-        };
-        audit.getSeenExercises(param, PostSeenExe);
-      }  
-  };
-   getExercisesForSubsubjectAndLevel(subsubject, level, PostExesForSubsubjectAndLevel);
-
-  console.log('we have '+ availableExe.length + ' exe for this level');
-};
-
-module.exports.getRandom = function(exeforLevel){
-  internalgetRandom(exeforLevel);
-}
-
-internalgetRandom = function(exeforLevel){
-  if (exeforLevel.length > 0) {
-        //pick a random exe from the filtered list
-        var randonIndex = Math.floor((Math.random() * exeforLevel.length));
-        console.log('getting the next exe for you ' + exeforLevel[randonIndex].Id);
-        getExerciseForId(exeforLevel[randonIndex].Id, PostGetExeForId);
-  } else {
-        console.log('There are no exercise assigned to you that have not been worked on.');
-        PostGetExeForId(exeforLevel);
-  }
-};
-
 module.exports.getExercises = function (req, res) {
   if (!req.payload._id) {
     res.status(401).json({
@@ -530,33 +443,6 @@ getExerciseForId = function (exeId, PostGetExeForIdFunc) {
       console.log('I got the next exercise for you ' + JSON.stringify(nextExercises[0].body));
       PostGetExeForIdFunc(nextExercises);
     })
-};
-
-internalCleanUpExercisesFromSeen = function(exeforLevel,seenExe){
-  
-  lookForExeId = function(exe,IdToRemove){
-      exeToCompare = exe.Id.toHexString();
-      console.log('comparing ' + exeToCompare + ' to '+ IdToRemove);
-      return(exeToCompare == IdToRemove);
-  };
-  if (seenExe.length > 0) {
-        var seenExeIndex;
-        for (index in seenExe) {
-          //find it in exe array and remove it
-          var exeToRemove = seenExe[index].exerciseId.toHexString();
-          seenExeIndex = exeforLevel.findIndex(exe => exe.Id.toHexString() == exeToRemove);
-          if(seenExeIndex != -1){
-            exeforLevel.splice(seenExeIndex, 1);
-            console.log('exe :' + seenExe[index].exerciseId + ' was already worked on by this user');
-          }else
-            console.log('exe :' + seenExe[index].exerciseId + ' was never seen by this user');
-        }
-      };
-      return exeforLevel;
-};
-
-module.exports.CleanUpExercisesFromSeen = function (exeforLevel,seenExe) {
-   return internalCleanUpExercisesFromSeen(exeforLevel,seenExe);
 };
 
 module.exports.newExercise = function (req, res) {

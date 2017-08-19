@@ -315,7 +315,9 @@
             vm.exercisesStages.push(data[i]);
           }
         }
-        vm.populateGroupExercise(vm.groupBaseExercise._id);
+        if(vm.groupBaseExercise != undefined) {
+          vm.populateGroupExercise(vm.groupBaseExercise._id);
+        }
       })
       .error(function(e){
         console.log(e);

@@ -148,6 +148,12 @@ loadDoneExercises = function(user, sendRespose) {
               exercise = data[i].exerciseId;
               if(exercise != undefined) {
                 student.addDoneExercise(exercise);
+                if(data[i].outcome == 'success') {
+                  assignment.updateSuccsessfulExercise(data[i].level);
+                }
+                else if(data[i].outcome == 'failure') {
+                  assignment.updateUnsuccsessfulExercise(data[i].level);
+                }
               }
             }
             console.log(student.doneExercises);

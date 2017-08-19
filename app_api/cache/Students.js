@@ -60,6 +60,7 @@ module.exports.Assignment = function(assignment) {
     this.groupBody = [];
     this.nextExercise = null;
     this.updatedDate = null;
+    this.levelsSuccessCounter = new HashMap();
 
     this.addUserProgress = function(userProgress) {
         this.userProgressHistory.push(userProgress);
@@ -105,6 +106,20 @@ module.exports.Assignment = function(assignment) {
 
     this.setInProgress = function() {
         this.assignment.status = 'inprogress';
+    }
+
+    this.updateSuccsessfulExercise = function(level) {
+        this.incrementSequencialHits();
+        var counter = this.levelsSuccessCounter.get(level);
+        if(counter == undefined) {
+            counter = 0;
+        }
+        counter++;
+        this.levelsSuccessCounter.set(level, counter);
+    }
+
+    this.updateUnsuccsessfulExercise = function(level) {
+        this.resetSequencialHits();
     }
 
     this.incrementSequencialHits = function() {

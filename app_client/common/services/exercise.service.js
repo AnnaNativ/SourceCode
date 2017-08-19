@@ -18,13 +18,6 @@
       });
     };
     
-    var similarExercise = function(params) {
-      console.log("In exercise.service similarExercise with: " + JSON.stringify(params));
-      return $http.get('/api/similarExercise', params).success(function(data){
-        console.log('!!!!!loading new exe '+ data);
-      });
-    };
-
     var removeExercise = function(exerciseId) {
       console.log("In exercise.service removeExercise with: " + exerciseId);
       return $http.post('/api/removeExercise', exerciseId);
@@ -33,7 +26,6 @@
 
     return {
       newExercise : newExercise,
-      similarExercise: similarExercise,
       removeExercise: removeExercise
     };
   }

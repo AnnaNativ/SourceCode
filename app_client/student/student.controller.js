@@ -191,6 +191,11 @@
       vm.getNextExercise();
     }
 
+    vm.getPictureForCurrentLevel = function() {
+      var path = "http://localhost:3000/images/stage" + vm.exercise.properties.level + ".jpg";
+      console.log('In getPictureForCurrentLevel with: ' + path);
+      return "http://localhost:3000/images/stage" + vm.exercise.properties.level + ".jpg";
+    }
     //####################################################################################
     //########## Solutions ###########
     //####################################################################################
