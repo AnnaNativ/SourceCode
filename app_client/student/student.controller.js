@@ -342,7 +342,7 @@
         vm.levelChange = 0;
         vm.getNextExercise();    
       }
-      else if(vm.preReqNextStep != undefined) {
+      else if(vm.assistant == 'pre_req' && vm.preReqNextStep != undefined) {
         vm.subSubjectChange = vm.preReqNextStep;
         vm.getNextExercise();
       }
