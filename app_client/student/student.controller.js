@@ -265,6 +265,10 @@
       vm.showAssistanceWarning = true;
     }
 
+    vm.preReq = function() {
+      vm.assistant = 'pre_req';
+    }
+
     vm.handleRadioClick = function ($index) {
       console.log(vm.exercise.solutions[$index].isCorrect);
       vm.finalSelection = undefined;
@@ -338,9 +342,18 @@
         vm.levelChange = 0;
         vm.getNextExercise();    
       }
+      else if(vm.preReqNextStep != undefined) {
+        vm.subSubjectChange = vm.preReqNextStep;
+        vm.getNextExercise();
+      }
       vm.correctAnswerNextStep = 'moreOfTheSame';
       vm.wrongAnswerNextStep = 'moreOfTheSame';
       vm.openSolution = undefined;
+      vm.preReqNextStep = undefined;
+    }
+
+    vm.cancelAssistance = function() {
+      vm.preReqNextStep = undefined;
     }
 
     vm.getTutorialVideo = function() {

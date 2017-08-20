@@ -45,6 +45,22 @@
                         <span class="glyphicon glyphicon-remove"></span></button>
                 </div>
             </div>
+            <div ng-if="vm.assistant == 'pre_req'">
+                <div class="modal-body">
+                    <h2>נושאים קשורים:</h2>
+                    <div ng-repeat="obj in vm.dependencies" id="{{obj.id}}">
+                        <input type="radio" ng-model="vm.preReqNextStep" value="{{obj.id}}"
+                        />&nbsp;&nbsp;
+                        <label>{{obj.subject}} - {{obj.name}}</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.closeAssistance()" ng-disabled="vm.preReqNextStep == undefined">
+                        <span class="glyphicon glyphicon-ok"></span></button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.cancelAssistance()">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
         </div>       
     </div>
 </div>
