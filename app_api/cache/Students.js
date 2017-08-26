@@ -192,7 +192,7 @@ module.exports.Assignment = function(assignment) {
     }
 
     this.canGoToNextLevel = function() {
-        if(this.exerciseCount == 0) {
+        if(this.exerciseCount == 0 || !this.inOriginalSubSubject()) {
             return true;
         }
         var successRate = this.successfulExerciseCount / this.exerciseCount;
