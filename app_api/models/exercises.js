@@ -17,7 +17,8 @@ var propertiesSchema = new Schema({
   level: Number,
   maxSequencialHits: Number,
   resumeOriginalAssignment: Boolean,
-  newLevel: Boolean
+  newLevel: Boolean,
+  exercisesLeft: Number
 },{ _id : false });
 
 var exerciseSchema = new Schema({

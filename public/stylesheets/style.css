@@ -1,6 +1,7 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+/*  background-image: url("http://localhost:3000/images/student-background3.jpg"); */
 }
 
 a {
@@ -75,8 +76,14 @@ div.ex1 {
     direction: rtl;
     unicode-bidi: bidi-override;
 }
+  
+.well{
+    background: rgba(245, 245, 245, 1);
+}
+
 .well.custom-well {
   min-height: 458px;
+  background: rgba(245, 245, 245, 1);
 }
 
 .centerBlock {

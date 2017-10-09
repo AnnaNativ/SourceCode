@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var audit = require('./audit');
 var assignment = require('./assignments');
 var Cache = require('../cache/Students');
+var reverseString = require('reverse-string');
 var Schema = mongoose.Schema;
 
 var Exercise = mongoose.model('Exercise');
@@ -266,6 +267,22 @@ module.exports.getNextExercise = function (req, res) {
 
     // 7.1 This is a regular exercise, just send it to the student
     var returnRegularExercise = function(isFromGroup) {
+      function adjustLTR(exercise) {
+        exercise.body.forEach(function(bodyPart) {
+          if(bodyPart.type == "text") {
+            parts = bodyPart.content.split("$$");
+            var transformedBodyPart = "";
+            for(var i=0; i<parts.length; i++) {
+              if(i % 2 == 1) {
+                parts[i] = reverseString(parts[i]);
+              }
+              transformedBodyPart = transformedBodyPart.concat(parts[i]);
+            }
+            bodyPart.content = transformedBodyPart;
+          }
+        });
+      }
+
       Exercise
         .find({'_id': mongoose.Types.ObjectId(assignment.getNextExercise().Id)})
         .exec(function(err, exercise) {
@@ -274,13 +291,15 @@ module.exports.getNextExercise = function (req, res) {
             if(isFromGroup) {
               exercise[0].body = assignment.getGroupBody().concat(exercise[0].body);
             }
+            adjustLTR(exercise[0]);
             exercise[0].properties = {
                           subSubjectName: subSubjectName, 
                           subSubjectId: subSubject,
                           level: currentExerciseLevel,
                           maxSequencialHits: assignment.getMaxSequencialHits(),
                           resumeOriginalAssignment: false,
-                          newLevel: levelIncreaced
+                          newLevel: levelIncreaced,
+                          exercisesLeft: assignment.getExerciseLeftCount()
             };
             if(shouldGoBackToOriginalAssignment == true) {
               shouldGoBackToOriginalAssignment = false;

@@ -191,6 +191,10 @@ module.exports.Assignment = function(assignment) {
         return this.exerciseCount;
     }
 
+    this.getExerciseLeftCount = function() {
+        return this.exerciseCount;
+    }
+
     this.canGoToNextLevel = function() {
         if(this.exerciseCount == 0 || !this.inOriginalSubSubject()) {
             return true;
