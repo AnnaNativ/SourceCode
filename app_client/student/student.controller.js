@@ -378,6 +378,42 @@
       .error(function(e){
         console.log(e);
       })
-    }  
+    }
+
+    //####################################################################################
+    //########## Status Bar ###########
+    //####################################################################################    
+
+    vm.getCurrentLevel = function() {
+      if(vm.selectedAssignment != undefined && vm.exercise != undefined && vm.exercise.properties != undefined) {
+        return vm.exercise.properties.level;
+      }
+      return "--";
+    }
+
+    vm.getSequencialCorrectAnswers = function() {
+      if(vm.selectedAssignment != undefined && vm.exercise != undefined && vm.exercise.properties != undefined) {
+        return vm.exercise.properties.currentSequencialHits;
+      }
+      return "--";      
+    }
+
+    vm.getExercisesLeftToSolve = function() {
+      if(vm.selectedAssignment != undefined && vm.exercise != undefined && vm.exercise.properties != undefined) {
+        return vm.exercise.properties.exercisesLeft;
+      }
+      return "--";      
+    }
+
+    vm.getCurrentGrade = function() {
+      return 65.7;
+    }
+
+    vm.getAssignmentName = function() {
+      if(vm.selectedAssignment != undefined) {
+        return vm.selectedAssignment.subSubject[0].name;
+      }
+      return "--";
+    }
   }
 })();

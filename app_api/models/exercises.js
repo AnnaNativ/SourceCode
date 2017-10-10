@@ -15,6 +15,7 @@ var propertiesSchema = new Schema({
   subSubjectId: String,
   subSubjectName: String,
   level: Number,
+  currentSequencialHits: Number,
   maxSequencialHits: Number,
   resumeOriginalAssignment: Boolean,
   newLevel: Boolean,

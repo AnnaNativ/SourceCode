@@ -85,6 +85,7 @@ module.exports.getNextExercise = function (req, res) {
   var levelChange;
   var subSubjectChange;
   var shouldGoBackToOriginalAssignment = false;
+  var leftExerciseCount = 0;
 
     // 4. Get the next exercise for a defined sub subject and level
   getExercisesForSubsubjectAndLevel = function (subsubject, level, callBackFunction) {
@@ -252,6 +253,15 @@ module.exports.getNextExercise = function (req, res) {
     assignment.setGroupBody([]);
     assignment.setNextExercise(null);
     
+    var setLeftExerciseCount = function(exercises) {    
+      leftExerciseCount = 0;
+      for(var i=0; i<exercises.length; i++) {
+          if(!student.isExerciseDone(exercises[i].Id)) {
+            leftExerciseCount++;
+          }
+      }
+    }
+    
     // 8.1 The student didnt pass the currenet level then fail the assignemnt and send student a message back
     var failAssignment = function() {
       Assignment.
@@ -296,10 +306,11 @@ module.exports.getNextExercise = function (req, res) {
                           subSubjectName: subSubjectName, 
                           subSubjectId: subSubject,
                           level: currentExerciseLevel,
+                          currentSequencialHits: assignment.getCurrentSequencialHits(),
                           maxSequencialHits: assignment.getMaxSequencialHits(),
                           resumeOriginalAssignment: false,
                           newLevel: levelIncreaced,
-                          exercisesLeft: assignment.getExerciseLeftCount()
+                          exercisesLeft: leftExerciseCount
             };
             if(shouldGoBackToOriginalAssignment == true) {
               shouldGoBackToOriginalAssignment = false;
@@ -334,7 +345,8 @@ module.exports.getNextExercise = function (req, res) {
           }            
       });        
     }
-    
+    setLeftExerciseCount(exercises);
+
     for(var i=0; i<exercises.length; i++) {
       if(!student.isExerciseDone(exercises[i].Id)) {
         // 6.1 If this is a group exercise (base or step) then use a group flow
