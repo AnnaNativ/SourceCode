@@ -406,7 +406,10 @@
     }
 
     vm.getCurrentGrade = function() {
-      return 65.7;
+      if(vm.selectedAssignment != undefined && vm.exercise != undefined && vm.exercise.properties != undefined) {
+        return parseInt(100 * vm.exercise.properties.currentGrade);
+      }
+      return "--";      
     }
 
     vm.getAssignmentName = function() {

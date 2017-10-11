@@ -310,7 +310,8 @@ module.exports.getNextExercise = function (req, res) {
                           maxSequencialHits: assignment.getMaxSequencialHits(),
                           resumeOriginalAssignment: false,
                           newLevel: levelIncreaced,
-                          exercisesLeft: leftExerciseCount
+                          exercisesLeft: leftExerciseCount,
+                          currentGrade: assignment.getCurrentGrade()
             };
             if(shouldGoBackToOriginalAssignment == true) {
               shouldGoBackToOriginalAssignment = false;

@@ -205,13 +205,17 @@ module.exports.Assignment = function(assignment) {
         return this.exerciseCount;
     }
 
+    this.getCurrentGrade = function() {
+        return this.successfulExerciseCount / this.exerciseCount;
+    }
+
     this.canGoToNextLevel = function() {
         if(this.exerciseCount == 0 || !this.inOriginalSubSubject()) {
             return true;
         }
-        var successRate = this.successfulExerciseCount / this.exerciseCount;
-        return this.maxSequencialHits >= this.REQUIRED_SEQUENTIAL_HITS || successRate >= this.MIN_SUCCESSFUL_EXERCISES_PERCENTAGE;
+        return this.maxSequencialHits >= this.REQUIRED_SEQUENTIAL_HITS || this.getCurrentGrade() >= this.MIN_SUCCESSFUL_EXERCISES_PERCENTAGE;
     }
+
 };
 
 module.exports.students = new Students();
