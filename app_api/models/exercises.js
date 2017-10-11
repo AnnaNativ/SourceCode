@@ -15,9 +15,12 @@ var propertiesSchema = new Schema({
   subSubjectId: String,
   subSubjectName: String,
   level: Number,
+  currentSequencialHits: Number,
   maxSequencialHits: Number,
   resumeOriginalAssignment: Boolean,
-  newLevel: Boolean
+  newLevel: Boolean,
+  exercisesLeft: Number,
+  currentGrade: Number
 },{ _id : false });
 
 var exerciseSchema = new Schema({

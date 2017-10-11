@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var audit = require('./audit');
 var assignment = require('./assignments');
 var Cache = require('../cache/Students');
+var reverseString = require('reverse-string');
 var Schema = mongoose.Schema;
 
 var Exercise = mongoose.model('Exercise');
@@ -84,6 +85,7 @@ module.exports.getNextExercise = function (req, res) {
   var levelChange;
   var subSubjectChange;
   var shouldGoBackToOriginalAssignment = false;
+  var leftExerciseCount = 0;
 
     // 4. Get the next exercise for a defined sub subject and level
   getExercisesForSubsubjectAndLevel = function (subsubject, level, callBackFunction) {
@@ -251,6 +253,15 @@ module.exports.getNextExercise = function (req, res) {
     assignment.setGroupBody([]);
     assignment.setNextExercise(null);
     
+    var setLeftExerciseCount = function(exercises) {    
+      leftExerciseCount = 0;
+      for(var i=0; i<exercises.length; i++) {
+          if(!student.isExerciseDone(exercises[i].Id)) {
+            leftExerciseCount++;
+          }
+      }
+    }
+    
     // 8.1 The student didnt pass the currenet level then fail the assignemnt and send student a message back
     var failAssignment = function() {
       Assignment.
@@ -266,6 +277,22 @@ module.exports.getNextExercise = function (req, res) {
 
     // 7.1 This is a regular exercise, just send it to the student
     var returnRegularExercise = function(isFromGroup) {
+      function adjustLTR(exercise) {
+        exercise.body.forEach(function(bodyPart) {
+          if(bodyPart.type == "text") {
+            parts = bodyPart.content.split("$$");
+            var transformedBodyPart = "";
+            for(var i=0; i<parts.length; i++) {
+              if(i % 2 == 1) {
+                parts[i] = reverseString(parts[i]);
+              }
+              transformedBodyPart = transformedBodyPart.concat(parts[i]);
+            }
+            bodyPart.content = transformedBodyPart;
+          }
+        });
+      }
+
       Exercise
         .find({'_id': mongoose.Types.ObjectId(assignment.getNextExercise().Id)})
         .exec(function(err, exercise) {
@@ -274,13 +301,17 @@ module.exports.getNextExercise = function (req, res) {
             if(isFromGroup) {
               exercise[0].body = assignment.getGroupBody().concat(exercise[0].body);
             }
+            adjustLTR(exercise[0]);
             exercise[0].properties = {
                           subSubjectName: subSubjectName, 
                           subSubjectId: subSubject,
                           level: currentExerciseLevel,
+                          currentSequencialHits: assignment.getCurrentSequencialHits(),
                           maxSequencialHits: assignment.getMaxSequencialHits(),
                           resumeOriginalAssignment: false,
-                          newLevel: levelIncreaced
+                          newLevel: levelIncreaced,
+                          exercisesLeft: leftExerciseCount,
+                          currentGrade: assignment.getCurrentGrade()
             };
             if(shouldGoBackToOriginalAssignment == true) {
               shouldGoBackToOriginalAssignment = false;
@@ -315,7 +346,8 @@ module.exports.getNextExercise = function (req, res) {
           }            
       });        
     }
-    
+    setLeftExerciseCount(exercises);
+
     for(var i=0; i<exercises.length; i++) {
       if(!student.isExerciseDone(exercises[i].Id)) {
         // 6.1 If this is a group exercise (base or step) then use a group flow

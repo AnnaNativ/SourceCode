@@ -49,6 +49,10 @@ module.exports.Student = function(id) {
         return (this.doneExercises.count() == 0);
     }
 
+    this.getExerciseDoneCount = function() {
+        return this.doneExercises.count();
+    }
+
 };
 
 module.exports.Assignment = function(assignment) {
@@ -65,6 +69,7 @@ module.exports.Assignment = function(assignment) {
     this.levelsSuccessCounter = new HashMap();
     this.exerciseCount = 0;
     this.successfulExerciseCount = 0;
+    this.leftExerciseCount = 0;
 
     this.addUserProgress = function(userProgress) {
         this.userProgressHistory.push(userProgress);
@@ -111,6 +116,10 @@ module.exports.Assignment = function(assignment) {
     this.setInProgress = function() {
         this.assignment.status = 'inprogress';
     }
+    
+    this.getLeftExerciseCount = function() {
+        return this.leftExerciseCount;      
+    }
 
     this.updateSuccsessfulExercise = function(level) {
         this.incrementSequencialHits();
@@ -138,6 +147,10 @@ module.exports.Assignment = function(assignment) {
         return this.maxSequencialHits;
     }
 
+    this.getCurrentSequencialHits = function() {
+        return this.sequencialHits;
+    }
+
     this.resetSequencialHits = function() {
         this.sequencialHits = 0;
     }
@@ -145,6 +158,7 @@ module.exports.Assignment = function(assignment) {
     this.resetMaxSequencialHits = function() {
         this.sequencialHits = 0;
         this.maxSequencialHits = 0;
+        this.successfulExerciseCount = 0;
     }
 
     this.getGroupId = function() {
@@ -191,13 +205,17 @@ module.exports.Assignment = function(assignment) {
         return this.exerciseCount;
     }
 
+    this.getCurrentGrade = function() {
+        return this.successfulExerciseCount / this.exerciseCount;
+    }
+
     this.canGoToNextLevel = function() {
         if(this.exerciseCount == 0 || !this.inOriginalSubSubject()) {
             return true;
         }
-        var successRate = this.successfulExerciseCount / this.exerciseCount;
-        return this.maxSequencialHits >= this.REQUIRED_SEQUENTIAL_HITS || successRate >= this.MIN_SUCCESSFUL_EXERCISES_PERCENTAGE;
+        return this.maxSequencialHits >= this.REQUIRED_SEQUENTIAL_HITS || this.getCurrentGrade() >= this.MIN_SUCCESSFUL_EXERCISES_PERCENTAGE;
     }
+
 };
 
 module.exports.students = new Students();

@@ -1,0 +1,35 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="panel panel-primary">
+                <div dir="rtl" class="panel-heading">
+                    <h1 class="panel-title">
+                        <span class="glyphicon glyphicon-education"></span> מצבך כרגע: </h1>
+                </div>
+                <div class="panel-body">
+                    <div dir="rtl" class="row text-center">
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-2">
+                          <a href="#" class="btn btn-warning btn-lg" role="button"><span class="glyphicon glyphicon-sound-7-1"></span> <br/>ציון נוכחי : {{vm.getCurrentGrade()}}</a>
+                        </div>
+                        <div class="col-md-2">
+                          <a href="#" class="btn btn-info btn-lg" role="button"><span class="glyphicon glyphicon-pencil"></span> <br/>צריך עוד לפתור : {{vm.getExercisesLeftToSolve()}}</a>
+                        </div>
+                        <div class="col-md-2">
+                          <a href="#" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-ok"></span> <br/>תשובות נכונות ברצף : {{vm.getSequencialCorrectAnswers()}}</a>
+                        </div>
+                        <div class="col-md-2">
+                          <a href="#" class="btn btn-danger btn-lg" role="button"><span class="glyphicon glyphicon-road"></span> <br/>רמה נוכחית : {{vm.getCurrentLevel()}}</a>
+                        </div>
+                        <div class="col-md-2">
+                          <a href="#" class="btn btn-success btn-lg" role="button"><span class="glyphicon glyphicon-list-alt"></span> <br/>משימה : {{vm.getAssignmentName()}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
