@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  padding: 0px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 /*  background-image: url("http://localhost:3000/images/student-background3.jpg"); */
 }
@@ -54,7 +54,7 @@ h2 {
   color: darkcyan;
 }
 
-h3 {
+h3, h4 {
   color: darkcyan
 }
 
@@ -79,6 +79,10 @@ div.ex1 {
   
 .well{
     background: rgba(245, 245, 245, 1);
+    margin-bottom: 3px;
+    margin-top: 3px;
+    padding-bottom: 3px;
+    padding-top: 3px;
 }
 
 .well.custom-well {
