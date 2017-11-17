@@ -1,0 +1,30 @@
+<navigation></navigation>
+
+<div ng-include="'/student/status.view.html'"></div>
+<div ng-include="'/student/tabs.view.html'"></div>
+<div class="container-fluid" ng-cloak>
+  <div class="row">
+    <div class="col-md-1 pull-right">
+    </div>
+    <div ng-show="vm.currentTab == 'assignments'" class="col-md-10 pull-right">
+        <div ng-include="'/student/assignments.view.html'"></div>
+    </div>  
+    <div ng-show="vm.currentTab == 'current assignment'" class="col-md-10 pull-right">
+        <div ng-include="'/student/assignment.view.html'"></div>
+    </div>    
+  </div>
+</div>
+<div ng-if="1==1">
+  vm.preReqNextStep - {{vm.preReqNextStep}}<br>
+  vm.selectedAssignmentDone - {{vm.selectedAssignmentDone}}<br>
+  vm.exercise.properties.resumeOriginalAssignment - {{vm.exercise.properties.resumeOriginalAssignment}}<br>
+  vm.exercise._id - {{vm.exercise._id}}<br>
+  vm.selectedAssignment.subSubject[0]._id - {{vm.selectedAssignment.subSubject[0]._id}}<br>
+  vm.finalSelection - {{vm.finalSelection}}<br>
+  vm.exercise - {{vm.exercise}}<br>
+  vm.selectedAssignmentDone1 - {{vm.selectedAssignmentDone}}<br>
+  vm.levelChange - {{vm.levelChange}}<br>
+  vm.dependencies - {{vm.dependencies}}<br>
+  vm.wrongAnswerNextStep - {{vm.wrongAnswerNextStep}}<br>
+  vm.assistanceWarning - {{vm.assistanceWarning}}<br>
+</div>

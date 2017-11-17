@@ -8,7 +8,7 @@ Released for free under the Creative Commons Attribution License
 body {
 	margin: 0;
 	padding: 0;
-	background: url(/images/footer-bg.png) repeat;
+	background: url(/images/footer1-bg.png) repeat;
 	font-family: 'Arial';
 	font-size: 14px;
 	color: #333333;
@@ -70,7 +70,7 @@ a:hover {
 /* Header */
 
 #header-wrapper {
-	background: url(/images/wrapper-bg.png) repeat-x left top;
+	background: url(/images/wrapper-bg1.png) repeat-x left top;
 }
 
 #header {
@@ -378,7 +378,7 @@ a:visited {
 }
 
 .box1-image {
-    width: 12%;
+    width: 9%;
     height: auto;	
 }
 
