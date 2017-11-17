@@ -171,6 +171,9 @@ a:hover {
 }
 
 #menu .current_page_item a {
+	text-decoration: none;
+	background: #E5E8DA;
+	color: #3c3c3c;	
 }
 
 /* Background */

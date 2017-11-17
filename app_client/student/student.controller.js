@@ -126,7 +126,15 @@
       }
       return '--';
     }
-    //####################################################################################
+
+    vm.formatSubmissionDate = function(dateIn) {
+      if(dateIn != undefined) {
+        var date = new Date(dateIn);
+        var monthNormalized = date.getMonth() + 1;
+        return date.getDate()  + '/' + monthNormalized + '/' + date.getFullYear();  
+      }
+      return '--';
+    }    //####################################################################################
     //########## Exercise ###########
     //####################################################################################
 

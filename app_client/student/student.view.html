@@ -12,11 +12,16 @@
 	</div>
 	<div id="menu">
 		<ul>
-			<li class="current_page_item"><a href="#">דף ראשי</a></li>
-			<li><a href="#">הודעות</a></li>
-			<li><a href="#">משימות גמורות</a></li>
-			<li><a href="#">משימות עצמיות</a></li>
-			<li><a href="#">שעורי בית</a></li>
+			<li ng-if="vm.studentScreenMode != 'main'"><a  ng-click="vm.studentScreenMode = 'main'" href="#">דף ראשי</a></li>
+			<li ng-if="vm.studentScreenMode == 'main'" class="current_page_item"><a  ng-click="vm.studentScreenMode = 'main'" href="#">דף ראשי</a></li>
+			<li ng-if="vm.studentScreenMode != 'messages'"><a  ng-click="vm.studentScreenMode = 'messages'" href="#">הודעות</a></li>
+			<li ng-if="vm.studentScreenMode == 'messages'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'messages'" href="#">הודעות</a></li>
+			<li ng-if="vm.studentScreenMode != 'done'"><a ng-click="vm.studentScreenMode = 'done'" href="#">משימות גמורות</a></li>
+			<li ng-if="vm.studentScreenMode == 'done'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'done'" href="#">משימות גמורות</a></li>
+			<li ng-if="vm.studentScreenMode != 'self'"><a ng-click="vm.studentScreenMode = 'self'" href="#">משימות עצמיות</a></li>
+			<li ng-if="vm.studentScreenMode == 'self'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'self'" href="#">משימות עצמיות</a></li>
+			<li ng-if="vm.studentScreenMode == undefined || vm.studentScreenMode == 'homework'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'homework'" href="#">שעורי בית</a></li>
+			<li ng-if="vm.studentScreenMode != undefined && vm.studentScreenMode != 'homework'"><a ng-click="vm.studentScreenMode = 'homework'" href="#">שעורי בית</a></li>
 		</ul>
 	</div>
 </div>
@@ -42,56 +47,40 @@
 		</div>
 		<div id="poptrox"> 
 			<!-- start -->
-			<ul id="gallery">
+			<ul ng-if="vm.studentScreenMode == undefined || vm.studentScreenMode == 'homework'" id="gallery">
 				<label id="tasks-lable">:שעורי בית</label>
-				<div class="task">
-					<a href="#"><image class="solved" src="/images/solved.png"></image></a>
-					<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
-					<image class="active-task" src="/images/task.png"></image>
-					<a class="sub-subject" href="student.html">משולשים שווי צלעות</a>
-					<label class="task-info">תאריך הגשה: 22/10/2017 | שם מורה: רויטל אדרי </label>
+            	<div ng-repeat="assignment in vm.myAssignments">
+					<div ng-if="assignment.status != 'done' && assignment.status != 'failed' && assignment.assigner[0]._id != assignment.assignee" class="task">
+						<a href="#"><image class="solved" src="/images/solved.png"></image></a>
+						<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
+						<image class="active-task" src="/images/task.png"></image>
+						<a class="sub-subject" href="student.html">{{assignment.subSubject[0].name}}</a>
+						<label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
+					</div>
 				</div>
-				<div class="task">
-					<a href="#"><image class="solved" src="/images/solved.png"></image></a>
-					<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
-					<image class="active-task" src="/images/task.png"></image>
-					<a class="sub-subject" href="student.html">נקודות קיצון במערכת צירים</a>
-					<label class="task-info">תאריך הגשה: 9/12/2017 | שם מורה: ישראל אוסי </label>
+			</ul>
+			<ul ng-if="vm.studentScreenMode == 'self'" id="gallery">
+				<label id="tasks-lable">:משימות עצמיות</label>
+            	<div ng-repeat="assignment in vm.myAssignments">
+					<div ng-if="assignment.status != 'done' && assignment.status != 'failed' && assignment.assigner[0]._id == assignment.assignee" class="task">
+						<a href="#"><image class="solved" src="/images/solved.png"></image></a>
+						<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
+						<image class="active-task" src="/images/task.png"></image>
+						<a class="sub-subject" href="student.html">{{assignment.subSubject[0].name}}</a>
+						<label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
+					</div>
 				</div>
-				<div class="task">
-					<a href="#"><image class="solved" src="/images/solved.png"></image></a>
-					<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
-					<image class="active-task" src="/images/task.png"></image>
-					<a class="sub-subject" href="student.html">אליפסות</a>
-					<label class="task-info">תאריך הגשה: 3/12/2017 | שם מורה: ישראל אוסי </label>
-				</div>
-				<div class="task">
-					<a href="#"><image class="solved" src="/images/solved.png"></image></a>
-					<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
-					<image class="active-task" src="/images/task.png"></image>
-					<a class="sub-subject" href="student.html">מכפלה קרטזית במישור המדומה</a>
-					<label class="task-info">תאריך הגשה: 31/8/2017 | שם מורה: יוסי אבוטבול </label>
-				</div>
-				<div class="task">
-					<a href="#"><image class="solved" src="/images/solved.png"></image></a>
-					<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
-					<image class="active-task" src="/images/task.png"></image>
-					<a class="sub-subject" href="student.html">אליפסות</a>
-					<label class="task-info">תאריך הגשה: 3/12/2017 | שם מורה: ישראל אוסי </label>
-				</div>
-				<div class="task">
-					<a href="#"><image class="solved" src="/images/solved.png"></image></a>
-					<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
-					<image class="active-task" src="/images/task.png"></image>
-					<a class="sub-subject" href="student.html">אליפסות</a>
-					<label class="task-info">תאריך הגשה: 3/12/2017 | שם מורה: ישראל אוסי </label>
-				</div>
-				<div class="task">
-					<a href="#"><image class="solved" src="/images/solved.png"></image></a>
-					<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
-					<image class="active-task" src="/images/task.png"></image>
-					<a class="sub-subject" href="student.html">אליפסות</a>
-					<label class="task-info">תאריך הגשה: 3/12/2017 | שם מורה: ישראל אוסי </label>
+			</ul>
+			<ul ng-if="vm.studentScreenMode == 'done'" id="gallery">
+				<label id="tasks-lable">:משימות גמורות</label>
+            	<div ng-repeat="assignment in vm.myAssignments">
+					<div ng-if="assignment.status == 'done' || assignment.status == 'failed'" class="task">
+						<a href="#"><image class="solved" src="/images/solved.png"></image></a>
+						<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
+						<image class="active-task" src="/images/task.png"></image>
+						<a class="sub-subject" href="student.html">{{assignment.subSubject[0].name}}</a>
+						<label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
+					</div>
 				</div>
 			</ul>
 			<br class="clear" />
@@ -105,3 +94,5 @@
 <!-- end #footer -->
 </body>
 </html>
+  vm.myAssignments - {{vm.myAssignments}}<br>
+  vm.studentScreenMode - {{vm.studentScreenMode}}<br>
