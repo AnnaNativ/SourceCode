@@ -5,10 +5,10 @@
         <div class="modal-content">
             <div ng-if="vm.finalSelection == undefined">
                 <div class="modal-header">
-                    <h2 class="h2-dialog">&nbsp;אופס!</h2>
+                    <h2 class="modal-title">&nbsp;אופס!</h2>
                 </div>
                 <div class="modal-body">
-                    <h3 class="h2-dialog">אנא בחר אחת מהתשובות</h3><br>
+                    <h3 class="modal-title">אנא בחר אחת מהתשובות</h3><br>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" data-dismiss="modal">המשך</button>
@@ -16,7 +16,7 @@
             </div>
             <div ng-if="vm.finalSelection == true">
                 <div class="modal-header">
-                    <h2 class="h2-dialog">&nbsp;פתרון נכון!</h2>
+                    <h2 class="modal-title">&nbsp;פתרון נכון!</h2>
                 </div>
                 <div ng-if="vm.allowNextLevel()" class="modal-body">
                     &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.correctAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
@@ -30,7 +30,7 @@
             </div>
             <div ng-if="vm.finalSelection == false">
                 <div class="modal-header">
-                    <h2 class="h2-dialog">&nbsp;פתרון שגוי!</h2>
+                    <h2 class="modal-title">&nbsp;פתרון שגוי!</h2>
                 </div>
                 <div ng-if="vm.dependencies.length > 0" class="modal-body">
                     &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
@@ -46,7 +46,7 @@
                     <label>נסה תרגיל נוסף</label><br><br><br>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="student-submit-button" data-dismiss="modal" ng-click="vm.nextStepClicked()">המשך</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.nextStepClicked()">המשך</button>
                 </div>
             </div>
         </div>       

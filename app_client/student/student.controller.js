@@ -78,6 +78,7 @@
 
     vm.assignmentClicked = function($index) {
 //      console.log('in assignmentClicked with index:' + $index);
+      vm.studentScreenMode = 'assignment';
       vm.selectedAssignment = vm.myAssignments[$index];
       vm.selectedAssignmentIndex = $index;
       vm.selectedAssignmentDone = false;
@@ -425,6 +426,12 @@
         return vm.selectedAssignment.subSubject[0].name;
       }
       return "--";
+    }
+
+    vm.flipStr = function(str) {
+      console.log('In flipStr with before: ' + str);
+      console.log('In flipStr with after: ' + str.replace(/([-0-9]+)/g, "\u202a$1\u202c"));
+      return str.replace(/([-0-9]+)/g, "\u202a$1\u202c");
     }
   }
 })();

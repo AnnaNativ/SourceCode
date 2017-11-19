@@ -12,8 +12,8 @@
 	</div>
 	<div id="menu">
 		<ul>
-			<li ng-if="vm.studentScreenMode != 'main'"><a  ng-click="vm.studentScreenMode = 'main'" href="#">דף ראשי</a></li>
-			<li ng-if="vm.studentScreenMode == 'main'" class="current_page_item"><a  ng-click="vm.studentScreenMode = 'main'" href="#">דף ראשי</a></li>
+			<li ng-if="vm.studentScreenMode != 'main'"><a ng-click="vm.studentScreenMode = 'main'" href="#">דף ראשי</a></li>
+			<li ng-if="vm.studentScreenMode == 'main'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'main'" href="#">דף ראשי</a></li>
 			<li ng-if="vm.studentScreenMode != 'messages'"><a  ng-click="vm.studentScreenMode = 'messages'" href="#">הודעות</a></li>
 			<li ng-if="vm.studentScreenMode == 'messages'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'messages'" href="#">הודעות</a></li>
 			<li ng-if="vm.studentScreenMode != 'done'"><a ng-click="vm.studentScreenMode = 'done'" href="#">משימות גמורות</a></li>
@@ -28,7 +28,7 @@
 <!-- end #header -->
 <div id="wrapper">
 	<div id="page">
-		<div id="box1">
+		<div ng-if="vm.studentScreenMode != 'assignment'" id="box1">
 			<div id="upper-status-box-right">
 				<div class="upper-status-box-right-row">
 					<label>שברים פשוטים</label>	
@@ -45,7 +45,34 @@
 			</div>
 			<img class="box1-image" src="/images/pic1.jpg">
 		</div>
-		<div id="poptrox"> 
+		<div ng-if="vm.studentScreenMode == 'assignment'" id="box1">
+			<div id="upper-status-box-right">
+				<div class="upper-status-box-right-row">
+					<label>TBD</label>	
+					<label><b><font color="#270C05" >:שם משימה</font></b></label>
+				</div>					
+				<div class="upper-status-box-right-row">
+					<label>TBD</label>
+					<label><b><font color="#270C05" >:רמה נוכחית</font></b></label>
+				</div>					
+				<div class="upper-status-box-right-row">
+					<label>TBD</label>
+					<label><b><font color="#270C05" >:תאריך הגשה</font></b></label>
+				</div>					
+			</div>
+			<div id="upper-status-box-left">
+				<div class="upper-status-box-left-row">
+					<label>TBD</label>	
+					<label><b><font color="#270C05" >:תשובות נכונות ברצף</font></b></label>
+				</div>					
+				<div class="upper-status-box-left-row">
+					<label>TBD</label>
+					<label><b><font color="#270C05" >:צריך עוד לפתור</font></b></label>
+				</div>							
+			</div>
+			<img class="box1-image" src="pic1.jpg">
+		</div>
+		<div ng-if="vm.studentScreenMode != 'assignment'" id="poptrox"> 
 			<!-- start -->
 			<ul ng-if="vm.studentScreenMode == undefined || vm.studentScreenMode == 'homework'" id="gallery">
 				<label id="tasks-lable">:שעורי בית</label>
@@ -54,7 +81,7 @@
 						<a href="#"><image class="solved" src="/images/solved.png"></image></a>
 						<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
 						<image class="active-task" src="/images/task.png"></image>
-						<a class="sub-subject" href="student.html">{{assignment.subSubject[0].name}}</a>
+						<a class="sub-subject" ng-click="vm.assignmentClicked($index)" href="#">{{assignment.subSubject[0].name}}</a>
 						<label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
 					</div>
 				</div>
@@ -78,7 +105,7 @@
 						<a href="#"><image class="solved" src="/images/solved.png"></image></a>
 						<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
 						<image class="active-task" src="/images/task.png"></image>
-						<a class="sub-subject" href="student.html">{{assignment.subSubject[0].name}}</a>
+						<label class="sub-subject">{{assignment.subSubject[0].name}}</label>
 						<label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
 					</div>
 				</div>
@@ -86,13 +113,50 @@
 			<br class="clear" />
 			<!-- end --> 
 		</div>
+		<div ng-if="vm.studentScreenMode == 'assignment'" id="exercise-area"> 
+            <div ng-repeat="obj in vm.exercise.body">
+                <div ng-if="obj.type == 'picture'">
+                    <img ng-src="{{obj.content}}">
+                </div>
+				<p ng-if="obj.type == 'text'">{{obj.content}}</p>
+			</div>	
+			<div ng-if="vm.exercise.solutions.length > 1" ng-repeat="obj in vm.exercise.solutions" id="{{obj.solution}}">
+				<input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"/>
+				<label>&nbsp;&nbsp;{{obj.solution}}</label><br>
+			</div>
+            <div ng-if="vm.exercise.solutions.length == 1">
+                <input type="text" dir="rtl" ng-model="vm.openSolution"/>
+            </div>
+
+			<br>
+			<button class="student-submit-button" ng-click="vm.checkAnswer()" data-toggle="modal" data-target="#myModal">סיום תרגיל</button>
+			<button class="student-submit-button-margin">הצג פתרון</button>
+			<button class="student-submit-button">פתרונות לדוגמא</button>
+			<button class="student-submit-button">וידאו הדרכה</button>
+            <div ng-include="'/student/next.step.dialog.html'"></div>
+		</div>
 	</div>
 </div>
 <div id="footer">
 	<p>&copy; מתמתיכיף בע"מ, כל הזכויות שמורות</p>
 </div>
 <!-- end #footer -->
-</body>
-</html>
+<div class="comments">
+  vm.currentSelection - {{vm.currentSelection}}<br>
+  vm.preReqNextStep - {{vm.preReqNextStep}}<br>
+  vm.selectedAssignmentDone - {{vm.selectedAssignmentDone}}<br>
+  vm.exercise.properties.resumeOriginalAssignment - {{vm.exercise.properties.resumeOriginalAssignment}}<br>
+  vm.exercise._id - {{vm.exercise._id}}<br>
+  vm.selectedAssignment.subSubject[0]._id - {{vm.selectedAssignment.subSubject[0]._id}}<br>
+  vm.finalSelection - {{vm.finalSelection}}<br>
+  vm.exercise - {{vm.exercise}}<br>
+  vm.selectedAssignmentDone1 - {{vm.selectedAssignmentDone}}<br>
+  vm.levelChange - {{vm.levelChange}}<br>
+  vm.dependencies - {{vm.dependencies}}<br>
+  vm.wrongAnswerNextStep - {{vm.wrongAnswerNextStep}}<br>
+  vm.assistanceWarning - {{vm.assistanceWarning}}<br>
   vm.myAssignments - {{vm.myAssignments}}<br>
   vm.studentScreenMode - {{vm.studentScreenMode}}<br>
+</div>
+</body>
+</html>
