@@ -75,7 +75,7 @@ a:hover {
 
 #header {
 	width: 800px;
-	height: 136px;
+	height: 96px;
 	margin: 0 auto;
 	padding: 0px;
 }
@@ -87,11 +87,8 @@ a:hover {
 	padding: 0;
 }
 
-#logo h1, #logo p {
-}
-
 #logo h1 {
-	padding: 75px 0px 0px 0px;
+	padding: 15px 0px 0px 0px;
 	letter-spacing: -2px;
 	text-align: center;
 	text-transform: uppercase;
@@ -106,7 +103,7 @@ a:hover {
 
 #logo p {
 	margin: 0;
-	padding: 0px 0 0 0px;
+	padding: 0px 0px 0px 0px;
 	letter-spacing: -1px;
 	font-style: italic;
 	color: #8E8E8E;
@@ -127,7 +124,7 @@ a:hover {
 
 #menu {
 	width: 800px;
-	height: 94px;
+	height: 74px;
 	margin: 0 auto;
 	padding: 0px;
 }
@@ -382,9 +379,20 @@ a:visited {
 
 .box1-image {
     width: 9%;
-    height: auto;	
+	height: auto;
 }
 
+#new-self-assignment-box {
+	display: inline;
+}
+
+#new-self-assignment-box label {
+	color: black;
+}
+
+.self-assignment-select {
+	width: 180px;
+}
 /*================== Student Page ==================*/
 #exercise-area {
 	margin: 0px auto;
@@ -409,7 +417,7 @@ a:visited {
 	font-style: italic;
 }
 
-.student-submit-button, .student-submit-button-margin {
+.student-submit-button, .student-submit-button-margin, .self-assignment-button {
 	margin: 0px 0px 7px 0px;
 	padding: 10px 15px;
 	border: none;
@@ -426,13 +434,21 @@ a:visited {
 	transition: color 0.25s ease-in-out;
 }
 
-.student-submit-button:hover, .student-submit-button-margin:hover {
+.student-submit-button:hover, .student-submit-button-margin:hover, .self-assignment-button:hover {
 	background: #E5E8DA;
 	color: #3c3c3c;
 }
 
 .student-submit-button-margin {
 	margin-right: 480px;
+}
+
+.self-assignment-button {
+	margin: 0px 0px 0px 100px;
+	padding: 2px 14px;
+	font-size: 14px;
+	line-height: 14px;
+	height: 20px;
 }
 
 .comments {
@@ -443,5 +459,9 @@ a:visited {
 	color: black;
 } 
 
+#nav_bar1, #nav_bar3, #nav_bar5 {
+    background-color: red;
+	border-color: red;
+}
 
 
