@@ -1,0 +1,68 @@
+<div id="box1">
+    <div id="upper-status-box-right">
+        <div class="upper-status-box-right-row">
+            <label>{{vm.getAssignmentName()}}</label>	
+            <label><b><font color="#270C05" >:משימה אחרונה</font></b></label>
+        </div>					
+        <div class="upper-status-box-right-row">
+            <label>{{vm.getCurrentLevel()}}</label>
+            <label><b><font color="#270C05" >:רמה נוכחית</font></b></label>
+        </div>					
+        <div class="upper-status-box-right-row">
+            <label>{{vm.formatSubmissionDate(vm.selectedAssignment.createdDate)}}</label>
+            <label><b><font color="#270C05" >:תאריך הגשה</font></b></label>
+        </div>					
+    </div>
+    <img class="box1-image" src="/images/pic1.jpg">
+    <div ng-if="vm.studentScreenMode == 'self'" id="new-self-assignment-box">
+        <button class="self-assignment-button" ng-click="vm.addNewAssignment()">הוסף</button>
+        <select class="self-assignment-select" dir="rtl" ng-model="vm.subSubject" ng-options="vm.subSubjects.indexOf(subSubject) as subSubject.name for subSubject in vm.subSubjects"
+            ng-change="vm.subSubjectSelected()"></select>
+        <label>:תת נושא</label>&nbsp;&nbsp;
+        <select class="self-assignment-select" dir="rtl" name="subject" ng-model="vm.subject" ng-options="vm.subjects.indexOf(subject) as subject.name for subject in vm.subjects"
+            ng-change="vm.subjectSelected()">
+        </select>
+        <label>:נושא</label>&nbsp;&nbsp;
+    </div>
+</div>
+<div id="poptrox"> 
+    <!-- start -->
+    <ul ng-if="vm.studentScreenMode == undefined || vm.studentScreenMode == 'homework'" id="gallery">
+        <label id="tasks-lable">:שעורי בית</label>
+        <div ng-repeat="assignment in vm.myAssignments">
+            <div ng-if="assignment.status != 'done' && assignment.status != 'failed' && assignment.assigner[0]._id != assignment.assignee" class="task">
+                <a href="#"><image class="solved" src="/images/solved.png"></image></a>
+                <a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
+                <image class="active-task" src="/images/task.png"></image>
+                <a class="sub-subject" ng-click="vm.assignmentClicked($index)" href="#">{{assignment.subSubject[0].name}}</a>
+                <label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
+            </div>
+        </div>
+    </ul>
+    <ul ng-if="vm.studentScreenMode == 'self'" id="gallery">
+        <label id="tasks-lable">:משימות עצמיות</label>
+        <div ng-repeat="assignment in vm.myAssignments">
+            <div ng-if="assignment.status != 'done' && assignment.status != 'failed' && assignment.assigner[0]._id == assignment.assignee" class="task">
+                <a href="#"><image class="solved" src="/images/solved.png"></image></a>
+                <a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
+                <image class="active-task" src="/images/task.png"></image>
+                <a class="sub-subject" ng-click="vm.assignmentClicked($index)" href="#">{{assignment.subSubject[0].name}}</a>
+                <label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}}</label>
+            </div>
+        </div>
+    </ul>
+    <ul ng-if="vm.studentScreenMode == 'done'" id="gallery">
+        <label id="tasks-lable">:משימות גמורות</label>
+        <div ng-repeat="assignment in vm.myAssignments">
+            <div ng-if="assignment.status == 'done' || assignment.status == 'failed'" class="task">
+                <a href="#"><image class="solved" src="/images/solved.png"></image></a>
+                <a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
+                <image class="active-task" src="/images/task.png"></image>
+                <label class="sub-subject">{{assignment.subSubject[0].name}}</label>
+                <label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
+            </div>
+        </div>
+    </ul>
+    <br class="clear" />
+    <!-- end --> 
+</div>

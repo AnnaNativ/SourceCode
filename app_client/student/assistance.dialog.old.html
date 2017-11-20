@@ -6,23 +6,25 @@
             <div ng-if="vm.assistant == 'tutorial'">
                 <div class="modal-body">
                     <div class="centerBlock">
-                        <h2 class="h2-dialog">וידאו הדרכה:</h2>
+                        <h2>וידאו הדרכה:</h2>
                         <iframe id="ytplayer" type="text/html" width="512" height="280" ng-src="{{vm.tutorialVideoLink}}" frameborder="0"></iframe><br>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="student-submit-button" data-dismiss="modal" ng-click="vm.closeAssistance()">סגור</button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.closeAssistance()">
+                        <span class="glyphicon glyphicon-remove"></span></button>
                 </div>
             </div>
             <div ng-if="vm.assistant == 'sample_solution'">
                 <div class="modal-body">
                     <div class="centerBlock">
-                        <h2 class="h2-dialog">וידאו פתרון לדוגמה:</h2>
+                        <h2>וידאו פתרון לדוגמה:</h2>
                         <iframe id="ytplayer" type="text/html" width="512" height="280" src="{{vm.sampleSolutionVideoLink}}" frameborder="0"></iframe><br>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="student-submit-button" data-dismiss="modal" ng-click="vm.closeAssistance()">סגור</button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.closeAssistance()">
+                        <span class="glyphicon glyphicon-remove"></span></button>
                 </div>
             </div>
             <div ng-if="vm.assistant == 'picture_solution'">
@@ -34,17 +36,18 @@
                 </div>
                 <div ng-if="!vm.showAssistanceWarning" class="modal-body">
                     <div class="centerBlock">
-                        <h2 class="h2-dialog">פתרון התרגיל:</h2>
+                        <h2>פתרון התרגיל:</h2>
                         <img ng-src="{{vm.exercise.solutionPicture}}"><br>
                     </div>      
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="student-submit-button" data-dismiss="modal" ng-click="vm.closeAssistance()">סגור</button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.closeAssistance()">
+                        <span class="glyphicon glyphicon-remove"></span></button>
                 </div>
             </div>
             <div ng-if="vm.assistant == 'pre_req'">
                 <div class="modal-body">
-                    <h2 class="h2-dialog">נושאים קשורים:</h2>
+                    <h2>נושאים קשורים:</h2>
                     <div ng-repeat="obj in vm.dependencies" id="{{obj.id}}">
                         <input type="radio" ng-model="vm.preReqNextStep" value="{{obj.id}}"
                         />&nbsp;&nbsp;
@@ -52,8 +55,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="student-submit-button" data-dismiss="modal" ng-click="vm.closeAssistance()">אישור</button>
-                    <button type="button" class="student-submit-button" data-dismiss="modal" ng-click="vm.cancelAssistance()">ביטול</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.closeAssistance()">
+                        <span class="glyphicon glyphicon-ok"></span></button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.cancelAssistance()">
+                        <span class="glyphicon glyphicon-remove"></span></button>
                 </div>
             </div>
         </div>       

@@ -60,6 +60,13 @@
         console.log(e);
       });
     
+    vm.newTabSelected = function(newTab) {
+      vm.studentScreenMode = newTab;
+      if(newTab == 'done' || newTab == 'self' || newTab == 'homework') {
+        vm.loadAssignments();
+      }
+    }  
+    
     vm.assignmentsTabSelected = function() {
       vm.currentTab = 'assignments';
       vm.loadAssignments();

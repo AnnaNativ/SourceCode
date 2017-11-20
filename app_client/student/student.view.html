@@ -13,138 +13,27 @@
 	</div>
 	<div id="menu">
 		<ul>
-			<li ng-if="vm.studentScreenMode != 'main'"><a ng-click="vm.studentScreenMode = 'main'" href="#">דף ראשי</a></li>
-			<li ng-if="vm.studentScreenMode == 'main'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'main'" href="#">דף ראשי</a></li>
-			<li ng-if="vm.studentScreenMode != 'messages'"><a  ng-click="vm.studentScreenMode = 'messages'" href="#">הודעות</a></li>
-			<li ng-if="vm.studentScreenMode == 'messages'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'messages'" href="#">הודעות</a></li>
-			<li ng-if="vm.studentScreenMode != 'done'"><a ng-click="vm.studentScreenMode = 'done'" href="#">משימות גמורות</a></li>
-			<li ng-if="vm.studentScreenMode == 'done'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'done'" href="#">משימות גמורות</a></li>
-			<li ng-if="vm.studentScreenMode != 'self'"><a ng-click="vm.studentScreenMode = 'self'" href="#">משימות עצמיות</a></li>
-			<li ng-if="vm.studentScreenMode == 'self'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'self'" href="#">משימות עצמיות</a></li>
-			<li ng-if="vm.studentScreenMode == undefined || vm.studentScreenMode == 'homework'" class="current_page_item"><a ng-click="vm.studentScreenMode = 'homework'" href="#">שעורי בית</a></li>
-			<li ng-if="vm.studentScreenMode != undefined && vm.studentScreenMode != 'homework'"><a ng-click="vm.studentScreenMode = 'homework'" href="#">שעורי בית</a></li>
+			<li ng-if="vm.studentScreenMode != 'main'"><a ng-click="vm.newTabSelected('main')" href="#">דף ראשי</a></li>
+			<li ng-if="vm.studentScreenMode == 'main'" class="current_page_item"><a ng-click="vm.newTabSelected('main')" href="#">דף ראשי</a></li>
+			<li ng-if="vm.studentScreenMode != 'messages'"><a ng-click="vm.newTabSelected('messages')" href="#">הודעות</a></li>
+			<li ng-if="vm.studentScreenMode == 'messages'" class="current_page_item"><a ng-click="vm.newTabSelected('messages')" href="#">הודעות</a></li>
+			<li ng-if="vm.studentScreenMode != 'done'"><a ng-click="vm.newTabSelected('done')" href="#">משימות גמורות</a></li>
+			<li ng-if="vm.studentScreenMode == 'done'" class="current_page_item"><a ng-click="vm.newTabSelected('done')" href="#">משימות גמורות</a></li>
+			<li ng-if="vm.studentScreenMode != 'self'"><a ng-click="vm.newTabSelected('self')" href="#">משימות עצמיות</a></li>
+			<li ng-if="vm.studentScreenMode == 'self'" class="current_page_item"><a ng-click="vm.newTabSelected('self')" href="#">משימות עצמיות</a></li>
+			<li ng-if="vm.studentScreenMode == undefined || vm.studentScreenMode == 'homework'" class="current_page_item"><a ng-click="vm.newTabSelected('homework')" href="#">שעורי בית</a></li>
+			<li ng-if="vm.studentScreenMode != undefined && vm.studentScreenMode != 'homework'"><a ng-click="vm.newTabSelected('homework')" href="#">שעורי בית</a></li>
 		</ul>
 	</div>
 </div>
 <!-- end #header -->
 <div id="wrapper">
 	<div id="page">
-		<div ng-if="vm.studentScreenMode != 'assignment'" id="box1">
-			<div id="upper-status-box-right">
-				<div class="upper-status-box-right-row">
-					<label>{{vm.getAssignmentName()}}</label>	
-					<label><b><font color="#270C05" >:משימה אחרונה</font></b></label>
-				</div>					
-				<div class="upper-status-box-right-row">
-					<label>{{vm.getCurrentLevel()}}</label>
-					<label><b><font color="#270C05" >:רמה נוכחית</font></b></label>
-				</div>					
-				<div class="upper-status-box-right-row">
-					<label>{{vm.formatSubmissionDate(vm.selectedAssignment.createdDate)}}</label>
-					<label><b><font color="#270C05" >:תאריך הגשה</font></b></label>
-				</div>					
-			</div>
-			<img class="box1-image" src="/images/pic1.jpg">
-			<div ng-if="vm.studentScreenMode == 'self'" id="new-self-assignment-box">
-				<button class="self-assignment-button" ng-click="vm.addNewAssignment()">הוסף</button>
-                <select class="self-assignment-select" dir="rtl" ng-model="vm.subSubject" ng-options="vm.subSubjects.indexOf(subSubject) as subSubject.name for subSubject in vm.subSubjects"
-                    ng-change="vm.subSubjectSelected()"></select>
-                <label>:תת נושא</label>&nbsp;&nbsp;
-                <select class="self-assignment-select" dir="rtl" name="subject" ng-model="vm.subject" ng-options="vm.subjects.indexOf(subject) as subject.name for subject in vm.subjects"
-                    ng-change="vm.subjectSelected()">
-                </select>
-                <label>:נושא</label>&nbsp;&nbsp;
-			</div>
+		<div ng-if="vm.studentScreenMode == 'assignment'">
+			<div ng-include="'/student/my.assignment.view.html'"></div>			
 		</div>
-		<div ng-if="vm.studentScreenMode == 'assignment'" id="box1">
-			<div id="upper-status-box-right">
-				<div class="upper-status-box-right-row">
-					<label>{{vm.getAssignmentName()}}</label>	
-					<label><b><font color="#270C05" >:שם משימה</font></b></label>
-				</div>					
-				<div class="upper-status-box-right-row">
-					<label>{{vm.getCurrentLevel()}}</label>
-					<label><b><font color="#270C05" >:רמה נוכחית</font></b></label>
-				</div>					
-				<div class="upper-status-box-right-row">
-					<label>{{vm.formatSubmissionDate(vm.selectedAssignment.createdDate)}}</label>
-					<label><b><font color="#270C05" >:תאריך הגשה</font></b></label>
-				</div>					
-			</div>
-			<div id="upper-status-box-left">
-				<div class="upper-status-box-left-row">
-					<label>{{vm.getSequencialCorrectAnswers()}}</label>	
-					<label><b><font color="#270C05" >:תשובות נכונות ברצף</font></b></label>
-				</div>					
-				<div class="upper-status-box-left-row">
-					<label>{{vm.getExercisesLeftToSolve()}}</label>
-					<label><b><font color="#270C05" >:צריך עוד לפתור</font></b></label>
-				</div>							
-			</div>
-			<img class="box1-image" src="pic1.jpg">
-		</div>
-		<div ng-if="vm.studentScreenMode != 'assignment'" id="poptrox"> 
-			<!-- start -->
-			<ul ng-if="vm.studentScreenMode == undefined || vm.studentScreenMode == 'homework'" id="gallery">
-				<label id="tasks-lable">:שעורי בית</label>
-            	<div ng-repeat="assignment in vm.myAssignments">
-					<div ng-if="assignment.status != 'done' && assignment.status != 'failed' && assignment.assigner[0]._id != assignment.assignee" class="task">
-						<a href="#"><image class="solved" src="/images/solved.png"></image></a>
-						<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
-						<image class="active-task" src="/images/task.png"></image>
-						<a class="sub-subject" ng-click="vm.assignmentClicked($index)" href="#">{{assignment.subSubject[0].name}}</a>
-						<label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
-					</div>
-				</div>
-			</ul>
-			<ul ng-if="vm.studentScreenMode == 'self'" id="gallery">
-				<label id="tasks-lable">:משימות עצמיות</label>
-            	<div ng-repeat="assignment in vm.myAssignments">
-					<div ng-if="assignment.status != 'done' && assignment.status != 'failed' && assignment.assigner[0]._id == assignment.assignee" class="task">
-						<a href="#"><image class="solved" src="/images/solved.png"></image></a>
-						<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
-						<image class="active-task" src="/images/task.png"></image>
-						<a class="sub-subject" ng-click="vm.assignmentClicked($index)" href="#">{{assignment.subSubject[0].name}}</a>
-						<label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}}</label>
-					</div>
-				</div>
-			</ul>
-			<ul ng-if="vm.studentScreenMode == 'done'" id="gallery">
-				<label id="tasks-lable">:משימות גמורות</label>
-            	<div ng-repeat="assignment in vm.myAssignments">
-					<div ng-if="assignment.status == 'done' || assignment.status == 'failed'" class="task">
-						<a href="#"><image class="solved" src="/images/solved.png"></image></a>
-						<a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
-						<image class="active-task" src="/images/task.png"></image>
-						<label class="sub-subject">{{assignment.subSubject[0].name}}</label>
-						<label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
-					</div>
-				</div>
-			</ul>
-			<br class="clear" />
-			<!-- end --> 
-		</div>
-		<div ng-if="vm.studentScreenMode == 'assignment'" id="exercise-area"> 
-            <div ng-repeat="obj in vm.exercise.body">
-                <div ng-if="obj.type == 'picture'">
-                    <img ng-src="{{obj.content}}">
-                </div>
-				<p ng-if="obj.type == 'text'">{{obj.content}}</p>
-			</div>	
-			<div ng-if="vm.exercise.solutions.length > 1" ng-repeat="obj in vm.exercise.solutions" id="{{obj.solution}}">
-				<input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"/>
-				<label>&nbsp;&nbsp;{{obj.solution}}</label><br>
-			</div>
-            <div ng-if="vm.exercise.solutions.length == 1">
-                <input type="text" dir="rtl" ng-model="vm.openSolution"/>
-            </div>
-
-			<br>
-			<button class="student-submit-button" ng-click="vm.checkAnswer()" data-toggle="modal" data-target="#myModal">סיום תרגיל</button>
-			<button class="student-submit-button-margin">הצג פתרון</button>
-			<button class="student-submit-button">פתרונות לדוגמא</button>
-			<button class="student-submit-button">וידאו הדרכה</button>
-            <div ng-include="'/student/next.step.dialog.html'"></div>
+		<div ng-if="vm.studentScreenMode != 'assignment'">
+			<div ng-include="'/student/my.assignments.view.html'"></div>
 		</div>
 	</div>
 </div>
@@ -152,7 +41,7 @@
 	<p>&copy; מתמתיכיף בע"מ, כל הזכויות שמורות</p>
 </div>
 <!-- end #footer -->
-<div ng-if="1==2" class="comments">
+<div ng-if="1==1" class="comments">
   vm.currentSelection - {{vm.currentSelection}}<br>
   vm.preReqNextStep - {{vm.preReqNextStep}}<br>
   vm.selectedAssignmentDone - {{vm.selectedAssignmentDone}}<br>
