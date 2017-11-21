@@ -489,4 +489,10 @@ a:visited {
 	border-radius: 10px;
 }
 
+.ex1 {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+
 

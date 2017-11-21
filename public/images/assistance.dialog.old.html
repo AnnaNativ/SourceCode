@@ -1,0 +1,66 @@
+<!-- Modal -->
+<div class="modal fade" id="assistanceDialog" role="dialog">
+    <div class="modal-dialog"> 
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div ng-if="vm.assistant == 'tutorial'">
+                <div class="modal-body">
+                    <div class="centerBlock">
+                        <h2>וידאו הדרכה:</h2>
+                        <iframe id="ytplayer" type="text/html" width="512" height="280" ng-src="{{vm.tutorialVideoLink}}" frameborder="0"></iframe><br>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.closeAssistance()">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
+            <div ng-if="vm.assistant == 'sample_solution'">
+                <div class="modal-body">
+                    <div class="centerBlock">
+                        <h2>וידאו פתרון לדוגמה:</h2>
+                        <iframe id="ytplayer" type="text/html" width="512" height="280" src="{{vm.sampleSolutionVideoLink}}" frameborder="0"></iframe><br>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.closeAssistance()">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
+            <div ng-if="vm.assistant == 'picture_solution'">
+                <div ng-if="vm.showAssistanceWarning" class="modal-body">
+                    <div class="centerBlock">
+                        <br><br><br>&nbsp&nbsp&nbsp&nbsp<input type="checkbox" ng-click="vm.showAssistanceWarning = false"/>&nbsp;&nbsp;
+                        <label>אני מבין שהתרגיל יחשב לי כתשובה שגויה</label><br>
+                    </div>      
+                </div>
+                <div ng-if="!vm.showAssistanceWarning" class="modal-body">
+                    <div class="centerBlock">
+                        <h2>פתרון התרגיל:</h2>
+                        <img ng-src="{{vm.exercise.solutionPicture}}"><br>
+                    </div>      
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.closeAssistance()">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
+            <div ng-if="vm.assistant == 'pre_req'">
+                <div class="modal-body">
+                    <h2>נושאים קשורים:</h2>
+                    <div ng-repeat="obj in vm.dependencies" id="{{obj.id}}">
+                        <input type="radio" ng-model="vm.preReqNextStep" value="{{obj.id}}"
+                        />&nbsp;&nbsp;
+                        <label>{{obj.subject}} - {{obj.name}}</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.closeAssistance()">
+                        <span class="glyphicon glyphicon-ok"></span></button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.cancelAssistance()">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>

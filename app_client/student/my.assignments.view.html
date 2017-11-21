@@ -59,7 +59,8 @@
                 <a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
                 <image class="active-task" src="/images/task.png"></image>
                 <label class="sub-subject">{{assignment.subSubject[0].name}}</label>
-                <label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
+                <label ng-if="assignment.assigner[0]._id == assignment.assignee" class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | משימה עצמית</label>
+                <label ng-if="assignment.assigner[0]._id != assignment.assignee" class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}}</label>
             </div>
         </div>
     </ul>

@@ -58,11 +58,12 @@
         <img class="box1-image" src="pic1.jpg">
     </div>
     <div id="exercise-area"> 
+        <button ng-if="!vm.atOriginalSubSubject()" class="student-submit-button" ng-click="vm.goBackToOriginalSubSubject()">חזור למשימה המקורית</button>
         <div ng-repeat="obj in vm.exercise.body">
             <div ng-if="obj.type == 'picture'">
                 <img ng-src="{{obj.content}}">
             </div>
-            <p ng-if="obj.type == 'text'">{{obj.content}}</p>
+            <p class="ex1" ng-if="obj.type == 'text'">{{obj.content}}</p>
         </div>	
         <div ng-if="vm.exercise.solutions.length > 1" ng-repeat="obj in vm.exercise.solutions" id="{{obj.solution}}">
             <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"/>
