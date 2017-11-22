@@ -67,15 +67,15 @@ a:hover {
 	margin: 0px auto;
 }
 
-/* Header */
+/* Header
 
 #header-wrapper {
-	background: url(/images/wrapper-bg1.png) repeat-x left top;
+	background: url(/images/wrapper-bg11.png) repeat-x left top;
 }
-
+*/
 #header {
 	width: 800px;
-	height: 96px;
+	height: 56px;
 	margin: 0 auto;
 	padding: 0px;
 }
@@ -93,7 +93,7 @@ a:hover {
 	text-align: center;
 	text-transform: uppercase;
 	font-size: 3em;
-	line-height: 90px;
+	line-height: 40px;
 }
 
 #logo h1 a {
@@ -215,6 +215,7 @@ a:hover {
 	box-shadow: 0px 1px 6px 1px rgba(0,0,0,0.1);
 	border-style: solid;
 	border-color: #270C05;
+	min-height: 480px;
 }
 
 #gallery {
@@ -390,9 +391,13 @@ a:visited {
 	color: black;
 }
 
-.self-assignment-select {
+.self-assignment-select, .open-solution-text-box {
 	width: 180px;
+	height: 26px;
+	font-size: 18px;
+/*	background: #E5E8DA; */
 }
+
 /*================== Student Page ==================*/
 #exercise-area {
 	margin: 0px auto;
@@ -448,11 +453,11 @@ a:visited {
 }
 
 .self-assignment-button {
-	margin: 0px 0px 0px 100px;
+	margin: 0px 4px 0px 100px;
 	padding: 2px 14px;
-	font-size: 14px;
-	line-height: 14px;
-	height: 20px;
+	font-size: 18px;
+	line-height: 18px;
+	height: 25px;
 }
 
 .center-button {
