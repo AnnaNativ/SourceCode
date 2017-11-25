@@ -277,6 +277,7 @@
     }
 
     vm.showSolution = function() {
+//      if(vm.exercise.solutionPicture)
       vm.assistant = 'picture_solution';
       vm.showAssistanceWarning = true;
     }

@@ -27,13 +27,17 @@
             </div>
         </div>
     </div>
+    <br>
     <div class="well well-lg">
         <div class="row">
-            <div class="col-md-2 pull-right">
-                <label>:עזרים</label>
+            <div ng-if="vm.solutionPicFile == undefined" class="col-md-4 pull-right">
+                <label>:הוספת פתרון בתמונה</label>
             </div><br>
-            <div class="col-md-8 center">
-                <label for="Solutionfile" ng-if="vm.solutionPicFile == undefined" class="btn btn btn-info">הוספת פיתרון בתמונה</label>
+            <div ng-if="vm.solutionPicFile != undefined" class="col-md-4 pull-right">
+                <label>:פתרון בתמונה</label>
+            </div><br>
+            <div class="col-md-6 center">
+                <label for="Solutionfile" ng-if="vm.solutionPicFile == undefined" class="btn btn btn-info">בחר תמונה</label>
                 <input id="Solutionfile" type="file" style="visibility:hidden;" ngf-select="vm.addSolutionPicture()" ng-model="vm.solutionPicFile" name="file" accept="image/*"
                 ngf-max-size="2MB" ngf-model-invalid="errorFile">
                 <img ng-if="vm.solutionPicFile != undefined" ngf-thumbnail="vm.newExercise.solutionPicture[0].content" class="thumb">
@@ -46,6 +50,15 @@
                         <span class="glyphicon glyphicon-remove"></span></button>
             </div>
         </div>
-
+    </div>
+    <br>
+    <div class="well well-lg">
+        <div class="row">
+            <div class="col-md-12 right">
+                <label>:קישור לפיתרון וידאו </label>
+                <input dir="rtl" type="text" class="form-control form-fixer" ng-model="vm.solutionVideo"><br>
+                <br>
+            </div>
+        </div>
     </div>
 </div>

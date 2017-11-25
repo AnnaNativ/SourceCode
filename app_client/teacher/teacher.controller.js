@@ -366,6 +366,9 @@
         else {
           vm.newExercise.level = vm.defaultLevel;
         }
+        if(vm.solutionVideo != undefined && vm.solutionVideo.length > 0) {
+          vm.newExercise.solutionVideo = vm.solutionVideo;
+        }
         // if this is a group exercise step then remove the base body and update the groupId
         if(vm.addingExerciseStep) {
           console.log('in addNewExercise.addingExerciseStep');
@@ -402,6 +405,7 @@
                 }
                 vm.cancelNewExercise();
                 vm.solutionPicFile = undefined;
+                vm.solutionVideo = undefined;
               });
           }
 

@@ -14,6 +14,7 @@ var randGen = require('mongoose-query-random');
 var Audit = mongoose.model('UserAudit');
 var UserProgress = mongoose.model('userProgress');
 var Assignment = mongoose.model('Assignment');
+var Video = mongoose.model('Video');
 
 var MAX_EXERCISE_LEVEL = 6;
 
@@ -500,64 +501,86 @@ getExerciseForId = function (exeId, PostGetExeForIdFunc) {
 };
 
 module.exports.newExercise = function (req, res) {
-  console.log("in exercise.js newExercise with: " + req.body);
 
-  var exercise = new Exercise();
-  exercise._id = new mongoose.mongo.ObjectId();
-  exercise.level = req.body.level;
-  // create the exercise body from its parts
-  req.body.body.forEach(function (bodyPart) {
-    // is this a solution Picture?
-    if(bodyPart.type == 'solutionPicture') {
-      exercise.solutionPicture = bodyPart.content;
-    }
-    // if not then it is a body part
-    else {
-      var part = new BodyPart();
-      part.type = bodyPart.type;
-      part.content = bodyPart.content;
-      exercise.body.push(part);
-    }
-  });
-  // if this is a base in a multi step exercise then update the groupId
-  if(req.body.solutions.length == 0) {
-    exercise.groupId = exercise._id;
-  }
-  // this is not a base group exercise, so create all the solutions from all solution parts
-  else {
-    req.body.solutions.forEach(function (solution) {
-      var sol = new Solution();
-      sol.solution = solution.solution;
-      sol.isCorrect = solution.isCorrect;
-      exercise.solutions.push(sol);
-    });
-  }
-  // if this is a step in a multi step exercise then update the groupId 
-  if(req.body.groupId != undefined) {
-    exercise.groupId = req.body.groupId;
-  }
-  // save the exercise
-  exercise.save(function (err) {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      var newExercise = new AssignedExercises();
-      newExercise.Id = exercise._id;
-      newExercise.level = exercise.level;
-      // if this is a multi step exercise then update the groupId
-      if(exercise.groupId != undefined) {
-        newExercise.groupId = exercise.groupId;
+  saveNewExercise = function(videoSolutionId) {
+    console.log('video ID = ' + JSON.stringify(videoSolutionId));        
+    exercise.videoSolution = videoSolutionId;
+    // create the exercise body from its parts
+    req.body.body.forEach(function (bodyPart) {
+      // is this a solution Picture?
+      if(bodyPart.type == 'solutionPicture') {
+        exercise.solutionPicture = bodyPart.content;
       }
-      // update the subSubject with the new exercise
-      SubSubject
-        .update({ "_id": req.body.subSubject }, { $push: { exercises: newExercise } })
-        .exec(function (err, subSubject) {
-          console.log('subSubject is updated!!!!')
-          res.status(200).json(subSubject);
-        });
+      // if not then it is a body part
+      else {
+        var part = new BodyPart();
+        part.type = bodyPart.type;
+        part.content = bodyPart.content;
+        exercise.body.push(part);
+      }
+    });
+    // if this is a base in a multi step exercise then update the groupId
+    if(req.body.solutions.length == 0) {
+      exercise.groupId = exercise._id;
     }
-  });
+    // this is not a base group exercise, so create all the solutions from all solution parts
+    else {
+      req.body.solutions.forEach(function (solution) {
+        var sol = new Solution();
+        sol.solution = solution.solution;
+        sol.isCorrect = solution.isCorrect;
+        exercise.solutions.push(sol);
+      });
+    }
+    // if this is a step in a multi step exercise then update the groupId 
+    if(req.body.groupId != undefined) {
+      exercise.groupId = req.body.groupId;
+    }
+    // save the exercise
+    exercise.save(function (err) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        var newExercise = new AssignedExercises();
+        newExercise.Id = exercise._id;
+        newExercise.level = exercise.level;
+        // if this is a multi step exercise then update the groupId
+        if(exercise.groupId != undefined) {
+          newExercise.groupId = exercise.groupId;
+        }
+        // update the subSubject with the new exercise
+        SubSubject
+          .update({ "_id": req.body.subSubject }, { $push: { exercises: newExercise } })
+          .exec(function (err, subSubject) {
+            console.log('subSubject is updated!!!!')
+            res.status(200).json(subSubject);
+          });
+      }
+    });
+  } 
+
+  console.log("in exercise.js newExercise with: " + req.body);
+  var exercise = new Exercise();
+    var videoSolution = new Video();
+    exercise._id = new mongoose.mongo.ObjectId();
+    exercise.level = req.body.level;
+    if(req.body.solutionVideo != undefined) {
+      videoSolution.type = 'exercise solution';
+      videoSolution.link = req.body.solutionVideo;
+      console.log('video ID = ' + JSON.stringify(videoSolution._id));        
+      videoSolution.save(function(err){
+        if(err) {
+          console.log(err);
+        }
+        else {
+          saveNewExercise(videoSolution._id);
+        }  
+      });
+    }
+    else {
+      saveNewExercise();
+    }
 };
 
 module.exports.removeExercise = function (req, res) {
