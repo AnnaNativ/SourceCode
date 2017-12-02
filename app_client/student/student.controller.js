@@ -222,7 +222,7 @@
     //####################################################################################
     //########## Solutions ###########
     //####################################################################################
-    vm.ALLOW_NEXT_LEVEL_THRESHOLD = 3;
+    vm.ALLOW_NEXT_LEVEL_THRESHOLD = 0;
     vm.currentSelection = undefined;
     vm.finalSelection = undefined;
     vm.correctAnswerNextStep = 'moreOfTheSame';

@@ -10,7 +10,7 @@
         <h1>המשימה הסתיימה בכשלון</h1><br>
     </div>
 </div>
-<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment == true">
+<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment == true && false">
     <br>
     <div id="next-step">
         <h1>חזרת למשימה המקורית</h1><br>
@@ -19,7 +19,7 @@
         </div>
     </div>    
 </div>
-<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel == true">
+<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel == true && false">
     <br>
     <div id="next-step">
         <h1>כל הכבוד, עברת לשלב {{vm.exercise.properties.level + 1}}</h1><br>
@@ -28,8 +28,11 @@
         </div>
     </div>
 </div>
+<!--
 <div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel != true">
-    <div id="box1">
+-->
+    <div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed">
+        <div id="box1">
         <div id="upper-status-box-right">
             <div class="upper-status-box-right-row">
                 <label ng-if="vm.atOriginalSubSubject()">{{vm.getAssignmentName()}}</label>	
