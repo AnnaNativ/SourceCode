@@ -257,7 +257,12 @@
           vm.exercise.solutions.shuffle();
         }
     });
-
+/*
+    $('#assistanceDialog').on('hidden.bs.modal', function () {
+      console.log('idden event fired!')
+      window.alert('hidden event fired!');
+    });
+*/
     vm.checkAnswer = function () {
       console.log('In checkAnswer');
       vm.finalSelection = undefined;
@@ -277,8 +282,12 @@
     }
 
     vm.showSolution = function() {
-//      if(vm.exercise.solutionPicture)
-      vm.assistant = 'picture_solution';
+      if(vm.exercise.solutionPicture != undefined) {
+        vm.getVideoSolution();
+      }
+      else {
+        vm.assistant = 'picture_solution';
+      }
       vm.showAssistanceWarning = true;
     }
 
@@ -353,7 +362,7 @@
     }
 
     vm.closeAssistance = function() {
-      if(vm.assistant == 'picture_solution' && vm.showAssistanceWarning != true) {
+      if((vm.assistant == 'picture_solution' || vm.assistant == 'video_solution') && vm.showAssistanceWarning != true) {
         console.log('In closeAssistance.if');
         vm.finalSelection = false;
         vm.levelChange = 0;
@@ -397,6 +406,17 @@
       })
     }
 
+    vm.getVideoSolution = function() {
+      meanData.getVideo(vm.exercise.videoSolution)
+      .success(function(data){
+        vm.assistant = 'video_solution';
+        vm.videoSolutionLink =  $sce.trustAsResourceUrl(data[0].link);
+        console.log('In getVideoSolution.success with: ' + data);
+      })
+      .error(function(e){
+        console.log(e);
+      })
+    }
     //####################################################################################
     //########## Status Bar ###########
     //####################################################################################    
