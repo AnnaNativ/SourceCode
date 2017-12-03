@@ -382,20 +382,38 @@
       vm.preReqNextStep = undefined;
     }
 
-    vm.getTutorialVideo = function() {
-      meanData.getVideo(vm.selectedAssignment.subSubject[0].tutorial_video)
+    vm.getTutorialVideoObject = function(video) {
+      meanData.getVideo(video)
       .success(function(data){
         vm.assistant = 'tutorial';
         vm.tutorialVideoLink =  $sce.trustAsResourceUrl(data[0].link);
-        console.log('In getTutorialVideo.success with: ' + data);
+        console.log('In getTutorialVideoObject.success with: ' + data);
       })
       .error(function(e){
         console.log(e);
       })
     }
 
-    vm.getSampleSolutionVideo = function() {
-      meanData.getVideo(vm.selectedAssignment.subSubject[0].sample_videos[0])
+    vm.getTutorialVideo = function() {
+      if(!vm.atOriginalSubSubject()) {
+        console.log('In getTutorialVideo.if with ' + vm.exercise.properties.subSubjectId);
+        meanData.getSubSubject(vm.exercise.properties.subSubjectId)
+        .success(function(data){
+          if(data.length > 0) {
+            vm.getTutorialVideoObject(data[0].tutorial_video);
+          }
+        })
+        .error(function(e){
+          console.log(e);
+        })
+      }
+      else {
+        vm.getTutorialVideoObject(vm.selectedAssignment.subSubject[0].tutorial_video);
+      }
+    }
+
+    vm.getSampleSolutionVideoObject = function(video) {
+      meanData.getVideo(video)
       .success(function(data){
         vm.assistant = 'sample_solution';
         vm.sampleSolutionVideoLink =  $sce.trustAsResourceUrl(data[0].link);
@@ -405,6 +423,23 @@
         console.log(e);
       })
     }
+
+    vm.getSampleSolutionVideo = function() {
+       if(!vm.atOriginalSubSubject()) {
+        meanData.getSubSubject(vm.exercise.properties.subSubjectId)
+        .success(function(data){
+          if(data.length > 0) {
+            vm.getSampleSolutionVideoObject(data[0].sample_videos[0]);
+          }
+        })
+        .error(function(e){
+          console.log(e);
+        })
+       }
+       else {
+         vm.getSampleSolutionVideoObject(vm.selectedAssignment.subSubject[0].sample_videos[0]);
+       }
+   }
 
     vm.getVideoSolution = function() {
       meanData.getVideo(vm.exercise.videoSolution)

@@ -68,6 +68,22 @@ module.exports.getSubjects = function(req, res) {
   }
 };
 
+module.exports.getSubSubject = function(req, res) {
+  if (!req.payload._id) {
+    res.status(401).json({
+      "message" : "UnauthorizedError: private profile"
+    });
+  } 
+  else {
+    var subSubject = new mongoose.mongo.ObjectId(req.query.subSubject);
+    SubSubject
+      .find({'_id': subSubject})
+      .exec(function(err, subSubject) {
+        res.status(200).json(subSubject);
+      });      
+  }
+};
+
 module.exports.getSubSubjects = function(req, res) {
   if (!req.payload._id) {
     res.status(401).json({
