@@ -492,10 +492,26 @@ a:visited {
 	border-color: black;
 	border-width: 3px;
 	border-radius: 10px;
-/*	width: 800px;
-	height: 650px; */
 }
 
+#videoDialog, #videoDialogDiv, #videoDialogContent {
+	width: 1000px;
+	height: 850px;
+	margin: auto;
+}
+/*
+#myModal, #myModalDiv, #myModalContent {
+	width: 500px;
+	height: 300px;
+	margin: auto;
+}
+
+#assistanceDialog, #assistanceDialogDiv, #assistanceDialogContent {
+	width: 500px;
+	height: 300px;
+	margin: auto;
+}
+*/
 .ex1 {
     direction: rtl;
     unicode-bidi: bidi-override;
