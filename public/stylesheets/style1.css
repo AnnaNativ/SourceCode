@@ -370,7 +370,7 @@ a:visited {
 	margin-top: 12px;
 	margin-left: 10px;
 }
-.unsolved {
+.unsolved, .delete {
 	float: left;
     width: 24px;
     height: auto;

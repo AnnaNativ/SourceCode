@@ -2,10 +2,11 @@ var mongoose = require('mongoose');
 var exercise = require('./exercise');
 var audit = require('./audit');
 var Cache = require('../cache/Students');
-
+var Authentication = require('./authentication');
 
 var Assignment = mongoose.model('Assignment');
 var Progress = mongoose.model('userProgress');
+var Audit = mongoose.model('UserAudit');
 var assignments = mongoose.model('Assignment');
 var progress = mongoose.model('userProgress');
 
@@ -97,6 +98,33 @@ module.exports.getAssignmentsOfTeacher = function(req, res) {
         }
       });
   }
+}
+
+module.exports.deleteAssignment = function (req, res) {
+  console.log('!!!!! deleting assignments for ' + req.query.assignment);
+  Audit.remove({userId: req.query.assignee, subsubjectId: req.query.subsubjectId}, function(err) {
+    if (err) {
+        console.log('Returned from deleteAssignment Audit collection with error ' + err);
+    }
+    else {
+      Progress.remove({assignmentId: req.query._id, subsubjectId: req.query.subsubjectId}, function(err) {
+        if (err) {
+            console.log('Returned from deleteAssignment UserProgress collection with error ' + err);
+        }
+        else {
+          Assignment.remove({_id: req.query._id}, function(err) {
+            if (err) {
+                console.log('Returned from deleteAssignment UserProgress collection with error ' + err);
+            }
+            else {
+              Authentication.reloadStudentActivity(req.query.assignee);
+              res.status(200).json('assignment removed successfully');              
+            }
+          });        
+        }
+      });        
+    }
+  });
 }
 
 module.exports.getMyAssignments = function (req, res) {

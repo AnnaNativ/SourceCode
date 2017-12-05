@@ -96,6 +96,20 @@
       vm.getNextExercise();
     }
 
+    vm.deleteAssignment = function($index) {
+        var txt;
+        if (confirm("Are you sure you want to delete this assignment?") == true) {
+            assignment.deleteAssignment(vm.myAssignments[$index])
+              .success(function (data) {
+                console.log('In deleteAssignment - got back with ' + data.length + ' assignments to do');
+                vm.loadAssignments();
+              })
+              .error(function (e) {
+                console.log(e);
+              });        
+        }
+    }
+
     vm.addNewAssignment = function() {
       var student = [{"id": vm.user._id}];
       assignment

@@ -24,7 +24,14 @@
         return $http.get('/api/myLastLocation', congif);
         
     };
-    
+
+    var deleteAssignment = function(assignment){
+        var congif = {
+          params:assignment
+        };
+        return $http.get('/api/deleteAssignment', congif);
+    };
+
     var newAssignment = function(assignment) {
       console.log("In assignment.newAssignment with: " + assignment);
       return $http.post('/api/assignment', assignment);
@@ -33,7 +40,8 @@
   return {
       myAssignments: myAssignments,
       myLastLocation: myLastLocation,
-      newAssignment: newAssignment
+      newAssignment: newAssignment,
+      deleteAssignment: deleteAssignment
   };
   }
 })();

@@ -52,6 +52,7 @@ router.post('/upload', multipartyMiddleware, ctrlUploads.uploadPic);
 
 //assignment
 router.get('/myAssignments', ctrlAssignment.getMyAssignments);
+router.get('/deleteAssignment', ctrlAssignment.deleteAssignment);
 router.get('/assignmentsOfTeacher', auth, ctrlAssignment.getAssignmentsOfTeacher);
 router.post('/assignment', ctrlAssignment.newAssignment);
 

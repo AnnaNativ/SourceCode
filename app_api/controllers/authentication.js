@@ -89,6 +89,20 @@ module.exports.logout = function(req, res) {
 
 };
 
+module.exports.reloadStudentActivity = function(userId) {
+  User
+  .find({'_id': new mongoose.mongo.ObjectId(userId)})
+  .exec(function(err, user) {
+    if(err) {
+      console.log('Returned from User load with error ' + err);
+    }
+    else {
+      student = new Cache.Student(userId);
+      loadAssignments(user);
+//      loadStudentActivity(user);
+    }
+  });
+}
 
 loadStudentActivity = function(user, sendRespose) {
   student = new Cache.Student(user._id);
@@ -158,7 +172,9 @@ loadDoneExercises = function(user, sendRespose) {
             }
             console.log(student.doneExercises);
             Cache.students.add(student);
-            sendRespose(user);
+            if(sendRespose != undefined) {
+              sendRespose(user);
+            }
         }
     })        
 }  

@@ -33,6 +33,7 @@
             <div ng-if="assignment.status != 'done' && assignment.status != 'failed' && assignment.assigner[0]._id != assignment.assignee" class="task">
                 <a href="#"><image class="solved" src="/images/solved.png"></image></a>
                 <a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
+                <a href="#" ng-click="vm.deleteAssignment($index)"><image class="delete" src="/images/delete_assignment.png"></image></a>
                 <image class="active-task" src="/images/task.png"></image>
                 <a class="sub-subject" ng-click="vm.assignmentClicked($index)" href="#">{{assignment.subSubject[0].name}}</a>
                 <label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | שם מורה: {{assignment.assigner[0].name}} </label>
@@ -45,6 +46,7 @@
             <div ng-if="assignment.status != 'done' && assignment.status != 'failed' && assignment.assigner[0]._id == assignment.assignee" class="task">
                 <a href="#"><image class="solved" src="/images/solved.png"></image></a>
                 <a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
+                <a href="#" ng-click="vm.deleteAssignment($index)"><image class="delete" src="/images/delete_assignment.png"></image></a>
                 <image class="active-task" src="/images/task.png"></image>
                 <a class="sub-subject" ng-click="vm.assignmentClicked($index)" href="#">{{assignment.subSubject[0].name}}</a>
                 <label class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}}</label>
@@ -57,6 +59,7 @@
             <div ng-if="assignment.status == 'done' || assignment.status == 'failed'" class="task">
                 <a href="#"><image class="solved" src="/images/solved.png"></image></a>
                 <a href="#"><image class="unsolved" src="/images/unsolved.png"></image></a>
+                <a href="#" ng-click="vm.deleteAssignment($index)"><image class="delete" src="/images/delete_assignment.png"></image></a>
                 <image class="active-task" src="/images/task.png"></image>
                 <label class="sub-subject">{{assignment.subSubject[0].name}}</label>
                 <label ng-if="assignment.assigner[0]._id == assignment.assignee" class="task-info">תאריך הגשה: {{vm.formatSubmissionDate(assignment.createdDate)}} | משימה עצמית</label>
