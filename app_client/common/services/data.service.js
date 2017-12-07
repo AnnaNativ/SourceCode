@@ -80,7 +80,7 @@
     }
 
     var getSubSubject = function(subSubject) {
-      console.log('In data.service getSubSubject');
+      console.log('In data.service getSubSubject with: ' + subSubject);
 
       var config = {
         params: {subSubject: subSubject},

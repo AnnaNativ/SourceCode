@@ -42,11 +42,11 @@
                 <button type="button" class="btn btn-info" ng-click="vm.viewSelectedSubject()" ng-disabled="vm.addingSubject" data-toggle="tooltip"
                     title="פרטים על נושא הלימוד הנבחר">
                     <span class="glyphicon glyphicon-info-sign"></span></button>
+                <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'subject'" ng-disabled="vm.addingSubject" data-toggle="modal" data-target="#confirmationModal">
+                <span class="glyphicon glyphicon-trash"></span></button>     
                 <button type="button" class="btn btn-info" ng-click="vm.editSubject()" ng-disabled="vm.addingSubject" data-toggle="tooltip"
                     title="עדכן נושא לימוד נבחר">
                 <span class="glyphicon glyphicon-edit"></span></button>
-                <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'subject'" ng-disabled="vm.addingSubject" data-toggle="modal" data-target="#confirmationModal">
-                <span class="glyphicon glyphicon-trash"></span></button>     
                 <button type="button" class="btn btn-warning" ng-click="vm.addSubjectClicked()" ng-disabled="vm.addingSubject" data-toggle="tooltip"
                     title="הוסף נושא לימוד חדש">
                 <span class="glyphicon glyphicon-plus"></span></button>
@@ -58,11 +58,11 @@
                 <button type="button" class="btn btn-info" ng-click="vm.viewSelectedSubject()" ng-disabled="vm.addingSubSubject" data-toggle="tooltip"
                     title="פרטים על תת נושא הלימוד הנבחר">
                     <span class="glyphicon glyphicon-info-sign"></span></button>
-                <button type="button" class="btn btn-info" ng-click="vm.editSubSubject()" ng-disabled="vm.addingSubSubject" data-toggle="tooltip"
-                    title="עדכן תת נושא לימוד נבחר">
-                <span class="glyphicon glyphicon-edit"></span></button>                
                 <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'subSubject'" ng-disabled="vm.addingSubSubject" data-toggle="modal" data-target="#confirmationModal">
                 <span class="glyphicon glyphicon-trash"></span></button>     
+                <button type="button" class="btn btn-info" ng-click="vm.editSubSubjectClicked()" ng-disabled="vm.addingSubSubject || vm.subSubject == undefined" data-toggle="tooltip"
+                    title="עדכן תת נושא לימוד נבחר">
+                <span class="glyphicon glyphicon-edit"></span></button>                
                 <button type="button" class="btn btn-warning" ng-click="vm.addSubSubjectClicked()" ng-disabled="vm.addingSubSubject" data-toggle="tooltip"
                     title="הוסף תת נושא לימוד חדש">
                 <span class="glyphicon glyphicon-plus"></span></button>

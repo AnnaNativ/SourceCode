@@ -123,24 +123,24 @@
     }
 
     vm.subjectSelected = function() {
-    vm.newSubjectAdded = false; 
-    vm.newSubSubjectAdded = false; 
-    vm.newExerciseAdded = false; 
-    vm.newExerciseStepAdded = false; 
-    vm.subSubject = undefined;
-    vm.exercise = undefined;
-    // clrear the add subject successful message
-    vm.newSubjectAdded = false; 
-    meanData.getSubSubjects()
-    .success(function(data){
-      console.log('In subjectSelected with ' + data);
-      vm.populateSubSubjectObject(data);
-      vm.level = undefined;
-      vm.exercises = [];
-    })
-    .error(function(e){
-      console.log(e);
-    })
+      vm.newSubjectAdded = false; 
+      vm.newSubSubjectAdded = false; 
+      vm.newExerciseAdded = false; 
+      vm.newExerciseStepAdded = false; 
+      vm.subSubject = undefined;
+      vm.exercise = undefined;
+      // clrear the add subject successful message
+      vm.newSubjectAdded = false; 
+      meanData.getSubSubjects()
+      .success(function(data){
+        console.log('In subjectSelected with ' + data);
+        vm.populateSubSubjectObject(data);
+        vm.level = undefined;
+        vm.exercises = [];
+      })
+      .error(function(e){
+        console.log(e);
+      })
   }
 
     //####################################################################################
@@ -190,7 +190,62 @@
 
     vm.addSubSubjectClicked = function() {
       vm.addingSubSubject = true;
-      // clrer the add subject successful message
+      // clear the add subject successful message
+      vm.newSubjectAdded = false; 
+      vm.newSubSubjectAdded = false; 
+      vm.newExerciseAdded = false; 
+      vm.newExerciseStepAdded = false; 
+    }
+
+    vm.editSubSubjectClicked = function() {
+      vm.getSampleVideo = function(video_id) {
+        meanData.getVideo(video_id)
+        .success(function(video) {
+          if(video != undefined && video.length > 0) {
+            vm.newSubSubject.sampleVideos = video[0].link;
+          }
+          vm.populateDependenciesForSubSubject();
+        })
+        .error(function(e){
+          console.log(e);
+        })  
+      }
+
+      vm.addingSubSubject = true;
+      vm.editingSubSubject = true;
+      console.log('In editSubSubjectClicked with: ' + vm.subSubject);
+      meanData.getSubSubject(vm.subSubjects[vm.subSubject]._id)
+      .success(function(data){
+        if(data.length > 0) {
+          console.log('In editSubSubjectClicked success with: ' + data[0].name);
+          vm.newSubSubject.editing = data[0]._id;
+          vm.newSubSubject.name = data[0].name;
+          if(data[0].tutorial_video != undefined) {
+            meanData.getVideo(data[0].tutorial_video)
+            .success(function(video) {
+              if(video != undefined && video.length > 0) {
+                vm.newSubSubject.tutorialVideo = video[0].link;
+              }
+              if(data[0].sample_videos != undefined) {
+                vm.getSampleVideo(data[0].sample_videos[0]);
+              }
+            })
+            .error(function(e){
+              console.log(e);
+            })  
+          }
+          else {
+              if(data[0].sample_videos != undefined) {
+                vm.getSampleVideo(data[0].sample_videos[0]);
+              }
+          }
+        }
+      })
+      .error(function(e){
+        console.log(e);
+      })
+      
+      // clear the add subject successful message
       vm.newSubjectAdded = false; 
       vm.newSubSubjectAdded = false; 
       vm.newExerciseAdded = false; 
@@ -200,7 +255,9 @@
     vm.cancelNewSubSubject = function() {
       vm.newSubSubject = {};
       vm.addingSubSubject = false;
+      vm.editingSubSubject = false;
       vm.addSubSubjectFormValid = true;
+      vm.selectedDependencies = [];
     }
 
     vm.subSubjectSelected = function() {
@@ -213,7 +270,7 @@
         vm.level = undefined;
       }
     }
-    
+
     //####################################################################################
     //########## Levels ###########
     //####################################################################################
@@ -675,6 +732,12 @@
           var lable = vm.subjects[i].name + ' - ' + subSubject.name;
           vm.dependencies.push({id: subSubject._id, label: lable});
         }
+      }
+    }
+
+    vm.populateDependenciesForSubSubject = function() {
+      for(var i=0; i<vm.subSubjects[vm.subSubject].dependencies.length; i++) {
+        vm.selectedDependencies.push({id: vm.subSubjects[vm.subSubject].dependencies[i]});
       }
     }
   }

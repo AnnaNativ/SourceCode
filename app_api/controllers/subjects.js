@@ -162,35 +162,59 @@ module.exports.newSubSubject = function(req, res) {
   var sampleVideos = new Video();
   var tutorialVideo = new Video();
   
-  var createSubSubjectsCB = function() {
-    var subSubject = new SubSubject();
-    subSubject._id = new mongoose.mongo.ObjectId();
-    subSubject.name = req.body.name;
-    subSubject.tutorial_video = tutorialVideo._id;
-    subSubject.sample_videos = [sampleVideos._id];
-
-    subSubject.exercises = [];
-    subSubject.dependencies = [];
+  var updateSubSubject = function() {
+    var id = new mongoose.mongo.ObjectId(req.body.editing);
+    var dependencies = [];
     for(var i=0; i<req.body.dependencies.length; i++) {
       var dependency = new mongoose.mongo.ObjectId(req.body.dependencies[i].id);
-      subSubject.dependencies.push(dependency);
+      dependencies.push(dependency);
     }
-    subSubject.subjectId = new mongoose.mongo.ObjectId(req.body.subjectId);
-    subSubject.save(function (err) {
-      if(err) {
-        console.log(err);
-      }
-      else {
-        //update the subject object with the new subsubjectId
-        console.log('createdSubsubject: ' + subSubject);
-        Subject
-        .update({"_id": subSubject.subjectId},{$push:{subSubjects: subSubject._id}})
-        .exec(function(err, subjects) {
-          console.log('subject is updated!!!!')
-          res.status(200).json(subSubject);
-        });
-      }
+    SubSubject.update({'_id':id},
+      {$set: {'name': req.body.name, 'tutorial_video': tutorialVideo._id, 'sample_videos': [sampleVideos._id], 'dependencies': dependencies}},
+      function(err, result){
+        if (err) {
+            console.log('Failed to update the SubSubject with new info ' + err);
+        }
+        else {
+              res.status(200).json('subSubject updated successfully');
+        }
     });
+  }
+  
+  var createSubSubjectsCB = function() {
+    var subSubject = new SubSubject();
+    if(req.body.editing != undefined) {
+      updateSubSubject();
+    }
+    else {
+      subSubject._id = new mongoose.mongo.ObjectId();
+      subSubject.name = req.body.name;
+      subSubject.tutorial_video = tutorialVideo._id;
+      subSubject.sample_videos = [sampleVideos._id];
+
+      subSubject.exercises = [];
+      subSubject.dependencies = [];
+      for(var i=0; i<req.body.dependencies.length; i++) {
+        var dependency = new mongoose.mongo.ObjectId(req.body.dependencies[i].id);
+        subSubject.dependencies.push(dependency);
+      }
+      subSubject.subjectId = new mongoose.mongo.ObjectId(req.body.subjectId);
+      subSubject.save(function (err) {
+        if(err) {
+          console.log(err);
+        }
+        else {
+          //update the subject object with the new subsubjectId
+          console.log('createdSubsubject: ' + subSubject);
+          Subject
+          .update({"_id": subSubject.subjectId},{$push:{subSubjects: subSubject._id}})
+          .exec(function(err, subjects) {
+            console.log('subject is updated!!!!')
+            res.status(200).json(subSubject);
+          });
+        }
+      });
+    }
   }
 
   var createSampleVideosCB = function(createSubSubjectsCB) {
