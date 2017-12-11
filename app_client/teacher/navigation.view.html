@@ -78,11 +78,11 @@
         </div>
         <div class="col-md-2 pull-right" ng-show="vm.level >= 0">
             <div class="btn-toolbar pull-right">
-                <button type="button" class="btn btn-info" ng-click="vm.editExercise()" ng-disabled="vm.addingExercise || vm.addingExerciseStep" data-toggle="tooltip"
-                    title="עדכן תרגיל נבחר">
-                <span class="glyphicon glyphicon-edit"></span></button>
                 <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'exercise'" ng-disabled="vm.addingExercise || vm.addingExerciseStep" data-toggle="modal" data-target="#confirmationModal">
                 <span class="glyphicon glyphicon-trash"></span></button>         
+                <button type="button" class="btn btn-info" ng-click="vm.editExerciseClicked()" ng-disabled="vm.addingExercise || vm.addingExerciseStep" data-toggle="tooltip"
+                    title="עדכן תרגיל נבחר">
+                <span class="glyphicon glyphicon-edit"></span></button>
                 <button type="button" class="btn btn-warning" ng-click="vm.addExerciseClicked()" ng-disabled="vm.addingExercise || vm.addingExerciseStep" data-toggle="tooltip"
                     title="הוסף תרגיל חדש">
                 <span class="glyphicon glyphicon-plus"></span></button>
@@ -91,11 +91,11 @@
         </div>
         <div class="col-md-2 pull-right" ng-show="vm.isMultiStepExercise()">
             <div class="btn-toolbar pull-right">
-                <button type="button" class="btn btn-info" ng-click="vm.editExerciseStep()" ng-disabled="vm.addingExerciseStep" data-toggle="tooltip"
-                    title="עדכן שלב נבחר">
-                <span class="glyphicon glyphicon-edit"></span></button>
                 <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'exercise'" ng-disabled="vm.addingExerciseStep" data-toggle="modal" data-target="#confirmationModal">
                 <span class="glyphicon glyphicon-trash"></span></button>         
+                <button type="button" class="btn btn-info" ng-click="vm.editExerciseStepClicked()" ng-disabled="vm.addingExerciseStep" data-toggle="tooltip"
+                    title="עדכן שלב נבחר">
+                <span class="glyphicon glyphicon-edit"></span></button>
                 <button type="button" class="btn btn-warning" ng-click="vm.addExerciseStepClicked()" ng-disabled="vm.addingExerciseStep" data-toggle="tooltip"
                     title="הוסף שלב חדש">
                 <span class="glyphicon glyphicon-plus"></span></button>

@@ -501,6 +501,63 @@ getExerciseForId = function (exeId, PostGetExeForIdFunc) {
 };
 
 module.exports.newExercise = function (req, res) {
+  var id;
+  var solutions = [];
+  var solutionPicture;
+  var body = [];
+
+  updateThisExercise = function(video) {
+    Exercise.update({'_id':id},
+      {$set:{'solutions': solutions, 'body': body, 'solutionPicture': solutionPicture, 'videoSolution': video}},
+      function(err, result){
+        if (err) {
+            console.log('Failed to update the Exercise with new info ' + err);
+        }
+        else {
+              res.status(200).json('Exercise updated successfully');
+        }
+    });
+  }
+
+  updateExercise = function() {
+    id = new mongoose.mongo.ObjectId(req.body.editing);
+    req.body.solutions.forEach(function (solution) {
+      var sol = new Solution();
+      sol.solution = solution.solution;
+      sol.isCorrect = solution.isCorrect;
+      solutions.push(sol);
+    });
+    req.body.body.forEach(function (bodyPart) {
+      // is this a solution Picture?
+      if(bodyPart.type == 'solutionPicture') {
+        solutionPicture = bodyPart.content;
+      }
+      // if not then it is a body part
+      else {
+        var part = new BodyPart();
+        part.type = bodyPart.type;
+        part.content = bodyPart.content;
+        body.push(part);
+      }
+    });
+    if(req.body.solutionVideo != undefined) {
+      var videoSolution = new Video();
+      videoSolution.type = 'exercise solution';
+      videoSolution.link = req.body.solutionVideo;
+      console.log('video ID = ' + JSON.stringify(videoSolution._id));        
+      videoSolution.save(function(err){
+        if(err) {
+          console.log(err);
+        }
+        else {
+          updateThisExercise(videoSolution);
+        }  
+      });
+    }
+    else {
+      updateThisExercise();
+    }
+  }
 
   saveNewExercise = function(videoSolutionId) {
     console.log('video ID = ' + JSON.stringify(videoSolutionId));        
@@ -560,8 +617,12 @@ module.exports.newExercise = function (req, res) {
     });
   } 
 
-  console.log("in exercise.js newExercise with: " + req.body);
-  var exercise = new Exercise();
+  if(req.body.editing != undefined) {
+    updateExercise();
+  }
+  else {
+    console.log("in exercise.js newExercise with: " + req.body);
+    var exercise = new Exercise();
     var videoSolution = new Video();
     exercise._id = new mongoose.mongo.ObjectId();
     exercise.level = req.body.level;
@@ -581,6 +642,7 @@ module.exports.newExercise = function (req, res) {
     else {
       saveNewExercise();
     }
+  }
 };
 
 module.exports.removeExercise = function (req, res) {

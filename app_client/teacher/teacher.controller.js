@@ -281,7 +281,7 @@
     vm.levelSelected = function() {
       console.log('In levelSelected');
       if(vm.subject >= 0 && vm.subSubject >= 0) {
-        vm.getExercises();       
+        vm.getExercises();    
       } 
     }
 
@@ -311,6 +311,7 @@
       level: undefined,
       body:[],
       solutionPicture: [],
+      solutionVideo: undefined,
       solutions : [{solution: "", isCorrect: true}, 
                    {solution: "", isCorrect: false}, 
                    {solution: "", isCorrect: false}, 
@@ -321,7 +322,7 @@
     };
 
     vm.addExerciseClicked = function() {
-      console.log('in subjects.controller addExerciseClicked');
+      console.log('in teacher.controller addExerciseClicked');
       vm.addingExercise = true;
       vm.addingExerciseStep = false;
       vm.newExerciseAdded = false;
@@ -329,9 +330,69 @@
       vm.multiStageExercise = false;
       // clrer the add subject successful message
     }
-    
+
+    vm.getExerciseForEditing = function(exercise) {
+      var baseSteps;
+      if(vm.addingExerciseStep) {
+        baseSteps = vm.newExercise.body;
+      }
+      meanData.getExercise(exercise)
+        .success(function(data){
+          vm.newExercise = data[0];
+          if(vm.addingExerciseStep) {
+            vm.newExercise.body = baseSteps.concat(vm.newExercise.body);
+          }
+          for(var i=vm.newExercise.solutions.length; i<5; i++) {
+            vm.newExercise.solutions.push({solution: "", isCorrect: false});
+          }
+          vm.newExercise.editing = data[0]._id;
+          if(vm.newExercise.solutionPicture != undefined) {
+            vm.solutionPicFile = vm.newExercise.solutionPicture;
+            vm.newExercise.solutionPicture = [];
+            vm.newExercise.solutionPicture.push({type: 'solutionPicture', content: vm.solutionPicFile});
+          }
+          else {
+            console.log('In editExerciseClicked.else');
+            vm.newExercise.solutionPicture = [];
+          }
+          if(vm.newExercise._id == vm.newExercise.groupId) {
+            vm.multiStageExercise = true;
+          }
+          meanData.getVideo(vm.newExercise.videoSolution)
+          .success(function(data){
+            if(data.length > 0) {
+              vm.solutionVideo = data[0].link;
+            }
+          })
+          .error(function(e){
+            console.log(e);
+          })
+        })
+        .error(function(e){
+          console.log(e);
+        })
+    }
+
+    vm.editExerciseClicked = function() {
+      vm.editingExercise = true;
+      vm.addExerciseClicked();
+      var parts = vm.exercise.split(' ');
+      var index = parts[parts.length - 1] - 1;
+      console.log('in editExerciseClicked with index: ' + index);
+      vm.getExerciseForEditing(vm.exercises[index].Id);
+    }
+
+    vm.editExerciseStepClicked = function() { 
+      vm.addExerciseStepClicked();
+      var parts = vm.stage.split(' ');
+      var index = parts[parts.length - 1] - 1;
+      console.log('in editExerciseStepClicked with index: ' + index);
+      vm.getExerciseForEditing(vm.exerciseStages[index].Id);
+
+    }
+
     vm.addExerciseStepClicked = function() {
-      console.log('in subjects.controller addExerciseStepClicked');
+      console.log('in addExerciseStepClicked');
       vm.addingExercise = false;
       vm.addingExerciseStep = true;
       vm.newExerciseStageAdded = false;
@@ -345,16 +406,21 @@
     vm.cancelNewExercise = function() {
       vm.newExercise.body = [];
       vm.newExercise.solutionPicture = [];
+      vm.newExercise.solutionVideo = undefined;
       vm.newExercise.solutions = [{solution: "", isCorrect: true}, 
                                   {solution: "", isCorrect: false}, 
                                   {solution: "", isCorrect: false}, 
                                   {solution: "", isCorrect: false}, 
                                   {solution: "", isCorrect: false}];
       vm.newExercise.groupId = undefined;
+      vm.newExercise.editing = undefined;
       vm.updateShowAnswersStatus();
       vm.formValid = true;
       vm.addingExercise = false;
       vm.addingExerciseStep = false;
+      vm.editingExercise = false;
+      vm.solutionPicFile = undefined;
+      vm.solutionVideo = undefined;
     }
 
     vm.getExercises = function() {
@@ -374,6 +440,7 @@
         }
         if(vm.groupBaseExercise != undefined) {
           vm.populateGroupExercise(vm.groupBaseExercise._id);
+          vm.exerciseChanged();    
         }
       })
       .error(function(e){
@@ -473,8 +540,9 @@
           vm.newExercise.body.push(vm.newExercise.solutionPicture[0]);
         }
         angular.forEach(vm.newExercise.body, function(fileObj, index, array) {
-            console.log('in teacher.controller onSubmit.forEach.body');
-            if(fileObj.type == 'picture' || fileObj.type == 'solutionPicture') {
+            console.log('in teacher.controller onSubmit.forEach.body with:' + fileObj.type + ' ' + fileObj.content);
+            if((fileObj.type == 'picture' || fileObj.type == 'solutionPicture') && (fileObj.content instanceof File || !fileObj.content.startsWith("http:"))) {
+              console.log('in teacher.controller onSubmit.forEach.body.if');
               fileObj.content.upload = Upload.upload({
                   url: '/api/upload',
                   method: 'POST',
@@ -568,14 +636,13 @@
     }
   }
 
-
-  $scope.$watch('vm.exercise', function() {
+  vm.exerciseChanged = function() {
     if(vm.exercise != undefined) {
       vm.newExerciseAdded = false;
       vm.newExerciseStepAdded = false;
       var parts = vm.exercise.split(" ");
       var loc = parts[parts.length - 1];
-      console.log('in watch vm.exercise with loc ' + loc);
+      console.log('in exerciseChanged with loc ' + loc);
       if(vm.exercises[loc - 1].groupId != undefined) {
         meanData.getExercise(vm.exercises[loc - 1].groupId)
         .success(function(data){
@@ -590,7 +657,9 @@
           vm.addingExerciseStep = false;
       }
     }
-    })
+  }
+
+  $scope.$watch('vm.exercise', vm.exerciseChanged)
 
     $scope.$watch('vm.stage', function() {
       vm.newExerciseAdded = false;
@@ -613,6 +682,7 @@
     }
 
     vm.addSolutionPicture = function(){
+      console.log('In addSolutionPicture with: ' + vm.newExercise.solutionPicture);
       vm.newExercise.solutionPicture.push({type: 'solutionPicture', content: vm.solutionPicFile});
     }
 

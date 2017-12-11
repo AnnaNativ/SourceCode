@@ -9,7 +9,7 @@
                 ngf-max-size="2MB" ngf-model-invalid="errorFile">
                 <img ngf-thumbnail="vm.newExercise.body[0].content" class="thumb">
                 <div ng-if="!vm.addingExerciseStep" dir="rtl">
-                    <input type="checkbox" ng-model="vm.multiStageExercise"/>
+                    <input type="checkbox" ng-model="vm.multiStageExercise" ng-disabled="vm.editingExercise"/>
                     <label>תרגיל רב שלבי</label><br>
                 </div>
                 <br>
