@@ -7,11 +7,13 @@
                 <h2 class="modal-title">אישור מחיקה</h2>
             </div>
             <div class="modal-body">
+                <h3 ng-if="vm.confirmationFor == 'exercise_step'" class="modal-title">אנא אשר מחיקת השלב הנבחר</h3><br>
                 <h3 ng-if="vm.confirmationFor == 'exercise'" class="modal-title">אנא אשר מחיקת התרגיל הנבחר</h3><br>
                 <h3 ng-if="vm.confirmationFor == 'subSubject'" class="modal-title">אנא אשר מחיקת תת הנושא הנבחר</h3><br>
                 <h3 ng-if="vm.confirmationFor == 'subject'" class="modal-title">אנא אשר מחיקת הנושא הנבחר</h3><br>
             </div>
             <div class="modal-footer">
+                <button ng-if="vm.confirmationFor == 'exercise_step'" type="button" class="btn btn-danger" ng-click="vm.removeExerciseStep()" data-dismiss="modal">אישור</button>
                 <button ng-if="vm.confirmationFor == 'exercise'" type="button" class="btn btn-danger" ng-click="vm.removeExercise()" data-dismiss="modal">אישור</button>
                 <button ng-if="vm.confirmationFor == 'subSubject'" type="button" class="btn btn-danger" ng-click="vm.removeSubSubject()" data-dismiss="modal">אישור</button>
                 <button ng-if="vm.confirmationFor == 'subject'" type="button" class="btn btn-danger" ng-click="vm.removeSubject()" data-dismiss="modal">אישור</button>

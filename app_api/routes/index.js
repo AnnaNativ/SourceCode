@@ -47,6 +47,8 @@ router.post('/logout', ctrlAuth.logout);
 router.post('/exercise', ctrlExercise.newExercise);
 router.post('/subject', ctrlSubjects.newSubject);
 router.post('/subSubject', ctrlSubjects.newSubSubject);
+router.post('/removeSubSubject', ctrlSubjects.removeSubSubject);
+
 // pictures upload
 router.post('/upload', multipartyMiddleware, ctrlUploads.uploadPic);
 

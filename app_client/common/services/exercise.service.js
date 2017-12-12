@@ -18,9 +18,9 @@
       });
     };
     
-    var removeExercise = function(exerciseId) {
-      console.log("In exercise.service removeExercise with: " + exerciseId);
-      return $http.post('/api/removeExercise', exerciseId);
+    var removeExercise = function(exercise) {
+      console.log("In exercise.service removeExercise with: " + exercise);
+      return $http.post('/api/removeExercise', exercise);
     };
     
 

@@ -39,9 +39,6 @@
     <div class="row">
         <div class="col-md-3 pull-right">
             <div class="btn-toolbar pull-right">
-                <button type="button" class="btn btn-info" ng-click="vm.viewSelectedSubject()" ng-disabled="vm.addingSubject" data-toggle="tooltip"
-                    title="פרטים על נושא הלימוד הנבחר">
-                    <span class="glyphicon glyphicon-info-sign"></span></button>
                 <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'subject'" ng-disabled="vm.addingSubject" data-toggle="modal" data-target="#confirmationModal">
                 <span class="glyphicon glyphicon-trash"></span></button>     
                 <button type="button" class="btn btn-info" ng-click="vm.editSubject()" ng-disabled="vm.addingSubject" data-toggle="tooltip"
@@ -55,9 +52,6 @@
         </div>
         <div class="col-md-3 pull-right" ng-show="vm.subject >= 0">
             <div class="btn-toolbar pull-right">
-                <button type="button" class="btn btn-info" ng-click="vm.viewSelectedSubject()" ng-disabled="vm.addingSubSubject" data-toggle="tooltip"
-                    title="פרטים על תת נושא הלימוד הנבחר">
-                    <span class="glyphicon glyphicon-info-sign"></span></button>
                 <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'subSubject'" ng-disabled="vm.addingSubSubject" data-toggle="modal" data-target="#confirmationModal">
                 <span class="glyphicon glyphicon-trash"></span></button>     
                 <button type="button" class="btn btn-info" ng-click="vm.editSubSubjectClicked()" ng-disabled="vm.addingSubSubject || vm.subSubject == undefined" data-toggle="tooltip"
@@ -91,7 +85,7 @@
         </div>
         <div class="col-md-2 pull-right" ng-show="vm.isMultiStepExercise()">
             <div class="btn-toolbar pull-right">
-                <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'exercise'" ng-disabled="vm.addingExerciseStep" data-toggle="modal" data-target="#confirmationModal">
+                <button type="button" class="btn btn-info" ng-click="vm.confirmationFor = 'exercise_step'" ng-disabled="vm.addingExerciseStep" data-toggle="modal" data-target="#confirmationModal">
                 <span class="glyphicon glyphicon-trash"></span></button>         
                 <button type="button" class="btn btn-info" ng-click="vm.editExerciseStepClicked()" ng-disabled="vm.addingExerciseStep" data-toggle="tooltip"
                     title="עדכן שלב נבחר">

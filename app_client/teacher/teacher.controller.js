@@ -501,6 +501,7 @@
             vm.newExercise.body.shift();
           })
         }
+        console.log('in addNewExercise after cleaning body');
         // now remove the empty answers from the exercise
         var solutions = [];
         for(var i=0; i<vm.newExercise.solutions.length; i++) {
@@ -508,6 +509,7 @@
             solutions.push(vm.newExercise.solutions[i]);
           }
         }
+        console.log('in addNewExercise after clearing solutions');
         vm.newExercise.solutions = solutions;
         vm.allPicSavedCallback = function() { 
               console.log('in in teacher.controller allPicSavedCallback');
@@ -539,66 +541,126 @@
         if(vm.newExercise.solutionPicture.length > 0) {
           vm.newExercise.body.push(vm.newExercise.solutionPicture[0]);
         }
-        angular.forEach(vm.newExercise.body, function(fileObj, index, array) {
-            console.log('in teacher.controller onSubmit.forEach.body with:' + fileObj.type + ' ' + fileObj.content);
-            if((fileObj.type == 'picture' || fileObj.type == 'solutionPicture') && (fileObj.content instanceof File || !fileObj.content.startsWith("http:"))) {
-              console.log('in teacher.controller onSubmit.forEach.body.if');
-              fileObj.content.upload = Upload.upload({
-                  url: '/api/upload',
-                  method: 'POST',
-                  data: {file: fileObj.content}
-              });
-              fileObj.content.upload.then(function (response) {
-                  $timeout(function () {
-                      console.log('in in teacher.controller onSubmit.forEach.body.upload.then.timeout with:' + response.data.filePath);
-                      vm.newExercise.body[index].content = response.data.filePath;
-                      itemsProcessed++;
-                      console.log('in in teacher.controller onSubmit.forEach.body.upload.then.timeout.beforeIf with:' + itemsProcessed + ' and  array length: ' + array.length);
-                      if(itemsProcessed === array.length) {
-                        vm.allPicSavedCallback();
-                      }
-                  }, 100);
-              }, function (response) {
-                      console.log('in in teacher.controller onSubmit.forEach.body.upload.then.timeout.response with:' + response.data.filePath);
-                  if (response.status > 0)  {
-                      $scope.errorMsg = response.status + ': ' + response.data;
-                  }
-              }, function (evt) {
-                  console.log('in in teacher.controller onSubmit.forEach.body.upload.then.timeout.evt with:' + evt.loaded);
-                  fileObj.content.progress = Math.min(100, parseInt(100.0 * 
-                                          evt.loaded / evt.total));
-              });
-            }
-            else{
-                itemsProcessed++;
-                console.log('in in teacher.controller onSubmit.forEach.body.else with:' + itemsProcessed + ' and  array length: ' + array.length);
-                if(itemsProcessed === array.length) {
-                  vm.allPicSavedCallback();
-                }            
-            }
-          });
+        if(vm.newExercise.body.length == 0) {
+          vm.allPicSavedCallback();
+        }
+        else {
+          angular.forEach(vm.newExercise.body, function(fileObj, index, array) {
+              console.log('in teacher.controller onSubmit.forEach.body with:' + fileObj.type + ' ' + fileObj.content);
+              if((fileObj.type == 'picture' || fileObj.type == 'solutionPicture') && (fileObj.content instanceof File || !fileObj.content.startsWith("http:"))) {
+                console.log('in teacher.controller onSubmit.forEach.body.if');
+                fileObj.content.upload = Upload.upload({
+                    url: '/api/upload',
+                    method: 'POST',
+                    data: {file: fileObj.content}
+                });
+                fileObj.content.upload.then(function (response) {
+                    $timeout(function () {
+                        console.log('in in teacher.controller onSubmit.forEach.body.upload.then.timeout with:' + response.data.filePath);
+                        vm.newExercise.body[index].content = response.data.filePath;
+                        itemsProcessed++;
+                        console.log('in in teacher.controller onSubmit.forEach.body.upload.then.timeout.beforeIf with:' + itemsProcessed + ' and  array length: ' + array.length);
+                        if(itemsProcessed === array.length) {
+                          vm.allPicSavedCallback();
+                        }
+                    }, 100);
+                }, function (response) {
+                        console.log('in in teacher.controller onSubmit.forEach.body.upload.then.timeout.response with:' + response.data.filePath);
+                    if (response.status > 0)  {
+                        $scope.errorMsg = response.status + ': ' + response.data;
+                    }
+                }, function (evt) {
+                    console.log('in in teacher.controller onSubmit.forEach.body.upload.then.timeout.evt with:' + evt.loaded);
+                    fileObj.content.progress = Math.min(100, parseInt(100.0 * 
+                                            evt.loaded / evt.total));
+                });
+              }
+              else{
+                  itemsProcessed++;
+                  console.log('in in teacher.controller onSubmit.forEach.body.else with:' + itemsProcessed + ' and  array length: ' + array.length);
+                  if(itemsProcessed === array.length) {
+                    vm.allPicSavedCallback();
+                  }            
+              }
+            });
+          }
       };
    }
-  
-  vm.removeExercise = function() {
-    console.log('In removeExercise');
-    
-    if(vm.exercise.length > 0) {
-      var exercise = vm.exercise.split('-')[1] - 1;
-      console.log('In removeExercise with: ' + vm.exercises[exercise].Id);
+
+  vm.removeExerciseStep = function() {
+    console.log('In removeExerciseStep');
+    if(vm.exerciseStages.length > 0) {
+      var theExercise = vm.stage.split('-')[1] - 1;
+      console.log('In removeExerciseStep with: ' + vm.exerciseStages[theExercise].Id);
       exercise
-        .removeExercise({_id: vm.exercises[exercise].Id})
+        .removeExercise({'_id': vm.exerciseStages[theExercise].Id, 'subSubject': vm.subSubjects[vm.subSubject]._id})
         .error(function(err){
           alert("There was an error : " + err);
         })
         .success(function(data){
           console.log('in subjects.controller addNewSubSubject.success');
+          vm.exerciseStages = {};
+          vm.levelSelected();
+        })
+    }
+}
+
+  vm.removeExercise = function() {
+    console.log('In removeExercise');
+    if(vm.exercise.length > 0) {
+      var theExercise = vm.exercise.split('-')[1] - 1;
+      console.log('In removeExercise with: ' + vm.exercises[theExercise].Id);
+      exercise
+        .removeExercise({'_id': vm.exercises[theExercise].Id, 
+                         'groupId': vm.exercises[theExercise].groupId, 
+                         'subSubject': vm.subSubjects[vm.subSubject]._id})
+        .error(function(err){
+          alert("There was an error : " + err);
+        })
+        .success(function(data){
+          console.log('in subjects.controller addNewSubSubject.success');
+          if(data.res == 'exercise_has_stages') {
+            alert("Exercise deletion failed. Please delete all stages of this multi stage exercise and try again");
+          }
+          else {
+            vm.exercises = {};
+            vm.levelSelected();
+          }
         })
     }
   }
 
   vm.removeSubSubject = function() {
      console.log('In removeSubSubject');
+      subject
+        .removeSubSubject(vm.subSubjects[vm.subSubject])
+        .error(function(err){
+          alert("There was an error : " + err);
+        })
+        .success(function(data){
+          if(data.res == 'subsubject_has_exercises') {
+            alert("Subsubject deletion failed. Please delete all associated exercises and try again");
+          }
+          else if(data.res == 'subsubject_has_assignments') {
+            alert("Subsubject deletion failed. Please delete all associated assignments and try again");            
+          }
+          else if(data.res == 'subsubject_has_dependents') {
+            alert("Subsubject deletion failed. Please remove dependencies from the following subSbujects and try again: " + data.dependents);                       
+          }
+          console.log('in subjects.controller addNewSubSubject.success');
+          // get all the subsubject so the dependencies will be updated.
+          meanData.getSubSubjects()
+          .success(function(data){
+            console.log('In addNewSubSubject with ' + data);
+            vm.populateSubSubjectObject(data);
+          })
+          .error(function(e){
+            console.log(e);
+          })            
+        })
+        .then(function(){
+          console.log('in subjects.controller addNewSubject.then');
+      });     
   }
 
   vm.removeSubject = function() {

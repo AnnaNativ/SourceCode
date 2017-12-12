@@ -646,16 +646,37 @@ module.exports.newExercise = function (req, res) {
 };
 
 module.exports.removeExercise = function (req, res) {
-  if (!req.payload._id) {
-    res.status(401).json({
-      "message": "UnauthorizedError: private exercise"
-    });
-  } else {
-    Exercise
-      .find()
-      .random(1, true, function (err, exercise) {
-        res.status(200).json(exercise[0]);
+  var removeTheExercise = function() {
+    var exercise = new mongoose.mongo.ObjectId(req.body._id);
+    var subSubject = new mongoose.mongo.ObjectId(req.body.subSubject);
+    SubSubject
+      .update(
+              {'_id': subSubject}, 
+              {$pull: {exercises: {'Id': exercise}}})
+      .exec(function (err, data) {
+        console.log('subSubject is updated!!!!')
+        Exercise.remove({_id: exercise}, function(err) {
+            if (!err) {
+              res.status(200).json('Exercise deleted successfully');
+            }
+        });
       });
   }
 
+  if(req.body._id == req.body.groupId) {
+    var groupId = new mongoose.mongo.ObjectId(req.body.groupId);
+    Exercise
+      .find({'groupId': groupId})
+      .exec(function(err, exercise) {
+        if(exercise.length > 1) {
+          res.status(200).json({'res': 'exercise_has_stages'});
+        }
+        else {
+          removeTheExercise();
+        }
+      });
+  }
+  else {
+    removeTheExercise();
+  }             
 };

@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Subject = mongoose.model('Subject');
 var SubSubject = mongoose.model('SubSubject');
 var Video = mongoose.model('Video');
+var Assignment = mongoose.model('Assignment');
 var Cache = require('../cache/Students');
 
 var dependencies = [];
@@ -82,6 +83,74 @@ module.exports.getSubSubject = function(req, res) {
         res.status(200).json(subSubject);
       });      
   }
+};
+
+module.exports.removeSubSubject = function(req, res) {
+
+  var doRemoveSubsubject = function(subSubjectId) {
+/*    Model.remove({ _id: req.body.id }, function(err) {
+        if (!err) {
+                message.type = 'notification!';
+        }
+        else {
+                message.type = 'error';
+        }
+    }); */             
+  }
+
+  var checkForDependencies = function(subSubjectId) {
+    SubSubject
+      .find()
+      .exec(function(err, subSubject) {
+        var dependents = [];
+        if(subSubject.length > 0) {
+          for(var i=0; i<subSubject.length; i++) {
+              if(subSubject[i].dependencies.includes(subSubjectId)) {
+                dependents.push(subSubject[i].name);
+              }
+          }
+          if(dependents.length > 0) {
+            res.status(200).json({'res': 'subsubject_has_dependents', 'dependents': dependents});        
+          }
+          else {
+            doRemoveSubsubject(subSubjectId);        
+          }
+        }
+        res.status(200).json({'res': 'no_subsubject_found'});
+      });      
+  }
+
+  var checkForAssignments = function(subSubjectId) {
+    Assignment
+      .find({'subsubjectId': subSubjectId})
+      .exec(function(err, assignment) {
+        if(assignment.length > 0) {
+            res.status(200).json({'res': 'subsubject_has_assignments'});
+        }
+        else {
+          checkForDependencies(subSubjectId);
+        }
+      });      
+  }
+
+  var checkForExercises = function(subSubjectId) {
+    SubSubject
+      .find({'_id': subSubjectId})
+      .exec(function(err, subSubject) {
+        if(subSubject.length > 0) {
+            if(subSubject[0].exercises.length > 0) {
+              res.status(200).json({'res': 'subsubject_has_exercises'});
+            }
+            else {
+              checkForAssignments(subSubjectId);
+            }
+        }
+        else {
+          res.status(200).json({'res': 'no_subsubject_found'});
+        }
+      });      
+  }
+  checkForExercises(new mongoose.mongo.ObjectId(req.body._id));
 };
 
 module.exports.getSubSubjects = function(req, res) {
