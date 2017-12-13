@@ -34,6 +34,7 @@ router.post('/removeExercise', ctrlExercise.removeExercise);
 router.get('/subjects', auth, ctrlSubjects.getSubjects);
 router.get('/subSubjects', auth, ctrlSubjects.getSubSubjects);
 router.get('/subSubject', auth, ctrlSubjects.getSubSubject);
+router.get('/subject', auth, ctrlSubjects.getSubject);
 router.get('/dependencies', auth, ctrlSubjects.getDependencies);
 router.get('/videos', auth, ctrlSubjects.getVideos);
 router.get('/video', auth, ctrlSubjects.getVideo);
@@ -48,6 +49,7 @@ router.post('/exercise', ctrlExercise.newExercise);
 router.post('/subject', ctrlSubjects.newSubject);
 router.post('/subSubject', ctrlSubjects.newSubSubject);
 router.post('/removeSubSubject', ctrlSubjects.removeSubSubject);
+router.post('/removeSubject', ctrlSubjects.removeSubject);
 
 // pictures upload
 router.post('/upload', multipartyMiddleware, ctrlUploads.uploadPic);

@@ -69,6 +69,22 @@ module.exports.getSubjects = function(req, res) {
   }
 };
 
+module.exports.getSubject = function(req, res) {
+  if (!req.payload._id) {
+    res.status(401).json({
+      "message" : "UnauthorizedError: private profile"
+    });
+  } 
+  else {
+    var subject = new mongoose.mongo.ObjectId(req.query.subject);
+    Subject
+      .find({'_id': subject})
+      .exec(function(err, subject) {
+        res.status(200).json(subject);
+      });      
+  }
+};
+
 module.exports.getSubSubject = function(req, res) {
   if (!req.payload._id) {
     res.status(401).json({
@@ -85,6 +101,38 @@ module.exports.getSubSubject = function(req, res) {
   }
 };
 
+module.exports.removeSubject = function(req, res) {
+  var removeThisSubject = function(subjectId) {
+    Subject.remove({_id: subjectId}, function(err) {
+        if (!err) {
+          res.status(200).json({'res': 'subject_removed'});
+        }
+        else {
+            res.status(401).json({'res': 'no_subject_removed'});         
+        }
+    });              
+  }
+
+  var checkForSubSubjects = function(subjectId) {
+    Subject
+      .find({'_id': subjectId})
+      .exec(function(err, subject) {
+        if(subject.length > 0) {
+            if(subject[0].subSubjects.length > 0) {
+              res.status(200).json({'res': 'subject_has_subSubjects'});
+            }
+            else {
+              removeThisSubject(subjectId);
+            }
+        }
+        else {
+          res.status(200).json({'res': 'no_subject_found'});
+        }
+      });      
+  }
+  checkForSubSubjects(new mongoose.mongo.ObjectId(req.body._id));
+}
+
 module.exports.removeSubSubject = function(req, res) {
 
   var doRemoveSubsubject = function(subSubjectId) {
@@ -98,7 +146,24 @@ module.exports.removeSubSubject = function(req, res) {
     });              
   }
 
-  var checkForDependencies = function(subSubjectId) {
+  var removeFromSubject = function(subSubjectId, subjectId) {
+    Subject
+      .update(
+              {'_id': subjectId}, 
+              {$pull: {subSubjects: subSubjectId}})
+      .exec(function (err, data) {
+        console.log('subject is updated!!!!')
+        if(!err) {
+          doRemoveSubsubject(subSubjectId);
+        }
+        else {
+          res.status(200).json({'res': 'no_subject_found'});          
+        }
+      });
+
+  }
+
+  var checkForDependencies = function(subSubjectId, subjectId) {
     SubSubject
       .find()
       .exec(function(err, subSubject) {
@@ -115,7 +180,7 @@ module.exports.removeSubSubject = function(req, res) {
             res.status(200).json({'res': 'subsubject_has_dependents', 'dependents': dependents});        
           }
           else {
-            doRemoveSubsubject(subSubjectId);        
+            removeFromSubject(subSubjectId, subjectId);        
           }
         }
         else {
@@ -124,7 +189,7 @@ module.exports.removeSubSubject = function(req, res) {
       });      
   }
 
-  var checkForAssignments = function(subSubjectId) {
+  var checkForAssignments = function(subSubjectId, subjectId) {
     Assignment
       .find({'subsubjectId': subSubjectId})
       .exec(function(err, assignment) {
@@ -132,7 +197,7 @@ module.exports.removeSubSubject = function(req, res) {
             res.status(200).json({'res': 'subsubject_has_assignments'});
         }
         else {
-          checkForDependencies(subSubjectId);
+          checkForDependencies(subSubjectId, subjectId);
         }
       });      
   }
@@ -146,7 +211,7 @@ module.exports.removeSubSubject = function(req, res) {
               res.status(200).json({'res': 'subsubject_has_exercises'});
             }
             else {
-              checkForAssignments(subSubjectId);
+              checkForAssignments(subSubjectId, subSubject[0].subjectId);
             }
         }
         else {
@@ -219,15 +284,35 @@ module.exports.getVideo = function(req, res) {
 
 module.exports.newSubject = function(req, res) {
   console.log('in subject.controller newSubject');
-  var subject = new Subject();
-  subject.name = req.body.name;
-  subject.schoolGrade = req.body.schoolGrade;
-  subject.level = req.body.level;
-  subject.subSubjects = [];
 
-  subject.save(function (err) {
-      res.status(200).json(subject);
-  });
+  var updateSubject = function() {
+    var id = new mongoose.mongo.ObjectId(req.body.editing);
+    Subject.update({'_id':id},
+      {$set: {'name': req.body.name, 'schoolGrade': req.body.schoolGrade, 'level': req.body.level}},
+      function(err, result){
+        if (err) {
+            console.log('Failed to update the Subject with new info ' + err);
+        }
+        else {
+              res.status(200).json('subject updated successfully');
+        }
+    });
+  }
+  
+  if(req.body.editing != undefined) {
+    updateSubject();
+  }
+  else {
+    var subject = new Subject();
+    subject.name = req.body.name;
+    subject.schoolGrade = req.body.schoolGrade;
+    subject.level = req.body.level;
+    subject.subSubjects = [];
+
+    subject.save(function (err) {
+        res.status(200).json(subject);
+    });
+  }
 }
 
 module.exports.newSubSubject = function(req, res) {

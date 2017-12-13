@@ -7,9 +7,13 @@
             <select dir="rtl" class="form-control form-fixer" ng-model="vm.newSubject.schoolGrade" ng-options="idx as grade for (idx, grade) in vm.schoolGrades"></select><br>
             <label>:רמת לימוד </label>
             <select dir="rtl" class="form-control form-fixer" ng-model="vm.newSubject.level" ng-options="idx as level for (idx, level) in vm.schoolLevels"></select><br>
-            <button type="button" class="btn btn-info" ng-click="vm.cancelNewSubject()" data-toggle="tooltip" title="בטל הוספת נושא לימוד חדש">
+            <button ng-hide="vm.editingSubject" type="button" class="btn btn-info" ng-click="vm.cancelNewSubject()" data-toggle="tooltip" title="בטל הוספת נושא לימוד חדש">
                 <span class="glyphicon glyphicon-remove"></span></button>
-            <button type="button" class="btn btn-warning" ng-click="vm.addNewSubject()" data-toggle="tooltip" title="שמור נושא לימוד חדש">
+            <button ng-show="vm.editingSubject" type="button" class="btn btn-info" ng-click="vm.cancelNewSubject()" data-toggle="tooltip" title="בטל שינוי נושא לימוד">
+                <span class="glyphicon glyphicon-remove"></span></button>
+            <button ng-hide="vm.editingSubject" type="button" class="btn btn-warning" ng-click="vm.addNewSubject()" data-toggle="tooltip" title="שמור נושא לימוד חדש">
+                <span class="glyphicon glyphicon-ok"></span></button>
+            <button ng-show="vm.editingSubject" type="button" class="btn btn-warning" ng-click="vm.addNewSubject()" data-toggle="tooltip" title="שמור נושא לימוד מעודכן">
                 <span class="glyphicon glyphicon-ok"></span></button>
             <div ng-if="!vm.addSubjectFormValid">
                 <div class="text-danger">&nbsp;&nbsp;!כל השדות חובה&nbsp;&nbsp;</div>

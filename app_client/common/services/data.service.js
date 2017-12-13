@@ -79,6 +79,17 @@
       return $http.get('/api/subSubjects', config);
     }
 
+    var getSubject = function(subject) {
+      console.log('In data.service getSubject with: ' + subject);
+
+      var config = {
+        params: {subject: subject},
+        headers : {Authorization: 'Bearer '+ authentication.getToken()}
+      };
+
+      return $http.get('/api/subject', config);
+    }
+
     var getSubSubject = function(subSubject) {
       console.log('In data.service getSubSubject with: ' + subSubject);
 
@@ -143,6 +154,7 @@
       getProfile : getProfile,
       getNextExercise: getNextExercise,
       getSubjects: getSubjects,
+      getSubject: getSubject,
       getSubSubjects: getSubSubjects,
       getSubSubject: getSubSubject,
       getVideo: getVideo,

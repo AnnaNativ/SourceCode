@@ -50,9 +50,13 @@
     <div ng-if="vm.newExercise.body.length > 0" class="well well-lg">
         <label>:סיום</label>
         <div>
-            <button type="button" class="btn btn-info" ng-click="vm.cancelNewExercise()" data-toggle="tooltip" title="בטל הוספת תרגיל חדש">
+            <button ng-hide="vm.editingExercise" type="button" class="btn btn-info" ng-click="vm.cancelNewExercise()" data-toggle="tooltip" title="בטל הוספת תרגיל חדש">
                 <span class="glyphicon glyphicon-remove"></span></button>
-            <button type="button" class="btn btn btn-warning" ng-click="vm.addNewExercise()" data-toggle="tooltip" title="שמור תרגיל חדש">
+            <button ng-show="vm.editingExercise" type="button" class="btn btn-info" ng-click="vm.cancelNewExercise()" data-toggle="tooltip" title="בטל שינוי תרגיל">
+                <span class="glyphicon glyphicon-remove"></span></button>
+            <button ng-hide="vm.editingExercise" type="button" class="btn btn btn-warning" ng-click="vm.addNewExercise()" data-toggle="tooltip" title="שמור תרגיל חדש">
+                <span class="glyphicon glyphicon-ok"></span></button>
+            <button ng-show="vm.editingExercise" type="button" class="btn btn btn-warning" ng-click="vm.addNewExercise()" data-toggle="tooltip" title="שמור תרגיל מעודכן">
                 <span class="glyphicon glyphicon-ok"></span></button>
             <div ng-if="!vm.formValid && vm.answerType == 'closed'">
                 <div class="text-danger">&nbsp;&nbsp;התרגיל חייב להכיל לפחות טקסט או תמונה אחת, ושתי תשובות ראשונות&nbsp;&nbsp;</div>

@@ -55,14 +55,17 @@
     vm.newSubjectAdded = false; 
     vm.addSubjectFormValid = true;
 
-    meanData.getSubjects()
-    .success(function(data){
-      vm.subjects = data;
-      vm.subSubjects = [];
-    })
-    .error(function(e){
-      console.log(e);
-    })
+    vm.getSubjects = function() {
+      meanData.getSubjects()
+      .success(function(data){
+        vm.subjects = data;
+        vm.subSubjects = [];
+      })
+      .error(function(e){
+        console.log(e);
+      })
+    }
+    vm.getSubjects();
 
     vm.addNewSubject = function() {
       if(vm.newSubject.name == undefined || vm.newSubject.name.length == 0 || 
@@ -77,7 +80,7 @@
           })
           .success(function(data){
             console.log('in subjects.controller addNewSubject.success');
-            vm.subjects.push(data);
+            vm.getSubjects();
             vm.subject = vm.subjects.length - 1;
             vm.subSubject = undefined;
             vm.newExercise.level = undefined;
@@ -98,12 +101,38 @@
       vm.newSubjectAdded = false; 
       vm.newSubSubjectAdded = false; 
       vm.newExerciseAdded = false; 
+      vm.newExerciseStepAdded = false;
+    }
+
+    vm.editSubjectClicked = function() {
+      vm.addingSubject = true;
+      vm.editingSubject = true;
+      // clrer the add subject successful message
+      vm.newSubjectAdded = false; 
+      vm.newSubSubjectAdded = false; 
+      vm.newExerciseAdded = false; 
       vm.newExerciseStepAdded = false; 
+            
+      console.log('In addSubjectClicked with: ' + vm.subject);
+      meanData.getSubject(vm.subjects[vm.subject]._id)
+      .success(function(data){
+        if(data.length > 0) {
+          console.log('In editSubjectClicked success with: ' + data[0].name);
+          vm.newSubject.editing = data[0]._id;
+          vm.newSubject.name = data[0].name;
+          vm.newSubject.schoolGrade = data[0].schoolGrade;
+          vm.newSubject.level = data[0].level;
+        }
+      })
+      .error(function(e){
+        console.log(e);
+      }) 
     }
 
     vm.cancelNewSubject = function() {
       vm.newSubject = {};
       vm.addingSubject = false;
+      vm.editingSubject = false;
       vm.addSubjectFormValid = true;
     }
 
@@ -638,6 +667,7 @@
           alert("There was an error : " + err);
         })
         .success(function(data){
+          console.log('in subjects.controller addNewSubSubject.success');
           if(data.res == 'subsubject_has_exercises') {
             alert("מחיקת תת נושא נכשלה. אנא מחק את כל התרגילים הקשורים ונסה שנית");
           }
@@ -647,16 +677,17 @@
           else if(data.res == 'subsubject_has_dependents') {
             alert("מחיקת תת נושא נכשלה. אנא הסר את התלות מהמשימות הבאות ונסה שנית\n\n" + data.dependents);
           }
-          console.log('in subjects.controller addNewSubSubject.success');
-          // get all the subsubject so the dependencies will be updated.
-          meanData.getSubSubjects()
-          .success(function(data){
-            console.log('In addNewSubSubject with ' + data);
-            vm.populateSubSubjectObject(data);
-          })
-          .error(function(e){
-            console.log(e);
-          })            
+          else {
+            // get all the subsubject so the dependencies will be updated.
+            meanData.getSubSubjects()
+            .success(function(data){
+              console.log('In addNewSubSubject with ' + data);
+              vm.populateSubSubjectObject(data);
+            })
+            .error(function(e){
+              console.log(e);
+            })  
+          }          
         })
         .then(function(){
           console.log('in subjects.controller addNewSubject.then');
@@ -664,7 +695,29 @@
   }
 
   vm.removeSubject = function() {
-     console.log('In removeSubject');
+      console.log('In removeSubject');
+      subject
+        .removeSubject(vm.subjects[vm.subject])
+        .error(function(err){
+          alert("There was an error : " + err);
+        })
+        .success(function(data) {
+          console.log('in subjects.controller removeSubject.success');
+          if(data.res == 'subject_has_subSubjects') {
+            alert("מחיקת נושא נכשלה. אנא מחק את כל תת הנושאים הקשורים ונסה שנית");       
+          }
+          else {
+            // get all the subjects so the dependencies will be updated.
+            vm.getSubjects();
+            vm.subject = vm.subjects.length - 1;
+            vm.subSubject = undefined;
+            vm.newExercise.level = undefined;
+            vm.subSubjects = [];
+          }
+        })
+        .then(function(){
+          console.log('in subjects.controller addNewSubject.then');
+      }); 
   }
 
   vm.getExerciseName = function(index) {
