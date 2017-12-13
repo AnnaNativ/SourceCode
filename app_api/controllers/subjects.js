@@ -88,14 +88,14 @@ module.exports.getSubSubject = function(req, res) {
 module.exports.removeSubSubject = function(req, res) {
 
   var doRemoveSubsubject = function(subSubjectId) {
-/*    Model.remove({ _id: req.body.id }, function(err) {
+    SubSubject.remove({_id: subSubjectId}, function(err) {
         if (!err) {
-                message.type = 'notification!';
+          res.status(200).json({'res': 'subsubject_removed'});
         }
         else {
-                message.type = 'error';
+           res.status(401).json({'res': 'no_subsubject_removed'});         
         }
-    }); */             
+    });              
   }
 
   var checkForDependencies = function(subSubjectId) {
@@ -105,7 +105,9 @@ module.exports.removeSubSubject = function(req, res) {
         var dependents = [];
         if(subSubject.length > 0) {
           for(var i=0; i<subSubject.length; i++) {
-              if(subSubject[i].dependencies.includes(subSubjectId)) {
+              console.log('subSubject is:' + JSON.stringify(subSubjectId));
+              console.log(JSON.stringify('dependencies are' + subSubject[i].dependencies));
+              if(JSON.stringify(subSubject[i].dependencies).includes(JSON.stringify(subSubjectId))) {
                 dependents.push(subSubject[i].name);
               }
           }
@@ -116,7 +118,9 @@ module.exports.removeSubSubject = function(req, res) {
             doRemoveSubsubject(subSubjectId);        
           }
         }
-        res.status(200).json({'res': 'no_subsubject_found'});
+        else {
+          res.status(200).json({'res': 'no_subsubject_found'});
+        }
       });      
   }
 

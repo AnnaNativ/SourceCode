@@ -620,7 +620,7 @@
         .success(function(data){
           console.log('in subjects.controller addNewSubSubject.success');
           if(data.res == 'exercise_has_stages') {
-            alert("Exercise deletion failed. Please delete all stages of this multi stage exercise and try again");
+            alert("מחיקת תרגיל רב שלבי נכשלה. אנא מחק את כל שלבי התרגיל ונסה שנית");
           }
           else {
             vm.exercises = {};
@@ -639,13 +639,13 @@
         })
         .success(function(data){
           if(data.res == 'subsubject_has_exercises') {
-            alert("Subsubject deletion failed. Please delete all associated exercises and try again");
+            alert("מחיקת תת נושא נכשלה. אנא מחק את כל התרגילים הקשורים ונסה שנית");
           }
           else if(data.res == 'subsubject_has_assignments') {
-            alert("Subsubject deletion failed. Please delete all associated assignments and try again");            
+            alert("מחיקת תת נושא נכשלה. אנא מחק את כל המשימות הקשורות ונסה שנית");
           }
           else if(data.res == 'subsubject_has_dependents') {
-            alert("Subsubject deletion failed. Please remove dependencies from the following subSbujects and try again: " + data.dependents);                       
+            alert("מחיקת תת נושא נכשלה. אנא הסר את התלות מהמשימות הבאות ונסה שנית\n\n" + data.dependents);
           }
           console.log('in subjects.controller addNewSubSubject.success');
           // get all the subsubject so the dependencies will be updated.
@@ -705,7 +705,7 @@
       var parts = vm.exercise.split(" ");
       var loc = parts[parts.length - 1];
       console.log('in exerciseChanged with loc ' + loc);
-      if(vm.exercises[loc - 1].groupId != undefined) {
+      if(vm.exercises[loc - 1] != undefined && vm.exercises[loc - 1].groupId != undefined) {
         meanData.getExercise(vm.exercises[loc - 1].groupId)
         .success(function(data){
           vm.groupBaseExercise = data[0];
