@@ -11,10 +11,10 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <li ng-show="navvm.isLoggedIn && navvm.role == 'teacher'"><a href="/teacher">{{ navvm.currentUser.name }}</a></li>
-          <li ng-show="navvm.isLoggedIn && navvm.role == 'student'"><a href="/student">{{ navvm.currentUser.name }}</a></li>
-          <li ng-show="navvm.isLoggedIn"><a href="logout">logout</a></li>
-          <li ng-show="navvm.isLoggedIn == false"><a href="login">login</a></li>
+          <li ng-show="navvm.isLoggedIn && navvm.role == 'teacher'"><a dir="rtl" href="/teacher">{{ navvm.currentUser.name }}</a></li>
+          <li ng-show="navvm.isLoggedIn && navvm.role == 'student'"><a dir="rtl" href="/student">{{ navvm.currentUser.name }}</a></li>
+          <li ng-show="navvm.isLoggedIn"><a href="logout">יציאה</a></li>
+          <li ng-show="navvm.isLoggedIn == false"><a href="login">כניסה</a></li>
         </li>
       </ul>
     </div>

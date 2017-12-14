@@ -11,6 +11,10 @@
       $window.localStorage['mean-token'] = token;
     };
 
+    var saveUserName = function (userName) {
+      $window.localStorage['user-name'] = userName;
+    };
+
     var getToken = function () {
       return $window.localStorage['mean-token'];
     };
@@ -38,7 +42,7 @@
         payload = JSON.parse(payload);
         return {
           email : payload.email,
-          name : payload.name
+          name : $window.localStorage['user-name']
         };
       }
     };
@@ -53,6 +57,7 @@
     login = function(user) {
       return $http.post('/api/login', user).success(function(data) {
         saveToken(data.token);
+        saveUserName(data.name);
       });
     };
 
