@@ -444,6 +444,15 @@ a:visited {
 	color: #3c3c3c;
 }
 
+
+.student-submit-button[disabled], .student-submit-button-margin[disabled], .self-assignment-button[disabled], .center-button[disabled], .student-submit-button-margin-small[disabled] {
+	background: #F7B733;
+	color: #F7B733;
+	box-shadow: none;
+	text-shadow: none;
+	transition: none;
+}
+
 .student-submit-button-margin {
 	margin-right: 480px;
 }

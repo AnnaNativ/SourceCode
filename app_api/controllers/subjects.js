@@ -317,8 +317,8 @@ module.exports.newSubject = function(req, res) {
 
 module.exports.newSubSubject = function(req, res) {
   console.log('in subject.controller newSubSubject');
-  var sampleVideos = new Video();
-  var tutorialVideo = new Video();
+  var sampleVideos = undefined;
+  var tutorialVideo = undefined;
   
   var updateSubSubject = function() {
     var id = new mongoose.mongo.ObjectId(req.body.editing);
@@ -328,7 +328,10 @@ module.exports.newSubSubject = function(req, res) {
       dependencies.push(dependency);
     }
     SubSubject.update({'_id':id},
-      {$set: {'name': req.body.name, 'tutorial_video': tutorialVideo._id, 'sample_videos': [sampleVideos._id], 'dependencies': dependencies}},
+      {$set: {'name': req.body.name, 
+              'tutorial_video': tutorialVideo != undefined ? tutorialVideo._id : undefined, 
+              'sample_videos': sampleVideos != undefined ? [sampleVideos._id] : [], 
+              'dependencies': dependencies}},
       function(err, result){
         if (err) {
             console.log('Failed to update the SubSubject with new info ' + err);
@@ -347,8 +350,8 @@ module.exports.newSubSubject = function(req, res) {
     else {
       subSubject._id = new mongoose.mongo.ObjectId();
       subSubject.name = req.body.name;
-      subSubject.tutorial_video = tutorialVideo._id;
-      subSubject.sample_videos = [sampleVideos._id];
+      subSubject.tutorial_video = tutorialVideo != undefined ? tutorialVideo._id : undefined;
+      subSubject.sample_videos = sampleVideos != undefined ? [sampleVideos._id] : undefined;
 
       subSubject.exercises = [];
       subSubject.dependencies = [];
@@ -376,33 +379,45 @@ module.exports.newSubSubject = function(req, res) {
   }
 
   var createSampleVideosCB = function(createSubSubjectsCB) {
-    sampleVideos._Id = new mongoose.mongo.ObjectId();
-    sampleVideos.type = 'sample solution'
-    sampleVideos.name = req.body.name;
-    sampleVideos.link = req.body.sampleVideos;
-    sampleVideos.save(function(err){
-      if(err) {
-        console.log(err);
-      }
-      else {
-        createSubSubjectsCB();
-      }  
-    });
+    if(req.body.sampleVideos == undefined || req.body.sampleVideos.length == 0) {
+      createSubSubjectsCB();
+    }
+    else {
+      sampleVideos = new Video();
+      sampleVideos._Id = new mongoose.mongo.ObjectId();
+      sampleVideos.type = 'sample solution'
+      sampleVideos.name = req.body.name;
+      sampleVideos.link = req.body.sampleVideos;
+      sampleVideos.save(function(err){
+        if(err) {
+          console.log(err);
+        }
+        else {
+          createSubSubjectsCB();
+        }  
+      });
+    }
   }
 
   var createTutorialVideo = function(createSampleVideosCB) {
-    tutorialVideo._Id = new mongoose.mongo.ObjectId();
-    tutorialVideo.type = 'tutorial';
-    tutorialVideo.name = req.body.name;
-    tutorialVideo.link = req.body.tutorialVideo;
-    tutorialVideo.save(function(err){
-      if(err) {
-        console.log(err);
-      }
-      else {
-        createSampleVideosCB(createSubSubjectsCB);
-      }  
-    });
+    if(req.body.tutorialVideo == undefined || req.body.tutorialVideo.length == 0) {
+      createSampleVideosCB(createSubSubjectsCB);
+    }
+    else {
+      tutorialVideo = new Video();
+      tutorialVideo._Id = new mongoose.mongo.ObjectId();
+      tutorialVideo.type = 'tutorial';
+      tutorialVideo.name = req.body.name;
+      tutorialVideo.link = req.body.tutorialVideo;
+      tutorialVideo.save(function(err){
+        if(err) {
+          console.log(err);
+        }
+        else {
+          createSampleVideosCB(createSubSubjectsCB);
+        }  
+      });
+    }
   } 
   createTutorialVideo(createSampleVideosCB);
 }

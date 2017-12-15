@@ -94,6 +94,8 @@
       vm.exercise = {};
       vm.levelChange = 0;
       vm.getNextExercise();
+      vm.getSampleSolutionVideo();
+      vm.getTutorialVideo();
     }
 
     vm.deleteAssignment = function($index) {
@@ -233,6 +235,24 @@
       console.log('In getPictureForCurrentLevel with: ' + path);
       return "http://localhost:3000/images/stage" + vm.exercise.properties.level + ".jpg";
     }
+
+    vm.solutionExists = function() {
+      if((vm.exercise.solutionPicture == undefined || vm.exercise.solutionPicture == 'null') && 
+         (vm.exercise.videoSolution == undefined || vm.exercise.videoSolution == 'null')) {
+        return false;
+      }
+      return true;
+    }
+
+    vm.sampleSolutionExists = function() {
+      console.log('In sampleSolutionExists with ' + vm.sampleSolutionVideoLink);
+      return vm.sampleSolutionVideoLink != undefined && vm.sampleSolutionVideoLink != null;
+    }
+
+    vm.tutorialVideoExists = function() {
+      return vm.tutorialVideoLink != undefined && vm.tutorialVideoLink != null;
+    } 
+    
     //####################################################################################
     //########## Solutions ###########
     //####################################################################################
@@ -296,7 +316,7 @@
     }
 
     vm.showSolution = function() {
-      if(vm.exercise.solutionPicture != undefined) {
+      if(vm.exercise.solutionPicture == undefined || vm.exercise.solutionPicture == null) {
         vm.getVideoSolution();
       }
       else {
@@ -397,15 +417,20 @@
     }
 
     vm.getTutorialVideoObject = function(video) {
-      meanData.getVideo(video)
-      .success(function(data){
-        vm.assistant = 'tutorial';
-        vm.tutorialVideoLink =  $sce.trustAsResourceUrl(data[0].link);
-        console.log('In getTutorialVideoObject.success with: ' + data);
-      })
-      .error(function(e){
-        console.log(e);
-      })
+      if(video == undefined || video == null) {
+        vm.tutorialVideoLink = undefined;
+      }
+      else {
+        meanData.getVideo(video)
+        .success(function(data){
+          vm.assistant = 'tutorial';
+          vm.tutorialVideoLink =  $sce.trustAsResourceUrl(data[0].link);
+          console.log('In getTutorialVideoObject.success with: ' + data);
+        })
+        .error(function(e){
+          console.log(e);
+        })
+      }
     }
 
     vm.getTutorialVideo = function() {
@@ -427,15 +452,22 @@
     }
 
     vm.getSampleSolutionVideoObject = function(video) {
-      meanData.getVideo(video)
-      .success(function(data){
-        vm.assistant = 'sample_solution';
-        vm.sampleSolutionVideoLink =  $sce.trustAsResourceUrl(data[0].link);
-        console.log('In getSampleSolutionVideo.success with: ' + data);
-      })
-      .error(function(e){
-        console.log(e);
-      })
+      console.log('In getSampleSolutionVideoObject with: ' + video);
+      if(video == undefined || video == null) {
+          console.log('In getSampleSolutionVideoObject.if with: ' + video);
+        vm.sampleSolutionVideoLink = undefined;
+      }
+      else {
+        meanData.getVideo(video)
+        .success(function(data){
+          vm.assistant = 'sample_solution';
+          vm.sampleSolutionVideoLink =  $sce.trustAsResourceUrl(data[0].link);
+          console.log('In getSampleSolutionVideo.success with: ' + data);
+        })
+        .error(function(e){
+          console.log(e);
+        })
+      }
     }
 
     vm.getSampleSolutionVideo = function() {

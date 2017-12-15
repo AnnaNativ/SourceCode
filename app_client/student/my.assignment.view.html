@@ -58,7 +58,7 @@
                 <label><b><font color="#270C05" >:צריך עוד לפתור</font></b></label>
             </div>							
         </div>
-        <img class="box1-image" src="pic1.jpg">
+        <img class="box1-image" src="/images/pic1.jpg">
     </div>
     <div id="exercise-area"> 
         <button ng-if="!vm.atOriginalSubSubject()" class="student-submit-button" ng-click="vm.goBackToOriginalSubSubject()">חזור למשימה המקורית</button>
@@ -79,10 +79,10 @@
         <br>
         <button class="student-submit-button" ng-click="vm.checkAnswer()" data-toggle="modal" data-target="#myModal">סיום תרגיל</button>
         <button ng-show="vm.dependencies.length != 0" class="student-submit-button" ng-click="vm.preReq()" data-toggle="modal" data-target="#assistanceDialog">לימוד מקדים</button>  
-        <button ng-show="vm.dependencies.length != 0" class="student-submit-button-margin-small" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
-        <button ng-show="vm.dependencies.length == 0" class="student-submit-button-margin" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
-        <button class="student-submit-button" ng-click="vm.getSampleSolutionVideo()" data-toggle="modal" data-target="#videoDialog">פתרונות לדוגמא</button>
-        <button class="student-submit-button" ng-click="vm.getTutorialVideo()" data-toggle="modal" data-target="#videoDialog">וידאו הדרכה</button>
+        <button ng-show="vm.dependencies.length != 0" class="student-submit-button-margin-small" ng-disabled="!vm.solutionExists()" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
+        <button ng-show="vm.dependencies.length == 0" class="student-submit-button-margin" ng-disabled="!vm.solutionExists()" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
+        <button class="student-submit-button" ng-disabled="!vm.sampleSolutionExists()" ng-click="vm.assistant = 'sample_solution'" data-toggle="modal" data-target="#videoDialog">פתרונות לדוגמא</button>
+        <button class="student-submit-button" ng-disabled="!vm.tutorialVideoExists()" ng-click="vm.assistant = 'tutorial'" data-toggle="modal" data-target="#videoDialog">וידאו הדרכה</button>
         <div ng-include="'/student/video.dialog.html'"></div>
         <div ng-include="'/student/assistance.dialog.html'"></div>
         <div ng-include="'/student/next.step.dialog.html'"></div>

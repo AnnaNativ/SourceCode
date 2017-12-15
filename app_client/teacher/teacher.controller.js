@@ -81,7 +81,7 @@
           .success(function(data){
             console.log('in subjects.controller addNewSubject.success');
             vm.getSubjects();
-            vm.subject = vm.subjects.length - 1;
+            vm.subject = vm.subjects.length;
             vm.subSubject = undefined;
             vm.newExercise.level = undefined;
             vm.subSubjects = [];
@@ -137,18 +137,23 @@
     }
 
     vm.populateSubSubjectObject = function(allSubSubjects) {
-      var selectedSubjectID = vm.subjects[vm.subject]._id;
       vm.subSubjects = [];
       vm.selectedDependencies = [];
       vm.dependencies = [];
-      console.log('In populateSubSubjectObject with1 ' + selectedSubjectID);
-      allSubSubjects.forEach(function(subSubject) {
-        console.log('In populateSubSubjectObject.forEach with ' + subSubject);
-        if(subSubject.subjectId == selectedSubjectID) {
-          vm.subSubjects.push(subSubject);
-        }
-        vm.addAsDependency(subSubject);
-      });
+      if(vm.subject == undefined || vm.subjects.length <= vm.subject) {
+        return;
+      }
+      else {
+        var selectedSubjectID = vm.subjects[vm.subject]._id;
+        console.log('In populateSubSubjectObject with1 ' + selectedSubjectID);
+        allSubSubjects.forEach(function(subSubject) {
+          console.log('In populateSubSubjectObject.forEach with ' + subSubject);
+          if(subSubject.subjectId == selectedSubjectID) {
+            vm.subSubjects.push(subSubject);
+          }
+          vm.addAsDependency(subSubject);
+        });
+      }
     }
 
     vm.subjectSelected = function() {
