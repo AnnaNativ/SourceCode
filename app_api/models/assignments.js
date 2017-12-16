@@ -8,7 +8,7 @@ var assignmentSchema = new mongoose.Schema({
     subjectId: {type: Schema.Types.ObjectId, ref:'Subject'},
     subsubjectId: {type: Schema.Types.ObjectId, ref:'SubSubject'},
     createdDate: {type: Date, default: Date.now},
-    updatedDate: {type: Date, default: Date.now}
+    updatedDate: {type: Date, default: Date.now},
 });    
 
 mongoose.model('Assignment', assignmentSchema);

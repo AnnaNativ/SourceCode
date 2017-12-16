@@ -208,9 +208,9 @@ module.exports.getNextExercise = function (req, res) {
         });
       // 2.2 If this is the first exercise then it means that the assignment just started and we need to change its status to 'inprogress'
       if(assignment.isNew()) {
-        assignment.setInProgress();
+        assignment.setInProgress(student.getLevel());
         Assignment.
-        update({_id: assignment.getId()}, {$set: {'status': 'inprogress'}}, 
+        update({_id: assignment.getId()}, {$set: {'status': 'inprogress', 'studentLevel': assignment.getStudentLevel()}}, 
           function(err, result) {
             if (err) {
               console.log('Failed to update the assignment with the new status ' + err);

@@ -94,19 +94,19 @@ module.exports.reloadStudentActivity = function(userId) {
   User
   .find({'_id': new mongoose.mongo.ObjectId(userId)})
   .exec(function(err, user) {
-    if(err) {
+    if(err && user.length > 0) {
       console.log('Returned from User load with error ' + err);
     }
     else {
-      student = new Cache.Student(userId);
-      loadAssignments(user);
+      student = new Cache.Student(userId, user[0].level);
+      loadAssignments(user[0]);
 //      loadStudentActivity(user);
     }
   });
 }
 
 loadStudentActivity = function(user, sendRespose) {
-  student = new Cache.Student(user._id);
+  student = new Cache.Student(user._id, user.level);
   loadAssignments(user, sendRespose);
 }
 

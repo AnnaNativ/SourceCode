@@ -10,6 +10,7 @@ var userSchema = new Schema({
   //school: {type: Schema.Types.ObjectId, ref: 'School'},
   school: String,
   teacher: {type: Schema.Types.ObjectId, ref: 'User'},
+  level: {type: Number, default: 3},
   hash: String,
   salt: String
 });

@@ -1,5 +1,7 @@
 var HashMap = require('hashmap');
 
+var DEFAULT_STUDENT_LEVEL = 3;
+
 function Students() {
     this.students = new HashMap();
 
@@ -13,8 +15,16 @@ function Students() {
     }
 };
 
-module.exports.Student = function(id) {
+module.exports.Student = function(id, level) {
     this.id = id.toString();
+    this.level = undefined;
+
+    if(level != undefined) {
+        this.level = level;
+    }
+    else {
+        this.level = DEFAULT_STUDENT_LEVEL;
+    }
     this.assignments = new HashMap();
     this.doneExercises = new HashMap();
 
@@ -53,6 +63,10 @@ module.exports.Student = function(id) {
         return this.doneExercises.count();
     }
 
+    this.getLevel = function() {
+        return this.level;
+    }
+
 };
 
 module.exports.Assignment = function(assignment) {
@@ -70,6 +84,7 @@ module.exports.Assignment = function(assignment) {
     this.exerciseCount = 0;
     this.successfulExerciseCount = 0;
     this.leftExerciseCount = 0;
+    this.studentLevel = undefined;
 
     this.addUserProgress = function(userProgress) {
         this.userProgressHistory.push(userProgress);
@@ -113,8 +128,9 @@ module.exports.Assignment = function(assignment) {
         return (this.assignment.status == 'new');
     }
 
-    this.setInProgress = function() {
+    this.setInProgress = function(studentLevel) {
         this.assignment.status = 'inprogress';
+        this.studentLevel = studentLevel;
     }
     
     this.getLeftExerciseCount = function() {
@@ -214,6 +230,10 @@ module.exports.Assignment = function(assignment) {
             return true;
         }
         return this.maxSequencialHits >= this.REQUIRED_SEQUENTIAL_HITS || this.getCurrentGrade() >= this.MIN_SUCCESSFUL_EXERCISES_PERCENTAGE;
+    }
+
+    this.getStudentLevel = function() {
+        return this.studentLevel;
     }
 
 };
