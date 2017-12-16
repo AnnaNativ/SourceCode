@@ -21,7 +21,8 @@ module.exports.register = function(req, res) {
       token = user.generateJwt();
       res.status(200);
       res.json({
-        "token" : token
+        "token" : token,
+        "name" : user.name
       });
   }
   console.log("In authentication register with: " + user);

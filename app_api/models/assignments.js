@@ -9,6 +9,7 @@ var assignmentSchema = new mongoose.Schema({
     subsubjectId: {type: Schema.Types.ObjectId, ref:'SubSubject'},
     createdDate: {type: Date, default: Date.now},
     updatedDate: {type: Date, default: Date.now},
+    studentLevel: Number
 });    
 
 mongoose.model('Assignment', assignmentSchema);

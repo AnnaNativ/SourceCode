@@ -36,6 +36,7 @@
 
     var currentUser = function() {
       if(isLoggedIn()){
+        console.log('In currentUser with: ' + $window.localStorage['user-name']);
         var token = getToken();
         var payload = token.split('.')[1];
         payload = $window.atob(payload);
@@ -51,6 +52,7 @@
       console.log("In authentication.service register with: " + user);
       return $http.post('/api/register', user).success(function(data){
         saveToken(data.token);
+        saveUserName(data.name);
       });
     };
 
