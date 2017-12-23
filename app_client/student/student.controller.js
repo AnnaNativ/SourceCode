@@ -4,8 +4,8 @@
     .module('meanApp')
     .controller('studentCtrl', studentCtrl);
 
-  studentCtrl.$inject = ['$scope', '$location', 'meanData','$window','audit','exercise', 'assignment', '$sce'];
-  function studentCtrl($scope, $location, meanData, $window, audit, exercise, assignment, $sce) {
+  studentCtrl.$inject = ['$scope', '$location', 'meanData','$window','audit','exercise', 'assignment', '$sce', '$timeout'];
+  function studentCtrl($scope, $location, meanData, $window, audit, exercise, assignment, $sce, $timeout) {
     //####################################################################################
     //########## Student ###########
     //####################################################################################
@@ -168,12 +168,12 @@
       console.log('In getNextExercise');
       // this is for the case when the user looked at the solution but didn't click the dialog exit button
       if(vm.assistant == 'picture_solution') {
-//        console.log('In getNextExercise.if');
+        console.log('In getNextExercise.if');
         vm.finalSelection = false;
       }
       meanData.getNextExercise(vm.selectedAssignment._id, vm.exercise._id, vm.finalSelection, vm.levelChange, vm.assistant, vm.subSubjectChange)
       .success(function(data){
-//        console.log('In getNextExercise.success');
+        console.log('In getNextExercise.success');
         if(data.status == 'NO_MORE_EXERCISES') {
           vm.selectedAssignmentDone = true;
           vm.selectedAssignment = undefined;
@@ -245,7 +245,7 @@
     }
 
     vm.sampleSolutionExists = function() {
-      console.log('In sampleSolutionExists with ' + vm.sampleSolutionVideoLink);
+//      console.log('In sampleSolutionExists with ' + vm.sampleSolutionVideoLink);
       return vm.sampleSolutionVideoLink != undefined && vm.sampleSolutionVideoLink != null;
     }
 
@@ -291,26 +291,38 @@
           vm.exercise.solutions.shuffle();
         }
     });
-/*
-    $('#assistanceDialog').on('hidden.bs.modal', function () {
-      console.log('idden event fired!')
-      window.alert('hidden event fired!');
-    });
-*/
-    vm.checkAnswer = function () {
+
+  vm.checkAnswer = function () {
       console.log('In checkAnswer');
       vm.finalSelection = undefined;
+      vm.finalSelectionText = undefined;
       // is this an open ended question?
       if(vm.exercise.solutions.length == 1) {
-//        console.log('In checkAnswer for open ended question');
         vm.finalSelection = (vm.openSolution == vm.exercise.solutions[0].solution);
       }
       else if(vm.currentSelection != undefined) {
-//        console.log('In checkAnswer for closed question');
         vm.finalSelection = vm.exercise.solutions[vm.currentSelection].isCorrect;
-      }  
-      else {
-//        console.log('No answer selected. Will ignore');
+      }
+
+      var x = document.getElementById("snackbar");
+      if(vm.finalSelection == undefined) {
+        vm.finalSelectionText = "אנא בחר אחת מהתשובות";
+        x.className = "show-none";
+        setTimeout(function(){ x.className = x.className.replace("show-none", ""); }, 2000);
+      }
+      else if(vm.finalSelection) {
+        vm.finalSelectionText = "פיתרון נכון";
+        x.className = "show-correct";
+        setTimeout(function(){ x.className = x.className.replace("show-correct", ""); }, 2000);
+      }
+      else if(!vm.finalSelection) {
+        vm.finalSelectionText = "פיתרון שגוי";
+        x.className = "show-incorrect";
+        setTimeout(function(){ x.className = x.className.replace("show-incorrect", ""); }, 2000);
+      }
+
+      if(vm.finalSelection != undefined) {
+        $timeout( function(){ vm.getNextExercise(); }, 2000); 
       }
       vm.currentSelection = undefined;
     }
@@ -471,10 +483,12 @@
     }
 
     vm.getSampleSolutionVideo = function() {
+       console.log("In getSampleSolutionVideo");
        if(!vm.atOriginalSubSubject()) {
+        console.log("In getSampleSolutionVideo.if");
         meanData.getSubSubject(vm.exercise.properties.subSubjectId)
         .success(function(data){
-          if(data.length > 0) {
+          if(data != undefined && data.length > 0 && data[0].sample_videos.length > 0) {
             vm.getSampleSolutionVideoObject(data[0].sample_videos[0]);
           }
         })
@@ -483,7 +497,10 @@
         })
        }
        else {
-         vm.getSampleSolutionVideoObject(vm.selectedAssignment.subSubject[0].sample_videos[0]);
+         console.log("In getSampleSolutionVideo.else");
+         if(vm.selectedAssignment.subSubject[0].sample_videos != undefined) {
+            vm.getSampleSolutionVideoObject(vm.selectedAssignment.subSubject[0].sample_videos[0]);
+         }
        }
    }
 
@@ -504,7 +521,7 @@
 
     vm.getCurrentLevel = function() {
       if(vm.selectedAssignment != undefined && vm.exercise != undefined && vm.exercise.properties != undefined) {
-        return vm.exercise.properties.level;
+        return vm.exercise.properties.level + 1;
       }
       return "--";
     }

@@ -227,6 +227,10 @@ module.exports.getNextExercise = function (req, res) {
     if(req.query.currentExerciseOutcome == 'true') {
       auditRecord.outcome = 'success';
       assignment.updateSuccsessfulExercise(auditRecord.level);
+      // 2.1.2 if the user's sequencial hits are more or equal to it's current level then mark a flag to skip to next level 
+      if(assignment.getCurrentSequencialHits() >= assignment.getStudentLevel()) {
+        levelChange = 1;
+      }
     }
     else {
       auditRecord.outcome = 'failure';

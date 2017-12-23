@@ -1,0 +1,54 @@
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog" id="myModalDiv"> 
+        <!-- Modal content-->
+        <div class="modal-content" id="myModalContent">
+            <div ng-if="vm.finalSelection == undefined">
+                <div class="modal-header">
+                    <h2 class="h2-dialog">&nbsp;אופס!</h2>
+                </div>
+                <div class="modal-body">
+                    <h3 class="h2-dialog">אנא בחר אחת מהתשובות</h3><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="student-submit-button" data-dismiss="modal">המשך</button>
+                </div>
+            </div>
+            <div ng-if="vm.finalSelection == true">
+                <div class="modal-header">
+                    <h2 class="h2-dialog">&nbsp;פתרון נכון!</h2>
+                </div>
+                <div ng-if="vm.allowNextLevel()" class="modal-body">
+                    &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.correctAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
+                    <label>אני רוצה עוד תרגילים כאלו</label><br>
+                    &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.correctAnswerNextStep" value="readyForNextLevel"/>&nbsp;&nbsp;
+                    <label>מוכן לשלב הבא</label><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="student-submit-button" data-dismiss="modal" ng-click="vm.nextStepClicked()">המשך</button>
+                </div>
+            </div>
+            <div ng-if="vm.finalSelection == false">
+                <div class="modal-header">
+                    <h2 class="h2-dialog">&nbsp;פתרון שגוי!</h2>
+                </div>
+                <div ng-if="vm.dependencies.length > 0" class="modal-body">
+                    &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="moreOfTheSame" checked/>&nbsp;&nbsp;
+                    <label>אני רוצה עוד תרגילים כאלו</label><br><br><br>
+                    &nbsp&nbsp&nbsp&nbsp<label>אני מתקשה, אנסה לעבור על אחד הנושאים הבאים:</label><br>
+                    <div ng-repeat="obj in vm.dependencies" id="{{obj.id}}">
+                        &nbsp&nbsp&nbsp&nbsp<input type="radio" ng-model="vm.wrongAnswerNextStep" value="{{obj.id}}"
+                        />&nbsp;&nbsp;
+                        <label>{{obj.subject}} - {{obj.name}}</label>
+                    </div>
+                </div>
+                <div ng-if="vm.dependencies.length == 0" class="modal-body">
+                    <label>נסה תרגיל נוסף</label><br><br><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="student-submit-button" data-dismiss="modal" ng-click="vm.nextStepClicked()">המשך</button>
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>
