@@ -224,17 +224,19 @@ module.exports.getNextExercise = function (req, res) {
     auditRecord.level = currentExerciseLevel;
     auditRecord.subsubjectId = subSubject;
     auditRecord.exerciseId = req.query.currentExerciseId;
-    if(req.query.currentExerciseOutcome == 'true') {
-      auditRecord.outcome = 'success';
-      assignment.updateSuccsessfulExercise(auditRecord.level);
-      // 2.1.2 if the user's sequencial hits are more or equal to it's current level then mark a flag to skip to next level 
-      if(assignment.getCurrentSequencialHits() >= assignment.getStudentLevel()) {
-        levelChange = 1;
+    if(subSubjectChange == undefined) {
+      if(req.query.currentExerciseOutcome == 'true') {
+        auditRecord.outcome = 'success';
+        assignment.updateSuccsessfulExercise(auditRecord.level);
+        // 2.1.2 if the user's sequencial hits are more or equal to it's current level then mark a flag to skip to next level 
+        if(assignment.getCurrentSequencialHits() >= assignment.getStudentLevel()) {
+          levelChange = 1;
+        }
       }
-    }
-    else {
-      auditRecord.outcome = 'failure';
-      assignment.updateUnsuccsessfulExercise(auditRecord.level);
+      else {
+        auditRecord.outcome = 'failure';
+        assignment.updateUnsuccsessfulExercise(auditRecord.level);
+      }
     }
     auditRecord.save(function (err) {
       if (err) {

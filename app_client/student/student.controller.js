@@ -294,6 +294,7 @@
 
   vm.checkAnswer = function () {
       console.log('In checkAnswer');
+      vm.levelChange = 0;
       vm.finalSelection = undefined;
       vm.finalSelectionText = undefined;
       // is this an open ended question?

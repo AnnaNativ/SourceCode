@@ -1,93 +1,89 @@
-<div class="container-fluid" ng-cloak>
-    <div ng-if="vm.selectedAssignmentDone">
-        <br>
-        <div id="next-step">
-            <h1>המשימה הסתיימה בהצלחה</h1><br>
+<div ng-if="vm.selectedAssignmentDone">
+    <br>
+    <div id="next-step">
+        <h1>המשימה הסתיימה בהצלחה</h1><br>
+    </div>
+</div>
+<div ng-if="vm.selectedAssignmentFailed">
+    <br>
+    <div id="next-step">
+        <h1>המשימה הסתיימה בכשלון</h1><br>
+    </div>
+</div>
+<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment == true">
+    <br>
+    <div id="next-step">
+        <h1>חזרת למשימה המקורית</h1><br>
+        <div style="text-align: center;">
+            <button class="center-button" ng-click="vm.exercise.properties.resumeOriginalAssignment = 'false'">המשך</button>
+        </div>
+    </div>    
+</div>
+<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel == true && false">
+    <br>
+    <div id="next-step">
+        <h1>כל הכבוד, עברת לשלב {{vm.exercise.properties.level + 1}}</h1><br>
+        <div style="text-align: center;">
+            <button class="center-button" ng-click="vm.exercise.properties.newLevel = 'false'">המשך</button>
         </div>
     </div>
-    <div ng-if="vm.selectedAssignmentFailed">
-        <br>
-        <div id="next-step">
-            <h1>המשימה הסתיימה בכשלון</h1><br>
+</div>
+<!--
+<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel != true">
+-->
+<div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment != true">
+        <div id="box1">
+        <div id="upper-status-box-right">
+            <div class="upper-status-box-right-row">
+                <label ng-if="vm.atOriginalSubSubject()">{{vm.getAssignmentName()}}</label>	
+                <label ng-if="!vm.atOriginalSubSubject()">{{vm.getAssignmentName()}} >>> {{vm.exercise.properties.subSubjectName}}</label>	
+                <label><b><font color="#270C05" >:שם משימה</font></b></label>
+            </div>					
+            <div class="upper-status-box-right-row">
+                <label>{{vm.getCurrentLevel()}}</label>
+                <label><b><font color="#270C05" >:רמה נוכחית</font></b></label>
+            </div>					
+            <div class="upper-status-box-right-row">
+                <label>{{vm.formatSubmissionDate(vm.selectedAssignment.createdDate)}}</label>
+                <label><b><font color="#270C05" >:תאריך הגשה</font></b></label>
+            </div>					
         </div>
-    </div>
-    <div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment == true && false">
-        <br>
-        <div id="next-step">
-            <h1>חזרת למשימה המקורית</h1><br>
-            <div style="text-align: center;">
-                <button class="center-button" ng-click="vm.exercise.properties.resumeOriginalAssignment = 'false'">המשך</button>
-            </div>
-        </div>    
-    </div>
-    <div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel == true && false">
-        <br>
-        <div id="next-step">
-            <h1>כל הכבוד, עברת לשלב {{vm.exercise.properties.level + 1}}</h1><br>
-            <div style="text-align: center;">
-                <button class="center-button" ng-click="vm.exercise.properties.newLevel = 'false'">המשך</button>
-            </div>
+        <div id="upper-status-box-left">
+            <div class="upper-status-box-left-row">
+                <label>{{vm.getSequencialCorrectAnswers()}}</label>	
+                <label><b><font color="#270C05" >:תשובות נכונות ברצף</font></b></label>
+            </div>					
+            <div class="upper-status-box-left-row">
+                <label>{{vm.getExercisesLeftToSolve()}}</label>
+                <label><b><font color="#270C05" >:צריך עוד לפתור</font></b></label>
+            </div>							
         </div>
-    </div>
-    <!--
-    <div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed && vm.exercise.properties.resumeOriginalAssignment != true && vm.exercise.properties.newLevel != true">
-    -->
-        <div ng-if="!vm.selectedAssignmentDone && !vm.selectedAssignmentFailed">
-            <div id="box1">
-            <div id="upper-status-box-right">
-                <div class="upper-status-box-right-row">
-                    <label ng-if="vm.atOriginalSubSubject()">{{vm.getAssignmentName()}}</label>	
-                    <label ng-if="!vm.atOriginalSubSubject()">{{vm.getAssignmentName()}} >>> {{vm.exercise.properties.subSubjectName}}</label>	
-                    <label><b><font color="#270C05" >:שם משימה</font></b></label>
-                </div>					
-                <div class="upper-status-box-right-row">
-                    <label>{{vm.getCurrentLevel()}}</label>
-                    <label><b><font color="#270C05" >:רמה נוכחית</font></b></label>
-                </div>					
-                <div class="upper-status-box-right-row">
-                    <label>{{vm.formatSubmissionDate(vm.selectedAssignment.createdDate)}}</label>
-                    <label><b><font color="#270C05" >:תאריך הגשה</font></b></label>
-                </div>					
+        <img class="box1-image" src="/images/pic1.jpg">
+</div>
+<div id="exercise-area"> 
+        <button ng-if="!vm.atOriginalSubSubject()" class="student-submit-button" ng-click="vm.goBackToOriginalSubSubject()">חזור למשימה המקורית</button>
+        <div ng-repeat="obj in vm.exercise.body">
+            <div ng-if="obj.type == 'picture'">
+                <img ng-src="{{obj.content}}">
             </div>
-            <div id="upper-status-box-left">
-                <div class="upper-status-box-left-row">
-                    <label>{{vm.getSequencialCorrectAnswers()}}</label>	
-                    <label><b><font color="#270C05" >:תשובות נכונות ברצף</font></b></label>
-                </div>					
-                <div class="upper-status-box-left-row">
-                    <label>{{vm.getExercisesLeftToSolve()}}</label>
-                    <label><b><font color="#270C05" >:צריך עוד לפתור</font></b></label>
-                </div>							
-            </div>
-            <img class="box1-image" src="/images/pic1.jpg">
+            <p class="ex1" ng-if="obj.type == 'text'">{{obj.content}}</p>
+        </div></br>
+        <div ng-if="vm.exercise.solutions.length > 1" ng-repeat="obj in vm.exercise.solutions" id="{{obj.solution}}">
+            <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"/>
+            <label>&nbsp;&nbsp;{{obj.solution}}</label><br>
         </div>
-        <div id="exercise-area"> 
-            <button ng-if="!vm.atOriginalSubSubject()" class="student-submit-button" ng-click="vm.goBackToOriginalSubSubject()">חזור למשימה המקורית</button>
-            <div ng-repeat="obj in vm.exercise.body">
-                <div ng-if="obj.type == 'picture'">
-                    <img ng-src="{{obj.content}}">
-                </div>
-                <p class="ex1" ng-if="obj.type == 'text'">{{obj.content}}</p>
-            </div></br>
-            <div ng-if="vm.exercise.solutions.length > 1" ng-repeat="obj in vm.exercise.solutions" id="{{obj.solution}}">
-                <input type="radio" name="obj" ng-click="vm.handleRadioClick($index)" ng-model="selectedValue.solution" value="{{obj.solution}}"/>
-                <label>&nbsp;&nbsp;{{obj.solution}}</label><br>
-            </div>
-            <div ng-if="vm.exercise.solutions.length == 1">
-                <input class="open-solution-text-box" type="text" dir="rtl" ng-model="vm.openSolution"/>
-            </div>
+        <div ng-if="vm.exercise.solutions.length == 1">
+            <input class="open-solution-text-box" type="text" dir="rtl" ng-model="vm.openSolution"/>
+        </div>
 
-            <br>
-            <button class="student-submit-button" ng-click="vm.checkAnswer()">סיום תרגיל</button>
-            <button ng-show="vm.dependencies.length != 0" class="student-submit-button" ng-click="vm.preReq()" data-toggle="modal" data-target="#assistanceDialog">לימוד מקדים</button>  
-            <button ng-show="vm.dependencies.length != 0" class="student-submit-button-margin-small" ng-disabled="!vm.solutionExists()" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
-            <button ng-show="vm.dependencies.length == 0" class="student-submit-button-margin" ng-disabled="!vm.solutionExists()" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
-            <button class="student-submit-button" ng-disabled="!vm.sampleSolutionExists()" ng-click="vm.assistant = 'sample_solution'" data-toggle="modal" data-target="#videoDialog">פתרונות לדוגמא</button>
-            <button class="student-submit-button" ng-disabled="!vm.tutorialVideoExists()" ng-click="vm.assistant = 'tutorial'" data-toggle="modal" data-target="#videoDialog">וידאו הדרכה</button>
-            <div id="snackbar">{{vm.finalSelectionText}}</div>
-            <div ng-include="'/student/video.dialog.html'"></div>
-            <div ng-include="'/student/assistance.dialog.html'"></div>
-            <div ng-include="'/student/next.step.dialog.html'"></div>
-    </div>
-    </div>
+        <br>
+        <button class="student-submit-button" ng-click="vm.checkAnswer()">סיום תרגיל</button>
+        <button ng-show="vm.dependencies.length != 0" class="student-submit-button" ng-click="vm.preReq()" data-toggle="modal" data-target="#assistanceDialog">לימוד מקדים</button>  
+        <button ng-show="vm.dependencies.length != 0" class="student-submit-button-margin-small" ng-disabled="!vm.solutionExists()" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
+        <button ng-show="vm.dependencies.length == 0" class="student-submit-button-margin" ng-disabled="!vm.solutionExists()" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
+        <button class="student-submit-button" ng-disabled="!vm.sampleSolutionExists()" ng-click="vm.assistant = 'sample_solution'" data-toggle="modal" data-target="#videoDialog">פתרונות לדוגמא</button>
+        <button class="student-submit-button" ng-disabled="!vm.tutorialVideoExists()" ng-click="vm.assistant = 'tutorial'" data-toggle="modal" data-target="#videoDialog">וידאו הדרכה</button>
+        <div id="snackbar">{{vm.finalSelectionText}}</div>
+        <div ng-include="'/student/video.dialog.html'"></div>
+        <div ng-include="'/student/assistance.dialog.html'"></div>
 </div>

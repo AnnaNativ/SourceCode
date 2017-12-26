@@ -164,11 +164,16 @@ loadDoneExercises = function(user, sendRespose) {
               exercise = data[i].exerciseId;
               if(exercise != undefined) {
                 student.addDoneExercise(exercise);
-                if(data[i].outcome == 'success') {
-                  assignment.updateSuccsessfulExercise(data[i].level);
+                if(assignment != undefined) {
+                  if(data[i].outcome == 'success') {
+                    assignment.updateSuccsessfulExercise(data[i].level);
+                  }
+                  else if(data[i].outcome == 'failure') {
+                    assignment.updateUnsuccsessfulExercise(data[i].level);
+                  }
                 }
-                else if(data[i].outcome == 'failure') {
-                  assignment.updateUnsuccsessfulExercise(data[i].level);
+                else {
+                  console.log("Internal Error: at loadDoneExercises. assignment is null");
                 }
               }
             }
