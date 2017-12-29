@@ -224,7 +224,7 @@ module.exports.getNextExercise = function (req, res) {
     auditRecord.level = currentExerciseLevel;
     auditRecord.subsubjectId = subSubject;
     auditRecord.exerciseId = req.query.currentExerciseId;
-    if(subSubjectChange == undefined) {
+    if(subSubjectChange == undefined && assignment.inOriginalSubSubject()) {
       if(req.query.currentExerciseOutcome == 'true') {
         auditRecord.outcome = 'success';
         assignment.updateSuccsessfulExercise(auditRecord.level);
