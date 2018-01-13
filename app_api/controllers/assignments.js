@@ -62,6 +62,7 @@ module.exports.newAssignment = function (req, res) {
         if(activeStudent) {
           newAssignment = new Cache.Assignment(assignment);
           newAssignment.addUserProgress(progress);
+          newAssignment.setLevel(activeStudent.getLevel());       
           activeStudent.addAssignment(newAssignment);
         }
       }
