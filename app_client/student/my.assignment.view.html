@@ -78,9 +78,9 @@
 
         <br>
         <button class="student-submit-button" ng-click="vm.checkAnswer()">סיום תרגיל</button>
-        <button ng-show="vm.dependencies.length != 0" class="student-submit-button" ng-click="vm.preReq()" data-toggle="modal" data-target="#assistanceDialog">לימוד מקדים</button>  
-        <button ng-show="vm.dependencies.length != 0" class="student-submit-button-margin-small" ng-disabled="!vm.solutionExists()" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
-        <button ng-show="vm.dependencies.length == 0" class="student-submit-button-margin" ng-disabled="!vm.solutionExists()" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
+        <button ng-show="vm.hasDependencies()" class="student-submit-button" ng-click="vm.preReq()" data-toggle="modal" data-target="#assistanceDialog">לימוד מקדים</button>  
+        <button ng-show="vm.hasDependencies()" class="student-submit-button-margin-small" ng-disabled="!vm.solutionExists()" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
+        <button ng-show="!vm.hasDependencies()" class="student-submit-button-margin" ng-disabled="!vm.solutionExists()" ng-click="vm.showSolution()" data-toggle="modal" data-target="#videoDialog">הצג פתרון</button>
         <button class="student-submit-button" ng-disabled="!vm.sampleSolutionExists()" ng-click="vm.assistant = 'sample_solution'" data-toggle="modal" data-target="#videoDialog">פתרונות לדוגמא</button>
         <button class="student-submit-button" ng-disabled="!vm.tutorialVideoExists()" ng-click="vm.assistant = 'tutorial'" data-toggle="modal" data-target="#videoDialog">וידאו הדרכה</button>
         <div id="snackbar">{{vm.finalSelectionText}}</div>

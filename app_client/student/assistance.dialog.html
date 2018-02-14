@@ -7,9 +7,9 @@
                 <div class="modal-body">
                     <h2 class="h2-dialog">נושאים קשורים:</h2>
                     <div ng-repeat="obj in vm.dependencies" id="{{obj.id}}">
-                        <input type="radio" ng-model="vm.preReqNextStep" value="{{obj.id}}"
+                        <input ng-if="obj.hasExercises == true" type="radio" ng-model="vm.preReqNextStep" value="{{obj.id}}"
                         />&nbsp;&nbsp;
-                        <label>{{obj.subject}} - {{obj.name}}</label>
+                        <label ng-if="obj.hasExercises == true">{{obj.subject}} - {{obj.name}}</label>
                     </div>
                 </div>
                 <div class="modal-footer">

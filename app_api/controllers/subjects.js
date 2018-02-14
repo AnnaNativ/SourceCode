@@ -33,13 +33,19 @@ module.exports.getDependencies = function(req, res) {
             SubSubject
               .find({_id: dependency})
               .exec(function(err, dependentSubSubject) {
-                dependencies.push({id: dependentSubSubject[0]._id, name: dependentSubSubject[0].name, subject: dependentSubSubject[0].subjectId});
+                dependencies.push({id: dependentSubSubject[0]._id, 
+                                   name: dependentSubSubject[0].name, 
+                                   subject: dependentSubSubject[0].subjectId, 
+                                   exercises: dependentSubSubject[0].exercises});
                 if(dependencies.length == subSubject[0].dependencies.length) {
                   dependencies.forEach(function(dependencyObj) {
                     Subject
                     .find({_id: dependencyObj.subject})
                     .exec(function(err, subject) {
-                      dependenciesWithSubject.push({id: dependencyObj.id, name: dependencyObj.name, subject: subject[0].name});
+                      dependenciesWithSubject.push({id: dependencyObj.id, name: 
+                                                    dependencyObj.name, subject: 
+                                                    subject[0].name, 
+                                                    hasExercises: student.hasMoreExercisesForDependency(dependencyObj.exercises)});
                       if(subSubject[0].dependencies.length == dependenciesWithSubject.length) {
                           res.status(200).json(dependenciesWithSubject);
                           return;

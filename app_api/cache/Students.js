@@ -55,6 +55,13 @@ module.exports.Student = function(id, level) {
         return (this.doneExercises.get(exerciseId.toString()) != undefined);
     }
 
+    this.isGroupExercise = function(exercise) {
+        if(exercise.groupId != undefined) {
+            return exercise.Id.toString() == exercise.groupId.toString();
+        }
+        return false;
+    }
+
     this.isDoneExerciseEmpty = function() {
         return (this.doneExercises.count() == 0);
     }
@@ -65,6 +72,19 @@ module.exports.Student = function(id, level) {
 
     this.getLevel = function() {
         return this.level;
+    }
+
+    this.hasMoreExercisesForDependency = function(availableExercises) {
+        if(availableExercises != undefined) {
+            for(var i=0; i<availableExercises.length; i++) {
+                if(!this.isGroupExercise(availableExercises[i])) {
+                    if(!this.isExerciseDone(availableExercises[i].Id)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 };

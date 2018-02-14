@@ -186,7 +186,7 @@
           vm.selectedAssignmentIndex = undefined;
         }
         else {
-//          console.log('In getNextExercise.success.else');
+          console.log('In getNextExercise.success.else');
           vm.getDependencies(data);
         }
         vm.subSubjectChange = undefined;
@@ -202,11 +202,22 @@
       .success(function(data){
         vm.dependencies = data;
         vm.exercise = exercise;
+        vm.getSampleSolutionVideo();
+        vm.getTutorialVideo();
 //        console.log('In getDependencies.success with: ' + data);
       })
       .error(function(e){
         console.log(e);
       })
+    }
+
+    vm.hasDependencies = function() {
+      for(var i=0; i<vm.dependencies.length; i++) {
+        if(vm.dependencies[i].hasExercises) {
+          return true;
+        }
+      }
+      return false;
     }
 
     vm.cameBackToOriginalSubSubject = function() {
@@ -217,8 +228,8 @@
     } 
     
     vm.atOriginalSubSubject = function() {
-//      console.log('In atOriginalSubSubject.Before');
       if(vm.selectedAssignment != undefined && vm.exercise.properties != undefined) {
+        console.log('In atOriginalSubSubject.if with: ' + vm.selectedAssignment.subSubject[0]._id + ' ' + vm.exercise.properties.subSubjectId);
         return vm.selectedAssignment.subSubject[0]._id == vm.exercise.properties.subSubjectId;
       }
       return true;
@@ -416,6 +427,7 @@
         vm.getNextExercise();    
       }
       else if(vm.assistant == 'pre_req' && vm.preReqNextStep != undefined) {
+        console.log("In closeAssistance.else.if 1");
         vm.subSubjectChange = vm.preReqNextStep;
         vm.getNextExercise();
       }
