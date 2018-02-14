@@ -150,6 +150,10 @@ module.exports.Assignment = function(assignment) {
 
     this.setInProgress = function(studentLevel) {
         this.assignment.status = 'inprogress';
+//        this.studentLevel = studentLevel;
+    }
+
+    this.setLevel = function(studentLevel) {
         this.studentLevel = studentLevel;
     }
     

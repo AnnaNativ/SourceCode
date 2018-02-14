@@ -20,6 +20,10 @@ module.exports.newAssignment = function (req, res) {
     assignment.assignee = mongoose.Types.ObjectId(student.id);
     assignment.subjectId = mongoose.Types.ObjectId(req.body.subjectId);
     assignment.subsubjectId = mongoose.Types.ObjectId(req.body.subsubjectId);
+    
+    activeStudent = Cache.students.get(assignment.assignee);
+    assignment.studentLevel = activeStudent.getLevel();
+    
     assignments.push(assignment);
     // save the assignment
     assignment.save(function (err) {
@@ -62,6 +66,7 @@ module.exports.newAssignment = function (req, res) {
         if(activeStudent) {
           newAssignment = new Cache.Assignment(assignment);
           newAssignment.addUserProgress(progress);
+          newAssignment.setLevel(activeStudent.getLevel());       
           activeStudent.addAssignment(newAssignment);
         }
       }
